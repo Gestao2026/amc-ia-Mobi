@@ -1,0 +1,27 @@
+# Segredos
+.env
+
+# Dados das OSCs (cada captador gera os seus)
+minhas-oscs/*/
+!minhas-oscs/MODELO-perfil-osc.md
+# OSC de exemplo (fictícia, versionada como demonstração)
+!minhas-oscs/exemplo-instituto-semente/
+!minhas-oscs/exemplo-instituto-semente/**
+
+# Dados do captador (perfil e entregas pessoais)
+captador/perfil-captador.md
+captador/oferta.md
+captador/entregas/
+
+# Memória dos agentes (gerada localmente)
+.claude/agents-memory/*.md
+!.claude/agents-memory/README.md
+
+# Painel: pipelines gerados por OSC (a Sala dos Agentes e o status inicial sao versionados)
+painel/pipeline-*.html
+
+# Sistema
+.DS_Store
+__pycache__/
+*.pyc
+node_modules/

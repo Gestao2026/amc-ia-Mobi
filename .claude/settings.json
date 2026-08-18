@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Write(minhas-oscs/**)",
+      "Write(captador/**)",
+      "Write(painel/**)",
+      "Edit(minhas-oscs/**)",
+      "Edit(captador/**)",
+      "Bash(python3 scripts/minerar-editais.py:*)",
+      "Bash(python3 scripts/captahub-editais.py:*)",
+      "Bash(python3 scripts/verificar-acentuacao.py:*)",
+      "Bash(python3 scripts/exportar-projeto.py:*)",
+      "Bash(ls:*)",
+      "Bash(date:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/sem-travessao.py\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|Bash|Task|Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/agentes-status.py\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
