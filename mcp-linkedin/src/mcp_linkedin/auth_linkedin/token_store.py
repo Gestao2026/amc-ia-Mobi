@@ -1,6 +1,17 @@
 """
-Armazenamento seguro LOCAL do access token do LinkedIn (Camada 2),
-usando o Windows Credential Manager via pywin32 (win32cred).
+Armazenamento seguro do access token do LinkedIn (Camada 2).
+
+Tres backends, escolhidos por configuracao (ver config.py):
+
+- `Win32CredentialBackend`: desenvolvimento local no Windows. A
+  protecao vem do proprio sistema (Credential Manager / DPAPI). NAO
+  funciona em Linux: o pywin32 nem chega a ser instalado la, entao
+  toda operacao levanta ModuleNotFoundError.
+- `SupabaseCredentialBackend` + `EncryptedCredentialBackend`:
+  producao. O token e cifrado no processo (AES-256-GCM, chave vinda
+  do ambiente) ANTES de sair para o banco, o que devolve remotamente
+  a propriedade que o DPAPI da localmente.
+- `InMemoryCredentialBackend`: testes e uso efemero. Nao persiste.
 
 Este modulo nunca acessa o LinkedIn, nunca executa OAuth, nunca gera
 ou usa Client Secret. Ele so guarda, le, valida e remove o access
@@ -28,6 +39,8 @@ import json
 import time
 from dataclasses import dataclass
 from typing import Callable, Protocol
+
+from mcp_linkedin.auth_linkedin.crypto import TokenCipher, TokenDecryptionError
 
 # TargetName fixo e especifico deste componente, para nao colidir com
 # nenhuma outra credencial ja gravada no Windows por outro programa.
@@ -104,6 +117,78 @@ class Win32CredentialBackend:
             if erro.winerror == _ERROR_NOT_FOUND:
                 return
             raise
+
+
+class InMemoryCredentialBackend:
+    """
+    Backend em memoria do processo, para ambientes sem Windows
+    Credential Manager (o container de producao no Render roda Linux,
+    onde pywin32 nem existe).
+
+    Nao persiste: reiniciar o processo derruba o token e exige uma nova
+    autorizacao no LinkedIn. E a mesma decisao ja tomada para as
+    sessoes da Camada 1 (ClaudeSessionStore, Etapa 7A) -- suficiente
+    para validar o fluxo, e explicitamente uma pendencia conhecida ate
+    a etapa que definir o armazenamento persistente de producao.
+
+    Nao grava em disco, o que e proposital: um token em arquivo dentro
+    do container seria menos seguro que em memoria, sem ganho real de
+    durabilidade (o sistema de arquivos do Render tambem e efemero).
+    """
+
+    def __init__(self) -> None:
+        self._store: dict[str, str] = {}
+
+    def write(self, target_name: str, secret: str) -> None:
+        self._store[target_name] = secret
+
+    def read(self, target_name: str) -> str | None:
+        return self._store.get(target_name)
+
+    def delete(self, target_name: str) -> None:
+        self._store.pop(target_name, None)
+
+    def __repr__(self) -> str:
+        # Nunca expor o conteudo gravado (o proprio access token).
+        return f"InMemoryCredentialBackend(credenciais_gravadas={len(self._store)})"
+
+
+class EncryptedCredentialBackend:
+    """
+    Envelopa outro CredentialBackend, cifrando o segredo antes de
+    grava-lo e decifrando na leitura.
+
+    Existe para o armazenamento remoto (Supabase): no Windows local a
+    protecao ja vem do proprio sistema (DPAPI), e cifrar de novo so
+    acrescentaria uma chave para gerenciar sem ganho de seguranca.
+
+    Falha de decifragem devolve None, nao excecao: o efeito pratico e
+    "nao ha token valido", que leva o captador a reautorizar. E o
+    desfecho recuperavel correto quando a chave foi trocada ou o dado
+    corrompeu, e evita derrubar a ferramenta de status por causa disso.
+    """
+
+    def __init__(self, inner: CredentialBackend, cipher: TokenCipher) -> None:
+        self._inner = inner
+        self._cipher = cipher
+
+    def write(self, target_name: str, secret: str) -> None:
+        self._inner.write(target_name, self._cipher.encrypt(secret))
+
+    def read(self, target_name: str) -> str | None:
+        armazenado = self._inner.read(target_name)
+        if armazenado is None:
+            return None
+        try:
+            return self._cipher.decrypt(armazenado)
+        except TokenDecryptionError:
+            return None
+
+    def delete(self, target_name: str) -> None:
+        self._inner.delete(target_name)
+
+    def __repr__(self) -> str:
+        return f"EncryptedCredentialBackend(inner={self._inner!r})"
 
 
 class TokenStore:

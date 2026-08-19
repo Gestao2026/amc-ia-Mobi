@@ -1,10 +1,20 @@
 """
 Servidor MCP do mcp-linkedin.
 
-Ferramentas expostas nesta etapa: somente `linkedin_mcp_status`, de
-teste, que devolve dados estaticos sem acessar o LinkedIn nem
-qualquer outro servico. OAuth do LinkedIn (Camada 2) ainda NAO esta
-implementado neste arquivo.
+Ferramentas expostas: `linkedin_mcp_status` (diagnostico),
+`linkedin_oauth_iniciar` e `linkedin_oauth_status` (Camada 2). Nenhuma
+ferramenta de negocio do LinkedIn (leitura ou publicacao) existe
+ainda.
+
+OAuth do LinkedIn (Camada 2, Etapa 7B): `resolve_linkedin_config`
+(config.py) le LINKEDIN_CLIENT_ID/LINKEDIN_CLIENT_SECRET/
+MCP_PUBLIC_BASE_URL do ambiente e, se presentes, liga o fluxo
+completo (URL de autorizacao -> callback -> troca de code por token ->
+TokenStore). Se ausentes, a Camada 2 fica desligada e o servidor sobe
+normalmente sem ela. O inicio do fluxo e uma FERRAMENTA MCP, nao uma
+pagina: nenhuma interface HTML existe neste componente. A unica rota
+HTTP propria e o callback, que o proprio LinkedIn chama, e que
+responde JSON.
 
 OAuth do Claude (Camada 1, Etapa 7A): `resolve_claude_auth_config`
 le MCP_CLAUDE_CLIENT_ID/MCP_CLAUDE_CLIENT_SECRET/MCP_PUBLIC_BASE_URL
@@ -40,23 +50,217 @@ from typing import Mapping
 from mcp.server.auth.provider import ProviderTokenVerifier
 from mcp.server.auth.settings import AuthSettings, ClientRegistrationOptions, RevocationOptions
 from mcp.server.mcpserver import MCPServer
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 from mcp_linkedin.auth_claude.provider import ClaudeAuthProvider
 from mcp_linkedin.auth_claude.session_store import ClaudeSessionStore
+from mcp_linkedin.auth_linkedin.oauth_callback import CallbackOutcome, CallbackParams
+from mcp_linkedin.auth_linkedin.runtime import LinkedInOAuthRuntime, build_runtime
+from mcp_linkedin.auth_linkedin.token_exchange import TokenExchangeError, TransportError
+from mcp_linkedin.config import (
+    LINKEDIN_CALLBACK_PATH,
+    missing_linkedin_env_vars,
+    resolve_linkedin_config,
+)
 
 mcp = MCPServer("mcp-linkedin")
 
 
+# =====================================================================
+# Camada 2: runtime OAuth do LinkedIn (Etapa 7B)
+# =====================================================================
+#
+# O runtime precisa ser de vida longa e unico no processo: o state
+# gerado por `linkedin_oauth_iniciar` so pode ser validado pelo mesmo
+# StateStore quando o LinkedIn chamar o callback, e o token gravado
+# pelo callback so e visivel para as demais ferramentas se o TokenStore
+# for o mesmo objeto.
+#
+# A resolucao e preguicosa (na primeira utilizacao, nao no import) para
+# que o modulo continue importavel sem nenhuma variavel de ambiente
+# definida. O sentinela abaixo distingue "ainda nao resolvido" de
+# "resolvido como None" (Camada 2 desligada), sem precisar de uma API
+# de reset so para testes: um teste que queira injetar um runtime
+# proprio atribui diretamente a `_linkedin_runtime` e restaura o
+# sentinela no final.
+
+_RUNTIME_NAO_RESOLVIDO = object()
+_linkedin_runtime: LinkedInOAuthRuntime | None | object = _RUNTIME_NAO_RESOLVIDO
+
+
+def resolve_linkedin_runtime(env=None) -> LinkedInOAuthRuntime | None:
+    """
+    Monta o runtime da Camada 2 a partir do ambiente, ou devolve None
+    se ela nao estiver configurada. Nao acessa rede.
+    """
+    config = resolve_linkedin_config(env)
+    if config is None:
+        return None
+    return build_runtime(config)
+
+
+def get_linkedin_runtime() -> LinkedInOAuthRuntime | None:
+    """Devolve o runtime unico do processo, resolvendo-o na primeira chamada."""
+    global _linkedin_runtime
+    if _linkedin_runtime is _RUNTIME_NAO_RESOLVIDO:
+        _linkedin_runtime = resolve_linkedin_runtime()
+    return _linkedin_runtime  # type: ignore[return-value]
+
+
 @mcp.tool()
 def linkedin_mcp_status() -> dict:
-    """Retorna o status estatico do componente, sem acessar o LinkedIn."""
+    """Retorna o status do componente e da conexao com o LinkedIn, sem acessar o LinkedIn."""
+    runtime = get_linkedin_runtime()
+
+    if runtime is None:
+        return {
+            "componente": "mcp-linkedin",
+            "oauth": "nao_configurado",
+            "linkedin": "nao_conectado",
+            "status": "operacional",
+            "variaveis_ausentes": missing_linkedin_env_vars(),
+        }
+
     return {
         "componente": "mcp-linkedin",
-        "ambiente": "local",
-        "linkedin": "nao_conectado",
-        "oauth": "nao_implementado",
+        "oauth": "configurado",
+        "linkedin": "conectado" if runtime.has_valid_token() else "nao_conectado",
         "status": "operacional",
+        "variaveis_ausentes": [],
     }
+
+
+@mcp.tool()
+def linkedin_oauth_iniciar() -> dict:
+    """
+    Inicia a autorizacao do LinkedIn e devolve a URL que o captador
+    precisa abrir no navegador para autorizar o acesso.
+
+    Nao acessa o LinkedIn e nao abre navegador: so monta a URL. Depois
+    que o captador autorizar, o proprio LinkedIn chama o callback deste
+    servidor, que conclui a troca por token automaticamente.
+    """
+    runtime = get_linkedin_runtime()
+
+    if runtime is None:
+        return {
+            "status": "nao_configurado",
+            "detalhe": (
+                "A conexao com o LinkedIn ainda nao foi configurada neste servidor. "
+                "Configure as variaveis listadas em variaveis_ausentes e reinicie o servico."
+            ),
+            "variaveis_ausentes": missing_linkedin_env_vars(),
+        }
+
+    autorizacao = runtime.start_authorization()
+
+    return {
+        "status": "aguardando_autorizacao",
+        "url_autorizacao": autorizacao.url,
+        "escopos_solicitados": list(runtime.config.scopes),
+        "detalhe": (
+            "Abra a URL acima no navegador, entre com a conta que administra a Pagina e "
+            "autorize o acesso. A autorizacao expira em 10 minutos. Depois de autorizar, "
+            "confira o resultado com a ferramenta linkedin_oauth_status."
+        ),
+    }
+
+
+@mcp.tool()
+def linkedin_oauth_status() -> dict:
+    """
+    Informa se existe um access token valido do LinkedIn guardado
+    neste servidor. Nunca devolve o token em si.
+    """
+    runtime = get_linkedin_runtime()
+
+    if runtime is None:
+        return {
+            "status": "nao_configurado",
+            "detalhe": "A conexao com o LinkedIn ainda nao foi configurada neste servidor.",
+            "variaveis_ausentes": missing_linkedin_env_vars(),
+        }
+
+    if runtime.has_valid_token():
+        return {
+            "status": "conectado",
+            "detalhe": "Existe uma autorizacao valida do LinkedIn guardada neste servidor.",
+        }
+
+    return {
+        "status": "nao_conectado",
+        "detalhe": (
+            "Nao existe autorizacao valida do LinkedIn. Use a ferramenta "
+            "linkedin_oauth_iniciar para autorizar."
+        ),
+    }
+
+
+@mcp.custom_route(LINKEDIN_CALLBACK_PATH, methods=["GET"])
+async def linkedin_oauth_callback(request: Request) -> JSONResponse:
+    """
+    Callback OAuth chamado pelo proprio LinkedIn depois que o captador
+    autoriza. Rota publica por necessidade do protocolo (o LinkedIn nao
+    envia o Bearer da Camada 1); a protecao contra chamada forjada e o
+    `state` de uso unico, validado por `process_callback` antes de
+    qualquer coisa acontecer com o authorization code.
+
+    Responde JSON, nunca HTML: este componente nao tem interface web.
+    Nenhuma resposta inclui o authorization code, o state ou o access
+    token.
+    """
+    runtime = get_linkedin_runtime()
+
+    if runtime is None:
+        return JSONResponse(
+            {
+                "status": "nao_configurado",
+                "detalhe": "A conexao com o LinkedIn nao esta configurada neste servidor.",
+            },
+            status_code=503,
+        )
+
+    params = CallbackParams(
+        code=request.query_params.get("code"),
+        state=request.query_params.get("state"),
+        error=request.query_params.get("error"),
+        error_description=request.query_params.get("error_description"),
+    )
+
+    try:
+        resultado = runtime.handle_callback(params)
+    except (TokenExchangeError, TransportError, ValueError):
+        # A mensagem original fica de fora da resposta de proposito:
+        # ela pertence ao operador do servico, nao ao navegador que
+        # chegou no callback. Nenhuma delas contem segredo, mas expor
+        # detalhe interno a quem abriu a URL nao traz beneficio.
+        return JSONResponse(
+            {
+                "status": "erro_na_troca_de_token",
+                "detalhe": "A autorizacao foi recebida, mas a troca por token falhou. Tente novamente.",
+            },
+            status_code=502,
+        )
+
+    if resultado.outcome is CallbackOutcome.TOKEN_EXCHANGE_STARTED:
+        return JSONResponse(
+            {
+                "status": "conectado",
+                "detalhe": "LinkedIn autorizado com sucesso. Pode fechar esta pagina.",
+            },
+            status_code=200,
+        )
+
+    corpo = {
+        "status": "rejeitado",
+        "motivo": resultado.outcome.value,
+        "detalhe": resultado.detail,
+    }
+    if resultado.oauth_error:
+        corpo["erro_linkedin"] = resultado.oauth_error
+
+    return JSONResponse(corpo, status_code=400)
 
 
 STREAMABLE_HTTP_HOST = "0.0.0.0"

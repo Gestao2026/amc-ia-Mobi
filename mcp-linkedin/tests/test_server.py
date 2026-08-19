@@ -44,13 +44,18 @@ from mcp_linkedin.server import (
 FAKE_LINKEDIN_CLIENT_SECRET = "FAKE_CLIENT_SECRET_NAO_REAL"
 
 
-def test_linkedin_mcp_status_retorna_campos_esperados():
+def test_linkedin_mcp_status_retorna_campos_esperados(monkeypatch):
+    # Sem as variaveis da Camada 2 no ambiente, o status reporta
+    # "nao_configurado" e lista o que falta, sem expor valor nenhum.
+    # A partir da Etapa 7B estes campos deixaram de ser estaticos: ver
+    # test_linkedin.py para o cenario com a Camada 2 ligada.
+    monkeypatch.setattr("mcp_linkedin.server._linkedin_runtime", None)
+
     resultado = linkedin_mcp_status()
 
     assert resultado["componente"] == "mcp-linkedin"
-    assert resultado["ambiente"] == "local"
     assert resultado["linkedin"] == "nao_conectado"
-    assert resultado["oauth"] == "nao_implementado"
+    assert resultado["oauth"] == "nao_configurado"
     assert resultado["status"] == "operacional"
 
 
@@ -240,13 +245,16 @@ def test_requisicao_ao_mcp_recebe_resposta_http_valida_do_servidor():
 
 
 def test_servidor_nao_depende_do_linkedin():
-    # server.py nao importa nada de auth_linkedin nem de
-    # linkedin_client; o handshake HTTP nao precisa de nenhum modulo
-    # relacionado ao LinkedIn.
+    # A partir da Etapa 7B, server.py PASSA a importar auth_linkedin
+    # (a Camada 2 vive nele). O que continua valendo, e e o que este
+    # teste protege, e que nada disso e necessario para o servidor
+    # funcionar: sem as variaveis do LinkedIn no ambiente, o runtime
+    # resolve para None e o handshake HTTP segue normal. Nenhuma
+    # ferramenta de negocio do LinkedIn (linkedin_client) existe ainda.
     import mcp_linkedin.server as modulo_servidor
 
     assert "linkedin_client" not in modulo_servidor.__dict__
-    assert "auth_linkedin" not in modulo_servidor.__dict__
+    assert modulo_servidor.resolve_linkedin_runtime(env={}) is None
 
 
 def test_nenhuma_credencial_e_necessaria_para_o_handshake():

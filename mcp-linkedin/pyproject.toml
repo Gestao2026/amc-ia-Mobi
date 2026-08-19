@@ -4,14 +4,23 @@ version = "0.0.0"
 description = "Componente isolado (esqueleto) para integrar o LinkedIn Mobi ao Claude via MCP. Sem integração funcional nesta etapa."
 requires-python = ">=3.11"
 
-# Etapa 2 (MCP local mínimo): a única dependência necessária para
-# rodar o servidor de teste é o SDK oficial do MCP. Ainda não foi
-# instalada; ver pedido de autorização entregue ao final desta etapa.
+# mcp: SDK oficial do MCP (servidor, transporte, Camada 1 de OAuth).
+# httpx2: linha 2.x do httpx, usada só pelo HttpxTransport (Etapa 7B)
+#   na troca de authorization code por access token. Já vinha instalada
+#   como dependência do próprio mcp 2.0.0; passa a ser declarada aqui
+#   porque agora é um import direto deste componente, não mais
+#   transitivo.
 #
-# Dependências futuras (Camada 2, cliente HTTP, validação de schema)
-# seguem fora de escopo até nova autorização.
+# Dependências futuras (cliente HTTP da API do LinkedIn, validação de
+# schema) seguem fora de escopo até nova autorização.
+# cryptography: cifragem em envelope (AES-256-GCM) do access token
+#   antes de ele sair para o armazenamento remoto de produção. Já vinha
+#   instalada de forma transitiva; passa a ser declarada porque agora é
+#   um import direto deste componente.
 dependencies = [
     "mcp",
+    "httpx2",
+    "cryptography",
 ]
 
 [build-system]

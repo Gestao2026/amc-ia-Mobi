@@ -2,7 +2,9 @@
 
 ## Status
 
-Um **servidor MCP local mínimo** está implementado, apenas para validar a comunicação `mcp-linkedin → servidor MCP → ferramenta`. Ele expõe uma única ferramenta de teste, `linkedin_mcp_status`, que devolve dados estáticos e não faz nenhuma chamada externa. Nenhuma autenticação, nenhum acesso ao LinkedIn e nenhum deploy remoto existem nesta etapa.
+O servidor MCP está implementado com as **duas camadas de OAuth prontas**: a Camada 1 (Claude.ai ↔ este servidor, Etapa 7A) e a Camada 2 (este servidor ↔ LinkedIn, Etapa 7B). O fluxo `MCP → autorização → callback → troca do authorization code → armazenamento do token` está completo e coberto por testes, mas **nunca foi executado contra o LinkedIn real**: depende de cadastrar o Redirect URI no LinkedIn Developer Portal e configurar as credenciais no Render.
+
+**Nenhuma ferramenta de negócio do LinkedIn** (ler publicações, engajamento, comentários, ou publicar) existe ainda. Nenhum deploy foi feito.
 
 ## Etapa 2. MCP local mínimo
 
@@ -51,6 +53,66 @@ Um **servidor MCP local mínimo** está implementado, apenas para validar a comu
 - **Achado de implementação:** quando `resource_server_url` não está na raiz (`<issuer>/mcp`), o SDK publica os metadados RFC 9728 em `/.well-known/oauth-protected-resource/mcp` (com o sufixo do path), não em `/.well-known/oauth-protected-resource` sozinho — confirmado testando contra o SDK real antes de escrever os testes.
 - **Pendências conhecidas, fora do escopo desta etapa:** armazenamento em memória (não sobrevive a reinício do processo no Render); ausência de tela de consentimento visível (a segurança desta v1 depende do `client_id` permanecer conhecido só por quem o configurou no Claude.ai, mais o PKCE obrigatório).
 
+## Etapa 7B. OAuth mcp-linkedin ↔ LinkedIn (Camada 2)
+
+- **O que foi implementado:** a infraestrutura OAuth completa da Camada 2, ligando as peças que existiam soltas desde as Etapas 3 e 4 num fluxo único e funcional: `MCP → URL de autorização → LinkedIn → callback → troca do authorization code → armazenamento do token`. **Nenhuma ferramenta de negócio do LinkedIn (leitura ou publicação) foi implementada nesta etapa**, e nenhuma chamada à API do LinkedIn existe além do endpoint de token.
+- [`config.py`](src/mcp_linkedin/config.py): `resolve_linkedin_config`, função pura no mesmo padrão de `resolve_run_config`, lendo `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET`, `MCP_PUBLIC_BASE_URL` e as opcionais `LINKEDIN_SCOPES` e `LINKEDIN_TOKEN_STORE_BACKEND`. Se qualquer obrigatória faltar, a Camada 2 fica desligada e o servidor sobe normalmente sem ela. `LinkedInConfig.__repr__` mascara o Client Secret.
+- **O `redirect_uri` não é uma variável própria:** é sempre derivado de `MCP_PUBLIC_BASE_URL` + `/oauth/linkedin/callback`. O mesmo valor precisa estar cadastrado no LinkedIn Developer Portal, ser enviado na URL de autorização e ser reenviado na troca por token; se divergirem, o LinkedIn recusa a troca. Uma variável separada só criaria a chance de divergirem.
+- [`auth_linkedin/http_transport.py`](src/mcp_linkedin/auth_linkedin/http_transport.py) **(novo):** `HttpxTransport`, a primeira implementação real do Protocol `HttpTransport`. É o único ponto do componente que abre conexão de rede para o LinkedIn. Usa `httpx2` (a linha 2.x do httpx), que já vinha instalada como dependência do próprio `mcp` 2.0.0, então **nenhuma instalação nova foi necessária**. Timeout de 10s, redirecionamento automático desligado (para o corpo com as credenciais nunca ser reenviado a outro host) e conversão das exceções do httpx2 em `TransportError` com `from None`, para o traceback encadeado não carregar o objeto `Request` que referencia o corpo com o Client Secret.
+- [`auth_linkedin/runtime.py`](src/mcp_linkedin/auth_linkedin/runtime.py) **(novo):** `LinkedInOAuthRuntime` compõe as peças existentes com estado compartilhado de vida longa. É o motivo de o módulo existir: o `state` gerado ao iniciar a autorização só pode ser validado depois, no callback, pelo **mesmo** `StateStore`.
+- [`auth_linkedin/token_store.py`](src/mcp_linkedin/auth_linkedin/token_store.py): novo `InMemoryCredentialBackend`, necessário porque o container de produção no Render roda Linux, onde o Windows Credential Manager (e o próprio `pywin32`) não existe. Não persiste: reiniciar o processo exige nova autorização, mesma decisão já tomada para as sessões da Camada 1.
+- [`server.py`](src/mcp_linkedin/server.py): rota `GET /oauth/linkedin/callback` via `custom_route` (rotas assim não exigem autorização no SDK, necessário porque o LinkedIn não envia o Bearer da Camada 1; a proteção é o `state` de uso único). **Responde JSON, nunca HTML: este componente não tem interface web.** Três ferramentas MCP: `linkedin_oauth_iniciar` (devolve a URL de autorização, sem o state isolado), `linkedin_oauth_status` (informa se há token válido, nunca o token) e `linkedin_mcp_status` (agora dinâmica, reportando também quais variáveis faltam configurar, por nome, nunca por valor).
+- **Escopos:** o padrão é conservador (`openid profile email`, o conjunto mínimo do OpenID Connect), configurável por `LINKEDIN_SCOPES`. Pedir um escopo que o app não tem aprovado faz o LinkedIn recusar a autorização inteira, então os escopos de Página só devem entrar depois de confirmados como aprovados no app Mobi.
+- **Nenhum acesso ao LinkedIn real nos testes.** Os 70 testes novos usam valores fictícios (prefixo `FAKE_`, domínio `.invalid` da RFC 2606), transporte HTTP falso ou `httpx2.MockTransport` (que exercita o `post` real de produção sem nenhum pacote sair da máquina), `InMemoryCredentialBackend` no lugar do Credential Manager real, e vários bloqueiam ativamente qualquer conexão que não seja loopback. Suíte total: **231 passed**.
+- **Pendências conhecidas, fora do escopo desta etapa:** armazenamento do token em memória (não sobrevive a reinício do processo no Render); `StateStore` também em memória, então a janela de 10 minutos da autorização não sobrevive a um restart; nenhum refresh automático do token do LinkedIn.
+
+## Etapa 7C. Backend de produção do token (Supabase com cifragem em envelope)
+
+### O problema verificado
+
+O `Win32CredentialBackend` **instancia** normalmente no Linux (o import de `win32cred` é preguiçoso, dentro de cada método), mas toda operação real falha com `ModuleNotFoundError`: `write` (`win32cred`), `read` e `delete` (`pywintypes`). O `pywin32` nem chega a ser instalado lá, porque o próprio `mcp` o declara como `pywin32>=311; sys_platform == 'win32'`.
+
+O agravante é **quando** isso quebraria: o servidor sobe, `linkedin_oauth_iniciar` devolve a URL, o captador autoriza no LinkedIn, e só então a gravação no callback explode, virando um 502. A falha chega depois de a pessoa já ter feito o trabalho, e sem token gravado.
+
+### O que foi implementado
+
+- [`auth_linkedin/crypto.py`](src/mcp_linkedin/auth_linkedin/crypto.py) **(novo):** cifragem em envelope com **AES-256-GCM** (autenticado), nonce aleatório de 12 bytes por operação, no formato `base64(nonce || ciphertext)`. A chave vem de `LINKEDIN_TOKEN_ENCRYPTION_KEY`, nunca do banco: **banco e chave ficam em domínios de confiança diferentes**, então um dump vazado do banco, sozinho, não entrega o token. É a mesma propriedade que o DPAPI dá localmente.
+- [`auth_linkedin/supabase_backend.py`](src/mcp_linkedin/auth_linkedin/supabase_backend.py) **(novo):** `SupabaseCredentialBackend`, sobre a API REST (PostgREST) via `httpx2`. Sem SDK novo, no mesmo padrão de `scripts/captahub-api.py`. Chave de API só em cabeçalho, nunca na URL. Qualquer resposta fora de 2xx é erro, **inclusive 3xx**: com `follow_redirects` desligado, um redirecionamento significa que a requisição não foi atendida, e o host de destino nunca chega a receber os cabeçalhos com a chave.
+- [`auth_linkedin/token_store.py`](src/mcp_linkedin/auth_linkedin/token_store.py): `EncryptedCredentialBackend`, que envelopa **qualquer** outro backend. Composição em vez de acoplamento: a cifragem é testável sem rede, e o backend do Supabase não precisa saber que existe cifragem. No Windows local **não** se aplica cifragem, porque o DPAPI já protege e uma segunda chave só acrescentaria gestão sem ganho.
+- **Falha de decifragem devolve `None`, não exceção.** O efeito prático é "não há token válido", que leva o captador a reautorizar. É o desfecho recuperável correto quando a chave foi trocada ou o dado corrompeu, e evita derrubar a ferramenta de status por causa disso.
+- [`config.py`](src/mcp_linkedin/config.py): novo backend `supabase`, que exige `MCP_LINKEDIN_SUPABASE_URL`, `MCP_LINKEDIN_SUPABASE_KEY` e `LINKEDIN_TOKEN_ENCRYPTION_KEY`. A chave de cifragem é **validada na inicialização**, não na primeira gravação: erro de configuração precisa aparecer antes de o captador gastar uma autorização no LinkedIn.
+- **Footgun corrigido:** `LINKEDIN_TOKEN_STORE_BACKEND=windows` fora do Windows era aceito sem reclamar e só falhava no callback. Agora é recusado na inicialização, com mensagem apontando para `supabase`.
+- **Isolamento (regra do CLAUDE.md):** credenciais próprias (`MCP_LINKEDIN_SUPABASE_*`), nunca o `SUPABASE_KEY` do `.env` da raiz do AMC-IA-Mobi.
+- **55 testes novos** (total: **286 passed**), nenhum acessando o Supabase real: `httpx2.MockTransport` intercepta dentro do próprio httpx2, então o código de produção roda inteiro sem nenhum pacote sair da máquina.
+
+### Tabela a criar no Supabase
+
+```sql
+create table if not exists mcp_linkedin_tokens (
+  target_name text primary key,
+  secret      text not null,
+  updated_at  timestamptz not null default now()
+);
+
+-- O conteúdo já chega cifrado, mas a tabela não deve ser exposta
+-- pela API pública: só a chave de serviço deste componente a acessa.
+alter table mcp_linkedin_tokens enable row level security;
+```
+
+A chave primária em `target_name` é o que faz o upsert (`Prefer: resolution=merge-duplicates`) funcionar.
+
+### Como gerar a chave de cifragem
+
+```bash
+python -c "from mcp_linkedin.auth_linkedin.crypto import generate_key_base64; print(generate_key_base64())"
+```
+
+Gere **uma vez**, guarde como secret no Render, e não versione. Trocar a chave invalida o token guardado, o que só custa uma reautorização.
+
+### Restrição registrada, sem trabalho agora
+
+O `StateStore` continua em memória. Pela TTL de 10 minutos ele **não** precisa de durabilidade, mas exige que o callback caia na **mesma instância** que emitiu o state. No plano free (instância única) está correto; se o serviço escalar para mais de uma instância, o state precisa ir para o armazenamento compartilhado, senão as autorizações passam a falhar de forma intermitente.
+
 ## O que é
 
 `mcp-linkedin` é um componente isolado dentro do repositório `amc-ia-Mobi`, com dependências, configuração e credenciais próprias, separado do restante do projeto (agentes de captação, comandos, skills). O AMC-IA-Mobi continua um sistema CLI e não é transformado em servidor web por causa deste componente.
@@ -59,10 +121,11 @@ O objetivo final deste componente é permitir que o Claude, através do protocol
 
 ## O que ainda não existe (pendente de autorização futura)
 
-- **OAuth mcp-linkedin → LinkedIn (Camada 2).** Ainda não implementado o fluxo em si (o `state_store`/`oauth_flow`/`oauth_callback`/`token_exchange` já existem desde as Etapas 3 e 4, mas ainda não estão conectados a nenhuma rota HTTP real nem ao app Mobi de verdade).
-- **Cliente HTTP para a API do LinkedIn.** Ainda não implementado.
-- **Ferramentas MCP funcionais** (leitura ou publicação do LinkedIn). Ainda não implementadas.
-- **Backend de produção do `TokenStore`.** Ainda em memória/local; a decisão de armazenamento persistente para produção segue pendente.
+- **Cliente HTTP para a API do LinkedIn.** Ainda não implementado. O `HttpxTransport` da Etapa 7B fala só com o endpoint de token, não com a API de conteúdo.
+- **Ferramentas MCP de negócio** (leitura ou publicação do LinkedIn). Ainda não implementadas.
+- **Autorização real no app Mobi.** O fluxo da Etapa 7B nunca foi executado contra o LinkedIn de verdade: depende de cadastrar o Redirect URI no LinkedIn Developer Portal e de configurar as credenciais no Render.
+- **Criar a tabela no Supabase e configurar as credenciais.** O backend de produção está implementado (Etapa 7C), mas a tabela ainda não existe e nenhuma credencial foi configurada no Render.
+- **Refresh automático do token do LinkedIn.** Ainda não implementado: quando o token expira, é preciso rodar `linkedin_oauth_iniciar` de novo.
 - **Domínio próprio (`mcp.mobilizando.org`).** Ainda não configurado; o serviço roda hoje só no domínio temporário do Render.
 
 ## Fora do escopo desta etapa e das próximas etapas imediatas
@@ -90,16 +153,25 @@ mcp-linkedin/
 ├── render.yaml             # configuracao do Render (Etapa 6D), sem secrets
 ├── src/
 │   └── mcp_linkedin/
-│       ├── server.py            # servidor MCP, transporte, resolve_claude_auth_config
-│       ├── config.py            # leitura de configuração (vazio nesta etapa)
+│       ├── server.py            # servidor MCP, transporte, Camada 1, rota de callback e ferramentas OAuth
+│       ├── config.py            # configuracao da Camada 2 (Etapa 7B)
 │       ├── auth_claude/         # Camada 1: Claude.ai <-> este servidor (Etapa 7A)
 │       │   ├── client_registry.py
 │       │   ├── session_store.py
 │       │   └── provider.py
-│       ├── auth_linkedin/       # Camada 2: este servidor <-> LinkedIn (logica pronta, sem rota HTTP ainda)
+│       ├── auth_linkedin/       # Camada 2: este servidor <-> LinkedIn (Etapa 7B, ligada)
+│       │   ├── state_store.py
+│       │   ├── oauth_flow.py
+│       │   ├── oauth_callback.py
+│       │   ├── token_exchange.py
+│       │   ├── token_store.py       # backends: Windows, memoria, cifrado
+│       │   ├── crypto.py            # cifragem em envelope (AES-256-GCM)
+│       │   ├── supabase_backend.py  # backend de producao (Etapa 7C)
+│       │   ├── http_transport.py    # unico ponto que abre rede para o LinkedIn
+│       │   └── runtime.py           # compoe o fluxo, com StateStore/TokenStore compartilhados
 │       ├── linkedin_client/     # cliente HTTP da API do LinkedIn (vazio nesta etapa)
-│       └── tools/                # ferramentas MCP funcionais futuras (vazio nesta etapa)
-└── tests/                        # 160 testes, nenhum acessa rede real (Etapa 7A)
+│       └── tools/                # ferramentas MCP de negocio futuras (vazio nesta etapa)
+└── tests/                        # 286 testes, nenhum acessa rede real (Etapa 7C)
 ```
 
 ## Segredos
