@@ -1,0 +1,13 @@
+# Segredos e ambiente local. Nunca devem entrar na imagem.
+.env
+.env.*
+secrets/
+.venv/
+*.key
+*.pem
+*.enc
+
+# Cache e artefatos locais.
+__pycache__/
+.pytest_cache/
+.git/

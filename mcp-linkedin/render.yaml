@@ -1,0 +1,31 @@
+# mcp-linkedin. Configuracao do Render (Etapa 6D).
+#
+# Preparacao apenas: nenhum servico foi criado no Render, nenhum
+# deploy foi feito, nenhuma conta acessada. Pressupoe que, ao
+# conectar o repositorio no painel do Render (etapa futura, manual),
+# o "Root Directory" deste servico seja configurado para
+# mcp-linkedin/ — os caminhos abaixo (dockerfilePath, dockerContext)
+# sao relativos a essa raiz, nao a raiz do repositorio amc-ia-Mobi.
+#
+# Sem secrets aqui: Client ID, Client Secret e access token do
+# LinkedIn nunca entram neste arquivo. Nenhum healthCheckPath foi
+# declarado de proposito: nao existe hoje nenhum endpoint HTTP
+# simples de "estou vivo" no servidor (so /mcp, que espera o
+# protocolo MCP, nao uma checagem trivial), e nao inventamos um so
+# para satisfazer um health check.
+#
+# PORT nao e declarada aqui: o Render fornece automaticamente a
+# variavel PORT ao container (10000 por padrao), e o servidor ja le
+# essa variavel em tempo de execucao.
+
+services:
+  - type: web
+    name: mcp-linkedin
+    runtime: docker
+    plan: free
+    region: virginia
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: MCP_TRANSPORT
+        value: streamable-http

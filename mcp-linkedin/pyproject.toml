@@ -1,0 +1,29 @@
+[project]
+name = "mcp-linkedin"
+version = "0.0.0"
+description = "Componente isolado (esqueleto) para integrar o LinkedIn Mobi ao Claude via MCP. Sem integração funcional nesta etapa."
+requires-python = ">=3.11"
+
+# Etapa 2 (MCP local mínimo): a única dependência necessária para
+# rodar o servidor de teste é o SDK oficial do MCP. Ainda não foi
+# instalada; ver pedido de autorização entregue ao final desta etapa.
+#
+# Dependências futuras (Camada 2, cliente HTTP, validação de schema)
+# seguem fora de escopo até nova autorização.
+dependencies = [
+    "mcp",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+# Garante que "pip install ." encontre o pacote em src/mcp_linkedin,
+# sem depender de auto-deteccao implicita do setuptools (Etapa 6B,
+# preparacao do container de producao).
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
