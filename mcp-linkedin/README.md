@@ -39,6 +39,18 @@ Um **servidor MCP local mínimo** está implementado, apenas para validar a comu
 - **`Dockerfile` alterado:** removida a variável `ENV PORT=8080` (premissa específica do Fly.io); `EXPOSE` passou de `8080` para `10000`, documentando o padrão atual do Render. `MCP_TRANSPORT=streamable-http` continua fixado na imagem. Nenhuma alteração de código Python foi necessária: `resolve_run_config` (Etapa 5C) já lê `PORT` do ambiente dinamicamente, então o servidor se adapta ao valor real fornecido pelo Render sem nenhuma mudança.
 - **Nenhum deploy foi feito nesta etapa.** Nenhuma conta Render foi acessada, nenhum CLI do Render instalado, nenhum repositório conectado ao Render.
 
+## Etapa 7A. OAuth Claude ↔ mcp-linkedin (Camada 1)
+
+- **O que foi implementado:** um Authorization Server mínimo para proteger a rota `/mcp`, permitindo o Claude.ai se conectar via "Adicionar conector personalizado". Reaproveita quase inteiramente o SDK oficial (`mcp.server.auth`): descoberta RFC 8414/RFC 9728, o handshake `401 + WWW-Authenticate`, e a validação PKCE S256 já vêm prontos do SDK; este componente só implementa o `OAuthAuthorizationServerProvider`.
+- [`src/mcp_linkedin/auth_claude/client_registry.py`](src/mcp_linkedin/auth_claude/client_registry.py): registro de um único cliente estático (sem DCR), pré-registrado via `MCP_CLAUDE_CLIENT_ID`/`MCP_CLAUDE_CLIENT_SECRET`, com o redirect_uri fixo e público `https://claude.ai/api/mcp/auth_callback`.
+- [`src/mcp_linkedin/auth_claude/session_store.py`](src/mcp_linkedin/auth_claude/session_store.py): authorization codes (TTL de 5 minutos, uso único), access tokens (TTL de 1 hora) e refresh tokens (TTL de 30 dias, com rotação a cada uso), **somente em memória** — decisão explícita desta v1, só para validar o fluxo no Render. Reiniciar o processo derruba as sessões.
+- [`src/mcp_linkedin/auth_claude/provider.py`](src/mcp_linkedin/auth_claude/provider.py): o `OAuthAuthorizationServerProvider`. Sem tela de consentimento (decisão explícita): depois que o SDK já validou client_id/redirect_uri/response_type, autoriza e redireciona imediatamente. DCR (`/register`) e revogação (`/revoke`) ficam desligados.
+- [`server.py`](src/mcp_linkedin/server.py): nova função pura `resolve_claude_auth_config` (mesmo padrão de `resolve_run_config`), lendo `MCP_CLAUDE_CLIENT_ID`, `MCP_CLAUDE_CLIENT_SECRET` (opcional) e `MCP_PUBLIC_BASE_URL` do ambiente. Se ausentes, a Camada 1 fica desligada (comportamento idêntico ao de antes desta etapa). `main()` só passa a configurar isso quando o transporte é `streamable-http`.
+- **PKCE S256:** não implementado manualmente — confirmado por inspeção do código-fonte do SDK que o próprio `TokenHandler` calcula e compara o `code_challenge`, rejeitando com `invalid_grant` em caso de divergência.
+- **Nenhum acesso ao LinkedIn ou ao Claude.ai real.** Todos os 51 testes novos desta etapa usam valores fictícios (`FAKE_...`) e rodam inteiramente em processo (via `TestClient`), com bloqueio de qualquer conexão de rede que não seja loopback.
+- **Achado de implementação:** quando `resource_server_url` não está na raiz (`<issuer>/mcp`), o SDK publica os metadados RFC 9728 em `/.well-known/oauth-protected-resource/mcp` (com o sufixo do path), não em `/.well-known/oauth-protected-resource` sozinho — confirmado testando contra o SDK real antes de escrever os testes.
+- **Pendências conhecidas, fora do escopo desta etapa:** armazenamento em memória (não sobrevive a reinício do processo no Render); ausência de tela de consentimento visível (a segurança desta v1 depende do `client_id` permanecer conhecido só por quem o configurou no Claude.ai, mais o PKCE obrigatório).
+
 ## O que é
 
 `mcp-linkedin` é um componente isolado dentro do repositório `amc-ia-Mobi`, com dependências, configuração e credenciais próprias, separado do restante do projeto (agentes de captação, comandos, skills). O AMC-IA-Mobi continua um sistema CLI e não é transformado em servidor web por causa deste componente.
@@ -47,13 +59,11 @@ O objetivo final deste componente é permitir que o Claude, através do protocol
 
 ## O que ainda não existe (pendente de autorização futura)
 
-- **OAuth Claude → mcp-linkedin (Camada 1).** Ainda não implementado. Será o servidor de autorização que o Claude.ai usa para se conectar a este componente como um conector personalizado.
-- **OAuth mcp-linkedin → LinkedIn (Camada 2).** Ainda não implementado. Será o fluxo pelo qual este componente se autentica na API do LinkedIn em nome do app Mobi.
+- **OAuth mcp-linkedin → LinkedIn (Camada 2).** Ainda não implementado o fluxo em si (o `state_store`/`oauth_flow`/`oauth_callback`/`token_exchange` já existem desde as Etapas 3 e 4, mas ainda não estão conectados a nenhuma rota HTTP real nem ao app Mobi de verdade).
 - **Cliente HTTP para a API do LinkedIn.** Ainda não implementado.
-- **Ferramentas MCP funcionais** (leitura ou publicação). Ainda não implementadas.
-- **Servidor MCP em funcionamento** (transporte stdio ou Streamable HTTP). Ainda não implementado.
-- **Decisão de infraestrutura de deploy.** Ainda não tomada. As opções em avaliação (Cloudflare Workers ou hospedagem Python persistente) estão descritas no plano técnico, mas nenhuma foi contratada ou configurada.
-- **Domínio e endpoint HTTPS público.** Ainda não definidos.
+- **Ferramentas MCP funcionais** (leitura ou publicação do LinkedIn). Ainda não implementadas.
+- **Backend de produção do `TokenStore`.** Ainda em memória/local; a decisão de armazenamento persistente para produção segue pendente.
+- **Domínio próprio (`mcp.mobilizando.org`).** Ainda não configurado; o serviço roda hoje só no domínio temporário do Render.
 
 ## Fora do escopo desta etapa e das próximas etapas imediatas
 
@@ -80,14 +90,16 @@ mcp-linkedin/
 ├── render.yaml             # configuracao do Render (Etapa 6D), sem secrets
 ├── src/
 │   └── mcp_linkedin/
-│       ├── server.py            # servidor MCP local mínimo, tool linkedin_mcp_status
+│       ├── server.py            # servidor MCP, transporte, resolve_claude_auth_config
 │       ├── config.py            # leitura de configuração (vazio nesta etapa)
-│       ├── auth_claude/         # Camada 1: Claude.ai <-> este servidor (vazio nesta etapa)
-│       ├── auth_linkedin/       # Camada 2: este servidor <-> LinkedIn (vazio nesta etapa)
+│       ├── auth_claude/         # Camada 1: Claude.ai <-> este servidor (Etapa 7A)
+│       │   ├── client_registry.py
+│       │   ├── session_store.py
+│       │   └── provider.py
+│       ├── auth_linkedin/       # Camada 2: este servidor <-> LinkedIn (logica pronta, sem rota HTTP ainda)
 │       ├── linkedin_client/     # cliente HTTP da API do LinkedIn (vazio nesta etapa)
 │       └── tools/                # ferramentas MCP funcionais futuras (vazio nesta etapa)
-└── tests/
-    └── test_server.py           # testa linkedin_mcp_status, sem chamada externa
+└── tests/                        # 160 testes, nenhum acessa rede real (Etapa 7A)
 ```
 
 ## Segredos
