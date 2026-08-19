@@ -785,6 +785,43 @@ def test_callback_com_falha_na_troca_responde_502(runtime_injetado):
     assert runtime.token_store.get_access_token() is None
 
 
+def test_callback_com_falha_de_armazenamento_responde_502(runtime_injetado):
+    # Antes desta rodada, uma falha do armazenamento remoto (ponte ou
+    # Supabase fora do ar) escapava do try da rota e virava um 500 com
+    # traceback. Agora e tratada como as demais falhas de troca.
+    from mcp_linkedin.auth_linkedin.token_store import TokenStoreBackendError
+
+    class TokenStoreQueFalha:
+        def save_access_token(self, access_token, expires_at):
+            raise TokenStoreBackendError("armazenamento remoto indisponivel")
+
+        def has_valid_token(self):
+            return False
+
+    runtime = _runtime()
+    runtime = runtime_injetado(
+        LinkedInOAuthRuntime(
+            config=runtime.config,
+            state_store=runtime.state_store,
+            token_store=TokenStoreQueFalha(),
+            transport=runtime.transport,
+            clock=runtime.clock,
+        )
+    )
+    autorizacao = runtime.start_authorization()
+    app = modulo_servidor.mcp.streamable_http_app()
+
+    with TestClient(app, base_url=_TEST_BASE_URL) as client:
+        resposta = client.get(
+            LINKEDIN_CALLBACK_PATH,
+            params={"code": FAKE_AUTHORIZATION_CODE, "state": autorizacao.state},
+        )
+
+    assert resposta.status_code == 502
+    assert resposta.json()["status"] == "erro_na_troca_de_token"
+    assert "armazenamento remoto indisponivel" not in resposta.text
+
+
 def test_callback_sem_configuracao_responde_503(runtime_injetado):
     runtime_injetado(None)
     app = modulo_servidor.mcp.streamable_http_app()

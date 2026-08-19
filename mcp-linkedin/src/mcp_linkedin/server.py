@@ -58,6 +58,7 @@ from mcp_linkedin.auth_claude.session_store import ClaudeSessionStore
 from mcp_linkedin.auth_linkedin.oauth_callback import CallbackOutcome, CallbackParams
 from mcp_linkedin.auth_linkedin.runtime import LinkedInOAuthRuntime, build_runtime
 from mcp_linkedin.auth_linkedin.token_exchange import TokenExchangeError, TransportError
+from mcp_linkedin.auth_linkedin.token_store import TokenStoreBackendError
 from mcp_linkedin.config import (
     LINKEDIN_CALLBACK_PATH,
     missing_linkedin_env_vars,
@@ -230,7 +231,7 @@ async def linkedin_oauth_callback(request: Request) -> JSONResponse:
 
     try:
         resultado = runtime.handle_callback(params)
-    except (TokenExchangeError, TransportError, ValueError):
+    except (TokenExchangeError, TransportError, TokenStoreBackendError, ValueError):
         # A mensagem original fica de fora da resposta de proposito:
         # ela pertence ao operador do servico, nao ao navegador que
         # chegou no callback. Nenhuma delas contem segredo, mas expor

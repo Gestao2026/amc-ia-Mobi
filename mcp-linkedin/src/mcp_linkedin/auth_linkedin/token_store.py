@@ -58,6 +58,17 @@ class TokenMetadata:
     expires_at: float  # epoch seconds
 
 
+class TokenStoreBackendError(Exception):
+    """
+    Falha ao falar com um armazenamento remoto de credencial. Nunca
+    contem segredo.
+
+    Vive aqui, e nao no modulo de um backend especifico, porque mais de
+    um backend remoto a levanta (Supabase e ponte HTTPS) e quem trata o
+    erro (a rota de callback) precisa de um unico tipo para capturar.
+    """
+
+
 class CredentialBackend(Protocol):
     """Interface minima que qualquer backend de credencial precisa cumprir."""
 

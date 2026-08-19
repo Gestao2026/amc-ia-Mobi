@@ -45,11 +45,23 @@ DEFAULT_LINKEDIN_SCOPES = ("openid", "profile", "email")
 TOKEN_STORE_BACKEND_WINDOWS = "windows"
 TOKEN_STORE_BACKEND_MEMORY = "memory"
 TOKEN_STORE_BACKEND_SUPABASE = "supabase"
+TOKEN_STORE_BACKEND_PONTE = "ponte"
 VALID_TOKEN_STORE_BACKENDS = {
     TOKEN_STORE_BACKEND_WINDOWS,
     TOKEN_STORE_BACKEND_MEMORY,
     TOKEN_STORE_BACKEND_SUPABASE,
+    TOKEN_STORE_BACKEND_PONTE,
 }
+
+# Variaveis exigidas pelo backend da ponte HTTPS (HostGator). A senha
+# do MySQL NAO esta aqui de proposito: nesta arquitetura o Render nunca
+# fala com o MySQL, so com a ponte. A senha do banco existe apenas no
+# config.php da HostGator.
+REQUIRED_PONTE_ENV_VARS = (
+    "MCP_LINKEDIN_PONTE_URL",
+    "MCP_LINKEDIN_PONTE_SECRET",
+    "LINKEDIN_TOKEN_ENCRYPTION_KEY",
+)
 
 # Variaveis exigidas somente pelo backend de producao. Nomes proprios
 # do componente: a regra de isolamento do CLAUDE.md proibe reaproveitar
@@ -68,6 +80,20 @@ class InvalidLinkedInConfigError(ValueError):
     """Configuracao da Camada 2 invalida. Nunca contem segredo."""
 
 
+def _validar_chave_de_cifragem(chave: str) -> None:
+    """
+    Confere a chave na INICIALIZACAO, nao na primeira gravacao de
+    token: uma chave malformada e erro de configuracao, e precisa
+    aparecer antes de o captador gastar uma autorizacao no LinkedIn.
+    """
+    try:
+        TokenCipher.from_base64_key(chave)
+    except InvalidEncryptionKeyError as erro:
+        # A mensagem de InvalidEncryptionKeyError nunca contem a chave
+        # (ver crypto.py), entao pode ser repassada.
+        raise InvalidLinkedInConfigError(f"LINKEDIN_TOKEN_ENCRYPTION_KEY invalida: {erro}") from None
+
+
 @dataclass(frozen=True)
 class LinkedInConfig:
     """Configuracao resolvida da Camada 2 (mcp-linkedin <-> LinkedIn)."""
@@ -81,6 +107,10 @@ class LinkedInConfig:
     supabase_url: str | None = None
     supabase_key: str | None = None
     supabase_table: str | None = None
+    # Preenchidos somente quando token_store_backend == "ponte".
+    ponte_url: str | None = None
+    ponte_secret: str | None = None
+    # Exigida pelos dois backends remotos.
     token_encryption_key: str | None = None
 
     def __repr__(self) -> str:
@@ -97,6 +127,8 @@ class LinkedInConfig:
             f"supabase_url={self.supabase_url!r}, "
             f"supabase_key={'***' if self.supabase_key else None!r}, "
             f"supabase_table={self.supabase_table!r}, "
+            f"ponte_url={self.ponte_url!r}, "
+            f"ponte_secret={'***' if self.ponte_secret else None!r}, "
             f"token_encryption_key={'***' if self.token_encryption_key else None!r})"
         )
 
@@ -174,6 +206,29 @@ def resolve_linkedin_config(env: Mapping[str, str] | None = None) -> LinkedInCon
         )
 
     supabase_url = supabase_key = supabase_table = token_encryption_key = None
+    ponte_url = ponte_secret = None
+
+    if backend == TOKEN_STORE_BACKEND_PONTE:
+        ausentes = [nome for nome in REQUIRED_PONTE_ENV_VARS if not env.get(nome)]
+        if ausentes:
+            raise InvalidLinkedInConfigError(
+                "LINKEDIN_TOKEN_STORE_BACKEND='ponte' exige as variaveis: " + ", ".join(ausentes) + "."
+            )
+
+        ponte_url = env["MCP_LINKEDIN_PONTE_URL"].strip()
+        ponte_secret = env["MCP_LINKEDIN_PONTE_SECRET"]
+        token_encryption_key = env["LINKEDIN_TOKEN_ENCRYPTION_KEY"]
+
+        # HTTPS obrigatorio. O envelope AES-GCM ja protege o token, mas
+        # o segredo da ponte viaja em cabecalho: em HTTP simples ele
+        # iria em claro pela internet. Recusar aqui impede que um erro
+        # de digitacao na URL degrade a ponte silenciosamente.
+        if not ponte_url.lower().startswith("https://"):
+            raise InvalidLinkedInConfigError(
+                "MCP_LINKEDIN_PONTE_URL precisa comecar com https:// (HTTP simples e recusado)."
+            )
+
+        _validar_chave_de_cifragem(token_encryption_key)
 
     if backend == TOKEN_STORE_BACKEND_SUPABASE:
         ausentes = [nome for nome in REQUIRED_SUPABASE_ENV_VARS if not env.get(nome)]
@@ -188,17 +243,7 @@ def resolve_linkedin_config(env: Mapping[str, str] | None = None) -> LinkedInCon
         supabase_key = env["MCP_LINKEDIN_SUPABASE_KEY"]
         supabase_table = (env.get("MCP_LINKEDIN_SUPABASE_TABLE") or "").strip() or None
         token_encryption_key = env["LINKEDIN_TOKEN_ENCRYPTION_KEY"]
-
-        # Valida a chave aqui, na inicializacao, e nao na primeira
-        # gravacao de token: uma chave malformada e erro de
-        # configuracao, e precisa aparecer antes de o captador gastar
-        # uma autorizacao no LinkedIn.
-        try:
-            TokenCipher.from_base64_key(token_encryption_key)
-        except InvalidEncryptionKeyError as erro:
-            # A mensagem de InvalidEncryptionKeyError nunca contem a
-            # chave (ver crypto.py), entao pode ser repassada.
-            raise InvalidLinkedInConfigError(f"LINKEDIN_TOKEN_ENCRYPTION_KEY invalida: {erro}") from None
+        _validar_chave_de_cifragem(token_encryption_key)
 
     return LinkedInConfig(
         client_id=client_id,
@@ -209,5 +254,7 @@ def resolve_linkedin_config(env: Mapping[str, str] | None = None) -> LinkedInCon
         supabase_url=supabase_url,
         supabase_key=supabase_key,
         supabase_table=supabase_table,
+        ponte_url=ponte_url,
+        ponte_secret=ponte_secret,
         token_encryption_key=token_encryption_key,
     )

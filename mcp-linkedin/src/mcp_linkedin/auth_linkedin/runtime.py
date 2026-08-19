@@ -52,6 +52,7 @@ from mcp_linkedin.auth_linkedin.token_store import (
     Win32CredentialBackend,
 )
 from mcp_linkedin.config import (
+    TOKEN_STORE_BACKEND_PONTE,
     TOKEN_STORE_BACKEND_SUPABASE,
     TOKEN_STORE_BACKEND_WINDOWS,
     LinkedInConfig,
@@ -126,6 +127,17 @@ def build_credential_backend(config: LinkedInConfig):
     """
     if config.token_store_backend == TOKEN_STORE_BACKEND_WINDOWS:
         return Win32CredentialBackend()
+
+    if config.token_store_backend == TOKEN_STORE_BACKEND_PONTE:
+        # Imports locais: so quem roda com este backend precisa deles.
+        from mcp_linkedin.auth_linkedin.crypto import TokenCipher
+        from mcp_linkedin.auth_linkedin.ponte_backend import PonteCredentialBackend
+
+        ponte = PonteCredentialBackend(url=config.ponte_url, secret=config.ponte_secret)
+        return EncryptedCredentialBackend(
+            inner=ponte,
+            cipher=TokenCipher.from_base64_key(config.token_encryption_key),
+        )
 
     if config.token_store_backend == TOKEN_STORE_BACKEND_SUPABASE:
         # Imports locais: so quem roda com o backend de producao

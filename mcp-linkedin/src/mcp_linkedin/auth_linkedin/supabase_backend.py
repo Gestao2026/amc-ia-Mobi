@@ -43,8 +43,10 @@ COLUNA_ALVO = "target_name"
 COLUNA_SEGREDO = "secret"
 
 
-class TokenStoreBackendError(Exception):
-    """Falha ao falar com o armazenamento remoto. Nunca contem segredo."""
+# Reexportado de token_store para nao duplicar a classe: mais de um
+# backend remoto a levanta, e a rota de callback precisa de um unico
+# tipo para capturar. Importar daqui continua funcionando.
+from mcp_linkedin.auth_linkedin.token_store import TokenStoreBackendError  # noqa: E402
 
 
 class SupabaseCredentialBackend:

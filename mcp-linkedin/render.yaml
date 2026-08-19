@@ -30,8 +30,11 @@ services:
       - key: MCP_TRANSPORT
         value: streamable-http
       # Backend de producao do token: o container roda Linux, onde o
-      # Windows Credential Manager nao existe. Este valor nao e
-      # secret; as credenciais do Supabase e a chave de cifragem sim,
-      # e ficam so no painel do Render.
+      # Windows Credential Manager nao existe. Usamos a ponte HTTPS na
+      # HostGator, para o MySQL de la continuar escutando so em
+      # localhost (a conexao direta exigiria liberar uma faixa CIDR
+      # que o Render compartilha com outros clientes).
+      # Este valor nao e secret; a URL, o segredo da ponte e a chave de
+      # cifragem sim, e ficam so no painel do Render.
       - key: LINKEDIN_TOKEN_STORE_BACKEND
-        value: supabase
+        value: ponte

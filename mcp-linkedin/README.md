@@ -113,6 +113,48 @@ Gere **uma vez**, guarde como secret no Render, e não versione. Trocar a chave 
 
 O `StateStore` continua em memória. Pela TTL de 10 minutos ele **não** precisa de durabilidade, mas exige que o callback caia na **mesma instância** que emitiu o state. No plano free (instância única) está correto; se o serviço escalar para mais de uma instância, o state precisa ir para o armazenamento compartilhado, senão as autorizações passam a falhar de forma intermitente.
 
+## Etapa 7D. Ponte HTTPS na HostGator (backend de produção atual)
+
+### Por que trocar o Supabase pela ponte
+
+Decisão de infraestrutura: o armazenamento de produção passou a ser o MySQL da HostGator. A conexão **direta** Render → MySQL foi **descartada** e não deve ser implementada: os IPs de saída do Render são faixas CIDR **compartilhadas com todos os clientes da mesma região** ([Render Docs](https://render.com/docs/outbound-ip-addresses)), e liberá-las em Remote MySQL deixaria o banco alcançável por qualquer serviço hospedado no Render. IPs dedicados são add-on pago.
+
+A ponte resolve isso: o MySQL continua escutando **só em localhost**, e nada precisa ser liberado.
+
+```
+Render (mcp-linkedin) --HTTPS autenticado--> ponte.mobilizando.org/token.php --> MySQL localhost
+```
+
+### O que foi implementado
+
+- [`auth_linkedin/ponte_backend.py`](src/mcp_linkedin/auth_linkedin/ponte_backend.py) **(novo):** `PonteCredentialBackend`, mesma forma do backend do Supabase. **Nenhuma dependência nova:** o `httpx2` já cobria tudo (a rota do MySQL direto teria exigido o PyMySQL).
+- [`ponte-hostgator/`](ponte-hostgator/) **(novo):** `token.php`, `.htaccess`, `mcp-linkedin-config.exemplo.php` e o guia de instalação. **Não são deployados pelo Render**, vão por FTP/cPanel.
+- **Autenticação:** segredo compartilhado em cabeçalho, validado com **`hash_equals()`** (tempo constante). O `token.php` aceita `X-MCP-Ponte-Secret` **e** `Authorization: Bearer`, porque em hospedagem compartilhada o `Authorization` costuma ser removido pelo CGI/FastCGI antes de chegar ao PHP. Sem essa redundância, a autenticação funcionaria nos testes e falharia em produção.
+- **HTTPS obrigatório nas duas pontas:** o `config.py` recusa uma URL que não comece com `https://` na inicialização, e o `token.php` recusa requisição que não chegue por HTTPS. O envelope AES protege o token, mas o segredo da ponte viaja em cabeçalho e iria em claro por HTTP.
+- **PDO com prepared statements**, `ATTR_EMULATE_PREPARES => false`, upsert por `ON DUPLICATE KEY UPDATE`. Erros do PDO nunca são ecoados nem registrados: a mensagem pode conter usuário e host do banco.
+- **O alvo é fixo no servidor.** O `token.php` valida o `alvo` recebido contra o esperado, então a ponte não serve como armazenamento genérico nem permite varrer outras chaves.
+- **A senha do MySQL não é variável do Render.** Nesta arquitetura o Render nunca fala com o banco, só com a ponte; a senha existe apenas no `config.php` da HostGator, fora do `public_html`, com permissão 600.
+
+### AES-GCM: inalterado
+
+A cifragem **não mudou uma linha**. O `EncryptedCredentialBackend` passou a envelopar o `PonteCredentialBackend` exatamente como envelopa o do Supabase.
+
+**O PHP nunca recebe, conhece ou guarda a chave AES.** Ela existe apenas no ambiente do Render. Um comprometimento total da HostGator entrega **apenas ciphertext**. Há testes que provam cada parte disso: `test_a_ponte_nunca_recebe_a_chave_aes`, `test_ciphertext_e_o_unico_conteudo_que_chega_na_ponte` e `test_quem_tem_o_banco_da_ponte_nao_consegue_ler_o_token`.
+
+### Correção de um defeito encontrado nesta rodada
+
+`TokenStoreBackendError` escapava do `try` da rota de callback, então uma falha do armazenamento remoto (ponte fora do ar, Supabase indisponível) virava **HTTP 500 com traceback** em vez de um 502 limpo. A exceção passou a viver em `token_store.py`, compartilhada pelos dois backends remotos, e a rota agora a captura. Coberto por `test_callback_com_falha_de_armazenamento_responde_502`.
+
+### O backend do Supabase continua disponível
+
+Mantido conforme decisão, selecionável por `LINKEDIN_TOKEN_STORE_BACKEND=supabase`, com todos os seus testes. Há um teste que protege isso (`test_backend_supabase_continua_disponivel`).
+
+### Testes
+
+**331 passed.** Os do lado Python usam `httpx2.MockTransport`, que exercita o código real sem nenhum pacote sair da máquina. O contrato que o `token.php` precisa cumprir está codificado como **especificação executável** na classe `PonteFalsa` de [`tests/test_ponte.py`](tests/test_ponte.py).
+
+**Limitação honesta:** não há PHP neste ambiente de desenvolvimento, então o `token.php` **não tem teste automatizado**. A verificação dele é o roteiro de `curl` em [`ponte-hostgator/README.md`](ponte-hostgator/README.md), a ser rodado depois do upload.
+
 ## O que é
 
 `mcp-linkedin` é um componente isolado dentro do repositório `amc-ia-Mobi`, com dependências, configuração e credenciais próprias, separado do restante do projeto (agentes de captação, comandos, skills). O AMC-IA-Mobi continua um sistema CLI e não é transformado em servidor web por causa deste componente.
