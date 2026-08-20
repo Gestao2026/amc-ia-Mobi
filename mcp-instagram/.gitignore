@@ -1,0 +1,16 @@
+# Segredos. Nunca versionar.
+.env
+secrets/
+*.enc
+*.key
+
+# Ambiente Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+
+# Sistema
+.DS_Store

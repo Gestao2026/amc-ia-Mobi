@@ -1,0 +1,31 @@
+[project]
+name = "mcp-instagram"
+version = "0.1.0"
+description = "Conexão do Instagram da Mobilizando ao Claude via MCP. Somente leitura de perfil e métricas."
+requires-python = ">=3.11"
+
+# mcp: SDK oficial do MCP (servidor, transporte, Camada 1 de OAuth).
+# httpx2: linha 2.x do httpx, usada pelo HttpxTransport na troca de
+#   authorization code por access token e pelos backends remotos de
+#   armazenamento. Já vem instalada como dependência do próprio mcp,
+#   mas é declarada aqui porque é um import direto deste componente.
+# cryptography: cifragem em envelope (AES-256-GCM) do access token antes
+#   de ele sair para o armazenamento remoto de produção.
+dependencies = [
+    "mcp",
+    "httpx2",
+    "cryptography",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+# Garante que "pip install ." encontre o pacote em src/mcp_instagram,
+# sem depender de autodetecção implícita do setuptools.
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

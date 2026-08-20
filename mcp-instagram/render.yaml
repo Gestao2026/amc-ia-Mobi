@@ -1,0 +1,46 @@
+# mcp-instagram. Configuração do Render.
+#
+# Preparação apenas: nenhum serviço foi criado no Render, nenhum deploy
+# foi feito, nenhuma conta acessada. Pressupõe que, ao conectar o
+# repositório no painel do Render (etapa manual), o "Root Directory"
+# deste serviço seja configurado para mcp-instagram/, porque os caminhos
+# abaixo são relativos a essa raiz, não à raiz do repositório
+# amc-ia-Mobi.
+#
+# Sem secrets aqui: Client ID, Client Secret, segredo da ponte, chave de
+# cifragem e access token do Instagram nunca entram neste arquivo.
+# Nenhum healthCheckPath foi declarado de propósito: não existe hoje um
+# endpoint HTTP simples de "estou vivo" no servidor (só /mcp, que espera
+# o protocolo MCP, e o callback OAuth), e não inventamos um só para
+# satisfazer um health check.
+#
+# PORT não é declarada aqui: o Render fornece automaticamente a variável
+# PORT ao container (10000 por padrão), e o servidor já a lê em tempo de
+# execução.
+
+services:
+  - type: web
+    name: mcp-instagram
+    runtime: docker
+    plan: free
+    region: virginia
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: MCP_TRANSPORT
+        value: streamable-http
+      # Backend de produção do token: o container roda Linux, onde o
+      # Windows Credential Manager não existe. Usamos a ponte HTTPS na
+      # HostGator, para o MySQL de lá continuar escutando só em
+      # localhost (a conexão direta exigiria liberar uma faixa CIDR que
+      # o Render compartilha com outros clientes).
+      # Este valor não é secret; a URL, o segredo da ponte e a chave de
+      # cifragem são, e ficam só no painel do Render.
+      - key: INSTAGRAM_TOKEN_STORE_BACKEND
+        value: ponte
+      # Escopos travados em somente leitura. Declarado explicitamente
+      # aqui, e não deixado no padrão do código, para que qualquer
+      # ampliação de permissão fique visível como uma mudança de
+      # configuração revisável, e não como um efeito colateral.
+      - key: INSTAGRAM_SCOPES
+        value: instagram_business_basic,instagram_business_manage_insights
