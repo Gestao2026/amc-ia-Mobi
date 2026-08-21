@@ -20,7 +20,24 @@ Consequência prática: um comprometimento total desta hospedagem (banco, PHP e 
 
 ## O que enviar, e para onde
 
-Supondo o subdomínio `ponte.mobilizando.org` com docroot em `/home/rosepa59/ponte.mobilizando.org/`:
+A instalação real nesta conta (conferida em 20/08/2026 pelo gerenciador de
+arquivos do cPanel) usa estes caminhos, e não os genéricos que este guia
+supunha antes:
+
+```
+/home2/rosepa59/home2/rosepa59/ponte-mcp/
+├── mcp-linkedin-config.php     0600   config do LinkedIn, fora da web
+├── mcp-instagram-config.php    0600   config do Instagram, fora da web
+└── public/                     0750   docroot do subdomínio ponte.mobilizando.org
+    ├── .htaccess               0644   serve os dois componentes
+    ├── token.php               0644   ponte do LinkedIn
+    └── token-instagram.php     0644   ponte do Instagram
+```
+
+O que importa não é o nome das pastas, é a relação entre elas: o config fica
+sempre **um nível acima** do docroot, porque o PHP o procura em
+`__DIR__ . '/../mcp-instagram-config.php'`. Aqui o docroot chama-se `public/`
+e a pasta-mãe `ponte-mcp/`; em outra conta os nomes podem mudar, a relação não.
 
 | Arquivo | Destino | Permissão |
 |---|---|---|
