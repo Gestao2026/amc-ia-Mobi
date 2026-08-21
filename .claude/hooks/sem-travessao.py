@@ -30,7 +30,7 @@ def main():
 
     # Só vigia entregáveis: projetos das OSCs (Fase 1) e materiais do captador (Fase 2)
     caminho_norm = caminho.replace("\\", "/")
-    if "minhas-oscs" not in caminho_norm and "captador/entregas" not in caminho_norm:
+    if "minhas-oscs" not in caminho_norm and "marketing/entregas" not in caminho_norm:
         sys.exit(0)
     if not caminho.endswith(EXTENSOES):
         sys.exit(0)

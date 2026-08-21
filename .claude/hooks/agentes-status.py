@@ -35,12 +35,12 @@ REGRAS_ARQUIVO = [
     (r"projetos/.+/edital\.md",     ("data",  "edital-analisar",       "Analisando o edital")),
     (r"perfil-osc\.md",             ("prod",  "osc-nova",              "Cadastrando a OSC")),
     (r"estado\.md",                 ("prod",  "projeto",               "Atualizando o projeto")),
-    (r"captador/perfil",            ("ad",    "captador-perfil",       "Posicionando o captador")),
-    (r"captador/oferta",            ("ad",    "assessoria-estruturar", "Estruturando a oferta")),
-    (r"captador/entregas/conteudo", ("ad",    "captador-conteudo",     "Criando conteúdo de autoridade")),
-    (r"captador/entregas/pagina",   ("ad",    "captador-pagina",       "Montando a página da assessoria")),
-    (r"captador/entregas/anuncios", ("ad",    "captador-anuncio",      "Gerando anúncios para atrair OSCs")),
-    (r"captador/entregas/comercial",("ad",    "assessoria-pitch",      "Escrevendo a proposta comercial")),
+    (r"marketing/perfil",           ("ad",    "captador-perfil",       "Posicionando o captador")),
+    (r"marketing/oferta",           ("ad",    "assessoria-estruturar", "Estruturando a oferta")),
+    (r"marketing/entregas/conteudo",("ad",    "captador-conteudo",     "Criando conteúdo de autoridade")),
+    (r"marketing/entregas/pagina",  ("ad",    "captador-pagina",       "Montando a página da assessoria")),
+    (r"marketing/entregas/anuncios",("ad",    "captador-anuncio",      "Gerando anúncios para atrair OSCs")),
+    (r"marketing/entregas/comercial",("ad",    "assessoria-pitch",      "Escrevendo a proposta comercial")),
 ]
 REGRAS_COMANDO = [
     (r"captahub-editais\.py",       ("data",  "edital-minerar",   "Puxando editais do CaptaHub")),

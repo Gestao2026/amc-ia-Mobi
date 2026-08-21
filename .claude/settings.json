@@ -2,10 +2,10 @@
   "permissions": {
     "allow": [
       "Write(minhas-oscs/**)",
-      "Write(captador/**)",
+      "Write(marketing/**)",
       "Write(painel/**)",
       "Edit(minhas-oscs/**)",
-      "Edit(captador/**)",
+      "Edit(marketing/**)",
       "Bash(python3 scripts/minerar-editais.py:*)",
       "Bash(python3 scripts/captahub-editais.py:*)",
       "Bash(python3 scripts/verificar-acentuacao.py:*)",

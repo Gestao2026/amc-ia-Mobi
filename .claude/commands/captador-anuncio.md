@@ -8,7 +8,7 @@ Gera anúncios para o captador alcançar gestores de OSC e levá-los à página 
 
 ## Passo 0. Contexto
 
-Leia `captador/perfil-captador.md`. Se não existir, oriente `/captador-perfil`. Consulte `.claude/skills/posicionamento-captador/SKILL.md`.
+Leia `marketing/perfil-captador.md`. Se não existir, oriente `/captador-perfil`. Consulte `.claude/skills/posicionamento-captador/SKILL.md`.
 
 ## Passo 1. Entrevista
 
@@ -22,7 +22,7 @@ Anuncie e acione o agente `posicionador-captador`. Ele gera a copy do anúncio (
 
 ## Passo 3. Aprovação e entrega
 
-Mostre para aprovação (aprovar e salvar / ajustar). Após aprovar, salve em `captador/entregas/anuncios/` e informe o caminho.
+Mostre para aprovação (aprovar e salvar / ajustar). Após aprovar, salve em `marketing/entregas/anuncios/` e informe o caminho.
 
 ## Regras
 

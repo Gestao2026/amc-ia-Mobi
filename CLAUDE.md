@@ -201,7 +201,7 @@ Este projeto atende várias OSCs (o captador é uma assessoria com carteira de c
 O sistema trabalha em dois contextos distintos, conforme a fase:
 
 - **Contexto da OSC (Fase 1, CAPTAR).** Tudo que envolve editais e projetos roda sobre a OSC ativa (`minhas-oscs/{ativa}/`). É o trabalho técnico de transformar editais em projetos aprovados.
-- **Contexto do captador (Fase 2, POSICIONAR).** O marketing e a venda da assessoria rodam sobre o perfil do próprio captador (`captador/perfil-captador.md`), não sobre uma OSC. Aqui o captador é o negócio, e o público são os gestores de OSC que vão contratá-lo. Comandos `/captador-*` e `/assessoria-*` usam este contexto.
+- **Contexto do captador (Fase 2, POSICIONAR).** O marketing e a venda da assessoria rodam sobre o perfil do próprio captador (`marketing/perfil-captador.md`), não sobre uma OSC. Aqui o captador é o negócio, e o público são os gestores de OSC que vão contratá-lo. Comandos `/captador-*` e `/assessoria-*` usam este contexto.
 
 ---
 
@@ -218,9 +218,9 @@ O sistema trabalha em dois contextos distintos, conforme a fase:
 | Documentos da OSC | `minhas-oscs/{slug}/projetos/{edital}/documentos/` | arquivos |
 | Estado da elaboração do projeto | `minhas-oscs/{slug}/projetos/{edital}/estado.md` | `.md` |
 | Entrega final pronta para submeter | `minhas-oscs/{slug}/projetos/{edital}/entrega-final/` | `.doc` / `.pdf` / `.xls` |
-| Perfil do captador (Fase 2) | `captador/perfil-captador.md` | `.md` |
-| Oferta da assessoria | `captador/oferta.md` | `.md` |
-| Conteúdo, página e anúncio do captador | `captador/entregas/{tipo}/` | `.md` / `.html` |
+| Perfil do captador (Fase 2) | `marketing/perfil-captador.md` | `.md` |
+| Oferta da assessoria | `marketing/oferta.md` | `.md` |
+| Conteúdo, página e anúncio do captador | `marketing/entregas/{tipo}/` | `.md` / `.html` |
 
 ---
 

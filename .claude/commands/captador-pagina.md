@@ -8,7 +8,7 @@ Gera a página que capta OSCs interessadas na assessoria do captador. Copy compl
 
 ## Passo 0. Contexto
 
-Leia `captador/perfil-captador.md`. Se não existir, oriente `/captador-perfil`. Se já existe uma oferta estruturada em `captador/oferta.md` (gerada por `/assessoria-estruturar`), use-a. Consulte `.claude/skills/posicionamento-captador/SKILL.md` (estrutura e design da página).
+Leia `marketing/perfil-captador.md`. Se não existir, oriente `/captador-perfil`. Se já existe uma oferta estruturada em `marketing/oferta.md` (gerada por `/assessoria-estruturar`), use-a. Consulte `.claude/skills/posicionamento-captador/SKILL.md` (estrutura e design da página).
 
 ## Passo 1. Entrevista
 
@@ -22,7 +22,7 @@ Anuncie e acione o agente `posicionador-captador`. Ele escreve a copy das 9 seç
 
 ## Passo 3. Entrega
 
-Não mostre o código no chat. Salve o HTML em `captador/entregas/pagina/` e a copy em markdown ao lado. Informe os caminhos absolutos e oriente abrir o HTML no navegador.
+Não mostre o código no chat. Salve o HTML em `marketing/entregas/pagina/` e a copy em markdown ao lado. Informe os caminhos absolutos e oriente abrir o HTML no navegador.
 
 ## Regras
 

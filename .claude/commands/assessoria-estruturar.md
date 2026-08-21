@@ -8,7 +8,7 @@ Estrutura a oferta da assessoria do captador: o que entra, em quais pacotes, por
 
 ## Passo 0. Contexto
 
-Leia `captador/perfil-captador.md`. Se não existir, oriente `/captador-perfil`. Consulte a seção "A oferta da assessoria" de `.claude/skills/posicionamento-captador/SKILL.md`.
+Leia `marketing/perfil-captador.md`. Se não existir, oriente `/captador-perfil`. Consulte a seção "A oferta da assessoria" de `.claude/skills/posicionamento-captador/SKILL.md`.
 
 ## Passo 1. Entrevista
 
@@ -27,7 +27,7 @@ Monte a oferta com:
 
 ## Passo 3. Aprovação e entrega
 
-Mostre para aprovação (aprovar e salvar / ajustar). Após aprovar, salve em `captador/oferta.md` e a proposta comercial em `captador/entregas/comercial/` e informe os caminhos.
+Mostre para aprovação (aprovar e salvar / ajustar). Após aprovar, salve em `marketing/oferta.md` e a proposta comercial em `marketing/entregas/comercial/` e informe os caminhos.
 
 ## Passo 4. Próximo passo
 

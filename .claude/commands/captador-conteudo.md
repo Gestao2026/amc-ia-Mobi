@@ -8,7 +8,7 @@ Gera conteúdo que posiciona o captador como autoridade em captação e atrai ge
 
 ## Passo 0. Contexto
 
-Leia `captador/perfil-captador.md`. Se não existir, oriente `/captador-perfil` primeiro. Consulte `.claude/skills/posicionamento-captador/SKILL.md`.
+Leia `marketing/perfil-captador.md`. Se não existir, oriente `/captador-perfil` primeiro. Consulte `.claude/skills/posicionamento-captador/SKILL.md`.
 
 ## Passo 1. Entrevista
 
@@ -22,7 +22,7 @@ Anuncie e acione o agente `posicionador-captador`. Ele gera a peça a partir do 
 
 ## Passo 3. Aprovação e entrega
 
-Mostre para aprovação (aprovar e salvar / ajustar). Após aprovar, salve em `captador/entregas/conteudo/` e informe o caminho.
+Mostre para aprovação (aprovar e salvar / ajustar). Após aprovar, salve em `marketing/entregas/conteudo/` e informe o caminho.
 
 ## Regras
 

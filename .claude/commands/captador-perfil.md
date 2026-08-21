@@ -8,7 +8,7 @@ Cadastra o próprio captador (o mentorado) como negócio. É a fundação da Fas
 
 ## Passo 0. Contexto
 
-Verifique se já existe `captador/perfil-captador.md`. Se existir, ofereça atualizar em vez de recomeçar. Use como base o modelo `captador/MODELO-perfil-captador.md`.
+Verifique se já existe `marketing/perfil-captador.md`. Se existir, ofereça atualizar em vez de recomeçar. Use como base o modelo `marketing/MODELO-perfil-captador.md`.
 
 ## Passo 1. Entrevista (UMA pergunta por vez)
 
@@ -25,7 +25,7 @@ Pergunte na ordem, uma por vez:
 
 ## Passo 2. Confirmação e salvamento
 
-Resuma o perfil, peça OK, salve em `captador/perfil-captador.md` e informe o caminho.
+Resuma o perfil, peça OK, salve em `marketing/perfil-captador.md` e informe o caminho.
 
 ## Passo 3. Próximo passo
 
