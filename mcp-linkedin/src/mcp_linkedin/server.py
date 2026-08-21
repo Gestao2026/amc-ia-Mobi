@@ -64,6 +64,18 @@ from mcp_linkedin.config import (
     missing_linkedin_env_vars,
     resolve_linkedin_config,
 )
+from mcp_linkedin.linkedin_client.publicacao import (
+    LIMITE_CARACTERES,
+    ClienteLinkedIn,
+    ErroDaApi,
+    PermissaoAusenteError,
+    SemAutorizacaoError,
+    TextoInvalidoError,
+)
+from mcp_linkedin.linkedin_client.transporte import (
+    ErroDeTransporte,
+    TransporteLinkedInHttpx,
+)
 
 mcp = MCPServer("mcp-linkedin")
 
@@ -196,6 +208,142 @@ def linkedin_oauth_status() -> dict:
             "linkedin_oauth_iniciar para autorizar."
         ),
     }
+
+
+# =====================================================================
+# Ferramentas de negocio: ler o perfil e publicar
+# =====================================================================
+#
+# Este componente PUBLICA, ao contrario do mcp-instagram, que e somente
+# leitura. Publicar no perfil de alguem e uma acao publica e dificil de
+# desfazer: a publicacao pode ser vista, curtida e comentada antes de
+# qualquer correcao.
+#
+# Por isso a trava aqui nao pode ser estrutural (o transporte precisa
+# saber escrever). Ela e explicita, e tem tres partes:
+#
+#   1. `texto` e obrigatorio e vem de quem chama. Nao ha valor padrao e
+#      o servidor nunca gera conteudo por conta propria.
+#   2. `confirmado` precisa vir True. O valor padrao e False, entao uma
+#      chamada distraida devolve a previa em vez de publicar.
+#   3. A previa mostra exatamente o que sera publicado, para a decisao
+#      ser tomada sobre o texto real e nao sobre a lembranca dele.
+
+_CLIENTE_NAO_RESOLVIDO = object()
+_cliente_linkedin: "ClienteLinkedIn | None | object" = _CLIENTE_NAO_RESOLVIDO
+
+
+def get_cliente_linkedin() -> "ClienteLinkedIn | None":
+    """
+    Devolve o cliente unico do processo, ou None se a Camada 2 nao
+    estiver configurada. Nao acessa rede: o transporte so abre conexao
+    quando `get` ou `post` e de fato chamado.
+    """
+    global _cliente_linkedin
+    if _cliente_linkedin is _CLIENTE_NAO_RESOLVIDO:
+        runtime = get_linkedin_runtime()
+        if runtime is None:
+            _cliente_linkedin = None
+        else:
+            _cliente_linkedin = ClienteLinkedIn(
+                transporte=TransporteLinkedInHttpx(),
+                obter_token=runtime.token_store.get_access_token,
+            )
+    return _cliente_linkedin  # type: ignore[return-value]
+
+
+def _executar(operacao) -> dict:
+    """Executa uma chamada e traduz as falhas possiveis em resposta de ferramenta."""
+    cliente = get_cliente_linkedin()
+
+    if cliente is None:
+        return {
+            "status": "nao_configurado",
+            "detalhe": "A conexao com o LinkedIn nao esta configurada neste servidor.",
+            "variaveis_ausentes": missing_linkedin_env_vars(),
+        }
+
+    try:
+        return operacao(cliente)
+    except SemAutorizacaoError as erro:
+        return {"status": "nao_conectado", "detalhe": str(erro)}
+    except TextoInvalidoError as erro:
+        return {"status": "texto_invalido", "detalhe": str(erro)}
+    except PermissaoAusenteError as erro:
+        return {"status": "sem_permissao_de_publicar", "detalhe": str(erro)}
+    except ErroDaApi as erro:
+        return {"status": "recusado_pelo_linkedin", **erro.como_dicionario()}
+    except ErroDeTransporte as erro:
+        return {"status": "falha_de_rede", "detalhe": str(erro)}
+
+
+@mcp.tool()
+def linkedin_perfil() -> dict:
+    """
+    Le os dados do proprio perfil: nome, foto e identificador do membro.
+
+    E a unica leitura possivel hoje. Ler publicacoes, engajamento ou
+    metricas exige a Community Management API, que nao esta aprovada
+    neste aplicativo.
+    """
+    return _executar(lambda cliente: {"status": "ok", "dados": cliente.perfil()})
+
+
+@mcp.tool()
+def linkedin_publicar(
+    texto: str,
+    confirmado: bool = False,
+    visibilidade: str = "PUBLIC",
+) -> dict:
+    """
+    Publica um texto no perfil pessoal de quem autorizou.
+
+    ATENCAO: esta acao e publica e nao tem desfazer silencioso. A
+    publicacao fica visivel no perfil assim que criada.
+
+    Por isso a ferramenta tem duas etapas. Chamada com `confirmado`
+    False, que e o padrao, ela NAO publica: devolve a previa exata do
+    que seria publicado, para o texto ser conferido. Publicar de fato
+    exige uma segunda chamada com `confirmado` True.
+
+    Nunca chame com `confirmado` True sem o autor ter lido o texto e
+    dito que pode publicar.
+
+    Parametros:
+      texto: o conteudo da publicacao, ate 3000 caracteres. Obrigatorio.
+      confirmado: True publica. False (padrao) devolve a previa.
+      visibilidade: PUBLIC (qualquer pessoa) ou CONNECTIONS (so conexoes).
+    """
+    texto_limpo = (texto or "").strip()
+
+    if not confirmado:
+        if not texto_limpo:
+            return {
+                "status": "texto_invalido",
+                "detalhe": "O texto da publicacao esta vazio. Informe o que deve ser publicado.",
+            }
+        return {
+            "status": "previa",
+            "publicado": False,
+            "texto": texto_limpo,
+            "caracteres": len(texto_limpo),
+            "limite": LIMITE_CARACTERES,
+            "visibilidade": visibilidade,
+            "detalhe": (
+                "Nada foi publicado. Esta e a previa exata do que sera publicado no perfil. "
+                "Mostre este texto ao autor e, com a aprovacao dele, chame de novo com "
+                "confirmado=True."
+            ),
+        }
+
+    return _executar(
+        lambda cliente: {
+            "status": "publicado",
+            "publicado": True,
+            **cliente.publicar(texto_limpo, visibilidade),
+            "detalhe": "A publicacao esta no ar no perfil.",
+        }
+    )
 
 
 @mcp.custom_route(LINKEDIN_CALLBACK_PATH, methods=["GET"])

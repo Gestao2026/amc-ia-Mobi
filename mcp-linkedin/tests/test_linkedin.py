@@ -667,12 +667,46 @@ def test_ferramentas_estao_registradas_no_servidor():
     assert {"linkedin_mcp_status", "linkedin_oauth_iniciar", "linkedin_oauth_status"} <= nomes
 
 
-def test_nenhuma_ferramenta_de_negocio_do_linkedin_existe_ainda():
-    # Etapa 7B estabelece só o OAuth: leitura e publicação ficam para
-    # a etapa seguinte.
+def test_a_unica_ferramenta_que_escreve_e_a_de_publicar():
+    """
+    Este servidor publica, ao contrario do mcp-instagram. Como a trava
+    nao pode ser estrutural (o transporte precisa saber escrever), ela
+    e esta lista fechada: acrescentar qualquer outra ferramenta de
+    escrita quebra o teste e obriga uma decisao consciente.
+
+    Escrever no perfil de alguem e acao publica e sem desfazer
+    silencioso. Uma ferramenta a mais aqui merece a mesma discussao que
+    a primeira teve.
+    """
     nomes = {ferramenta.name for ferramenta in modulo_servidor.mcp._tool_manager.list_tools()}
 
-    assert not any("publicar" in nome or "post" in nome for nome in nomes)
+    esperadas = {
+        # Conexao
+        "linkedin_mcp_status",
+        "linkedin_oauth_iniciar",
+        "linkedin_oauth_status",
+        # Leitura
+        "linkedin_perfil",
+        # Escrita, a unica
+        "linkedin_publicar",
+    }
+
+    assert nomes == esperadas
+
+
+def test_publicar_exige_confirmacao_explicita():
+    """
+    A trava que impede publicacao acidental. Se o padrao de `confirmado`
+    virar True algum dia, ou a previa passar a publicar, este teste cai.
+    """
+    import inspect
+
+    assinatura = inspect.signature(modulo_servidor.linkedin_publicar)
+    assert assinatura.parameters["confirmado"].default is False
+
+    resultado = modulo_servidor.linkedin_publicar(texto="Nao deve ir ao ar.")
+    assert resultado["publicado"] is False
+    assert resultado["status"] == "previa"
 
 
 # =====================================================================
