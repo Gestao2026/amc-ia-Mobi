@@ -1,0 +1,32 @@
+# Ponte de armazenamento do mcp-linkedin. Vai no public_html do
+# subdominio ponte.mobilizando.org, ao lado do token.php.
+
+# Repassa o cabecalho Authorization para o PHP. Em CGI/FastCGI ele
+# costuma ser removido antes de chegar ao script. O token.php nao
+# depende disto (aceita tambem X-MCP-Ponte-Secret), mas com esta regra
+# os dois formatos funcionam.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Forca HTTPS. O token.php tambem recusa HTTP, mas aqui a
+    # requisicao nem chega a ser processada.
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ - [F]
+</IfModule>
+
+# Sem listagem de diretorio.
+Options -Indexes
+
+# Nada alem do token.php deve ser servido daqui.
+<FilesMatch "^(?!token\.php$).*$">
+    Require all denied
+</FilesMatch>
+
+# Cinto e suspensorio: se um config.php acabar nesta pasta por engano
+# (o lugar correto e um nivel acima), ele nao pode ser baixado.
+<FilesMatch "config.*\.php$">
+    Require all denied
+</FilesMatch>
