@@ -513,3 +513,59 @@ def test_valores_ficticios_sao_claramente_marcados():
     assert FAKE_PONTE_SECRET.startswith("FAKE_")
     assert FAKE_ACCESS_TOKEN.startswith("FAKE_")
     assert FAKE_PONTE_URL.startswith("https://") and ".invalid" in FAKE_PONTE_URL
+
+
+# =====================================================================
+# Aviso de persistencia no status
+# =====================================================================
+#
+# Motivo destes testes: com o backend 'memory', a autorizacao morre
+# quando o container reinicia ou hiberna, e o sintoma que chega ao
+# captador e "ontem estava conectado e hoje nao esta". O status precisa
+# dizer isso sozinho, sem exigir acesso ao painel da hospedagem.
+
+
+def _injetar_runtime_com_env(monkeypatch, env):
+    """
+    Monta o runtime com a configuracao real resolvida do ambiente, mas
+    com TokenStore em memoria de proposito: o que estes testes verificam
+    e o que a CONFIGURACAO declara sobre persistencia, e usar o backend
+    real faria o status abrir conexao de rede com a ponte.
+    """
+    from mcp_instagram import server as modulo_servidor
+    from mcp_instagram.auth_instagram.runtime import InstagramOAuthRuntime
+    from mcp_instagram.auth_instagram.state_store import StateStore
+    from mcp_instagram.auth_instagram.token_store import (
+        InMemoryCredentialBackend,
+        TokenStore,
+    )
+
+    runtime = InstagramOAuthRuntime(
+        config=resolve_instagram_config(env),
+        state_store=StateStore(),
+        token_store=TokenStore(backend=InMemoryCredentialBackend()),
+        transport=None,
+    )
+    monkeypatch.setattr(modulo_servidor, "_instagram_runtime", runtime)
+    return modulo_servidor
+
+
+def test_status_avisa_que_a_autorizacao_nao_sobrevive_com_backend_memory(monkeypatch):
+    env = _env_ponte(INSTAGRAM_TOKEN_STORE_BACKEND="memory")
+    modulo_servidor = _injetar_runtime_com_env(monkeypatch, env)
+
+    resultado = modulo_servidor.instagram_mcp_status()
+
+    assert resultado["onde_o_token_fica_guardado"] == "memory"
+    assert resultado["autorizacao_sobrevive_a_reinicio"] is False
+    assert "memória" in resultado["aviso_de_persistencia"]
+
+
+def test_status_nao_avisa_nada_quando_o_backend_e_a_ponte(monkeypatch):
+    modulo_servidor = _injetar_runtime_com_env(monkeypatch, _env_ponte())
+
+    resultado = modulo_servidor.instagram_mcp_status()
+
+    assert resultado["onde_o_token_fica_guardado"] == "ponte"
+    assert resultado["autorizacao_sobrevive_a_reinicio"] is True
+    assert resultado["aviso_de_persistencia"] is None

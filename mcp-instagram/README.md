@@ -2,7 +2,23 @@
 
 Conexão de uma conta profissional do Instagram ao Claude, pelo método oficial da Meta.
 
-Este componente faz **uma coisa só**: estabelecer e manter a autorização. Ele não publica, não edita, não exclui, não responde mensagens, não altera configurações e não administra anúncios. Não existe nenhuma ferramenta de negócio neste servidor, e o teste `test_nenhuma_ferramenta_de_negocio_existe` guarda essa promessa.
+Este componente é **somente leitura**. Ele estabelece e mantém a autorização, lê o perfil, lista as publicações com engajamento e lê as métricas da conta. Ele não publica, não edita, não exclui, não comenta, não responde mensagens, não altera configurações e não administra anúncios.
+
+A limitação é estrutural, não uma promessa de boa vontade. Duas travas a sustentam:
+
+1. O transporte usado pelas ferramentas de negócio (`TransporteGraphHttpx`) expõe **apenas** `get`. Sem `post`, `put`, `patch` ou `delete`, nenhuma ferramenta de escrita pode ser construída sobre ele por engano.
+2. Os escopos padrão (`instagram_business_basic` e `instagram_business_manage_insights`) não concedem escrita. Ampliar permissão exige mudar `INSTAGRAM_SCOPES`, o que fica visível como mudança de configuração revisável.
+
+Os testes `test_nenhuma_ferramenta_de_escrita_existe` e `test_o_cliente_de_leitura_nao_expoe_metodo_de_escrita` guardam as duas travas.
+
+**Ferramentas de leitura disponíveis:**
+
+| Ferramenta | O que devolve |
+|---|---|
+| `instagram_perfil` | Nome de usuário, tipo de conta, seguidores, total de publicações, biografia |
+| `instagram_publicacoes` | Publicações recentes com legenda, tipo, link, data, curtidas e comentários (1 a 50) |
+| `instagram_metricas_publicacao` | Alcance, curtidas, comentários, salvamentos, compartilhamentos, interações e visualizações de uma publicação |
+| `instagram_metricas_conta` | Alcance, visualizações, interações e contas engajadas na janela pedida (1 a 30 dias) |
 
 Arquitetura idêntica à do `mcp-linkedin`, com duas camadas de autorização independentes:
 

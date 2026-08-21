@@ -1,6 +1,30 @@
 """
-Cliente da API do Instagram (leitura de perfil e métricas).
+Ferramentas MCP de negócio (leitura de perfil e métricas).
 
-Esqueleto estrutural. Nenhuma chamada à API do Instagram existe nesta
-etapa: o escopo autorizado foi apenas estabelecer a conexão.
+Somente leitura. O cliente exposto aqui não publica, não edita, não
+exclui, não comenta, não responde mensagem e não administra anúncio: o
+transporte que ele usa expõe apenas `get`, então a limitação é
+estrutural, não uma promessa.
 """
+
+from mcp_instagram.instagram_client.leitura import (
+    ClienteLeituraInstagram,
+    ErroDaApi,
+    SemAutorizacaoError,
+)
+from mcp_instagram.instagram_client.transporte import (
+    ErroDeTransporte,
+    RespostaGraph,
+    TransporteGraph,
+    TransporteGraphHttpx,
+)
+
+__all__ = [
+    "ClienteLeituraInstagram",
+    "ErroDaApi",
+    "ErroDeTransporte",
+    "RespostaGraph",
+    "SemAutorizacaoError",
+    "TransporteGraph",
+    "TransporteGraphHttpx",
+]

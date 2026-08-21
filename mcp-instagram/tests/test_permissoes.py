@@ -160,28 +160,57 @@ def test_status_conectado_mostra_a_conta_e_nunca_o_token(runtime_injetado):
 
 
 @pytest.mark.anyio
-async def test_nenhuma_ferramenta_de_negocio_existe():
+async def test_nenhuma_ferramenta_de_escrita_existe():
     """
-    Guarda a promessa feita ao captador: este servidor não lê conteúdo,
-    não publica, não edita, não exclui, não responde mensagens e não
-    administra anúncios. Se alguém acrescentar uma ferramenta assim, este
-    teste falha e obriga uma decisão consciente.
+    Guarda a promessa feita ao captador: este servidor LÊ perfil,
+    publicações e métricas, mas não publica, não edita, não exclui, não
+    comenta, não responde mensagens e não administra anúncios. Se alguém
+    acrescentar uma ferramenta de escrita, este teste falha e obriga uma
+    decisão consciente.
+
+    A lista é fechada de propósito. Uma verificação por palavra proibida
+    no nome deixaria passar qualquer ferramenta batizada de forma
+    criativa; exigir que o conjunto seja exatamente este obriga quem
+    acrescentar algo a vir aqui e declarar o que está fazendo.
 
     A verificação é feita no registro de ferramentas do próprio servidor
     MCP, e não nos nomes do módulo: as rotas HTTP exigidas pela Meta
     (desautorização e exclusão de dados) também moram neste módulo, mas
     não são ferramentas e não podem ser chamadas pelo modelo.
     """
-    ferramentas_permitidas = {
+    ferramentas_de_conexao = {
         "instagram_mcp_status",
         "instagram_oauth_iniciar",
         "instagram_oauth_status",
         "instagram_desconectar",
     }
+    # Todas somente leitura. Nenhuma altera a conta do Instagram.
+    ferramentas_de_leitura = {
+        "instagram_perfil",
+        "instagram_publicacoes",
+        "instagram_metricas_publicacao",
+        "instagram_metricas_conta",
+    }
 
     registradas = {ferramenta.name for ferramenta in await modulo_servidor.mcp.list_tools()}
 
-    assert registradas == ferramentas_permitidas
+    assert registradas == ferramentas_de_conexao | ferramentas_de_leitura
+
+
+def test_o_cliente_de_leitura_nao_expoe_metodo_de_escrita():
+    """
+    A trava estrutural: o transporte usado pelas ferramentas de negócio
+    só tem `get`. Sem `post`, `put`, `patch` ou `delete`, nenhuma
+    ferramenta de escrita pode ser construída sobre ele por engano, nem
+    mesmo por quem não leu a documentação.
+    """
+    from mcp_instagram.instagram_client.transporte import TransporteGraphHttpx
+
+    metodos_publicos = {
+        nome for nome in dir(TransporteGraphHttpx) if not nome.startswith("_")
+    }
+
+    assert metodos_publicos == {"get"}
 
 
 @pytest.fixture

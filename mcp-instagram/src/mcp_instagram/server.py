@@ -1,12 +1,18 @@
 """
 Servidor MCP do mcp-instagram.
 
-Ferramentas expostas: `instagram_mcp_status` (diagnóstico),
+Ferramentas de conexão: `instagram_mcp_status` (diagnóstico),
 `instagram_oauth_iniciar`, `instagram_oauth_status` e
-`instagram_desconectar`. NENHUMA ferramenta de negócio existe: este
-componente não lê publicações, não lê métricas, não publica, não edita,
-não exclui, não responde mensagens e não administra anúncios. O escopo
-autorizado foi estabelecer a conexão, e o código não vai além disso.
+`instagram_desconectar`.
+
+Ferramentas de negócio, TODAS SOMENTE LEITURA: `instagram_perfil`,
+`instagram_publicacoes`, `instagram_metricas_publicacao` e
+`instagram_metricas_conta`. Este componente NÃO publica, não edita, não
+exclui, não comenta, não responde mensagens e não administra anúncios.
+A limitação é estrutural, não uma promessa: o cliente de leitura recebe
+um transporte que expõe apenas `get`, e os escopos padrão
+(`instagram_business_basic`, `instagram_business_manage_insights`) não
+concedem escrita.
 
 `instagram_desconectar` apaga a autorização guardada NESTE servidor.
 Não é uma ação na conta do Instagram: nada é alterado, publicado ou
@@ -52,6 +58,14 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from mcp_instagram.auth_claude.provider import ClaudeAuthProvider
+from mcp_instagram.instagram_client.leitura import (
+    JANELA_DIAS_PADRAO,
+    LIMITE_PUBLICACOES_PADRAO,
+    ClienteLeituraInstagram,
+    ErroDaApi,
+    SemAutorizacaoError,
+)
+from mcp_instagram.instagram_client.transporte import ErroDeTransporte, TransporteGraphHttpx
 from mcp_instagram.auth_claude.session_store import ClaudeSessionStore
 from mcp_instagram.auth_instagram.oauth_callback import CallbackOutcome, CallbackParams
 from mcp_instagram.auth_instagram.runtime import InstagramOAuthRuntime, build_runtime
@@ -66,6 +80,7 @@ from mcp_instagram.config import (
     INSTAGRAM_DATA_DELETION_PATH,
     INSTAGRAM_DATA_DELETION_STATUS_PATH,
     INSTAGRAM_DEAUTHORIZE_PATH,
+    TOKEN_STORE_BACKEND_MEMORY,
     missing_instagram_env_vars,
     resolve_instagram_config,
 )
@@ -229,11 +244,33 @@ def instagram_mcp_status() -> dict:
 
     conectado = runtime.has_valid_token()
 
+    # Onde o token é guardado decide se a autorização sobrevive a um
+    # reinício do contêiner. O backend 'memory' perde tudo quando o
+    # serviço hiberna (no plano gratuito do Render isso acontece após
+    # poucos minutos ocioso), e o sintoma que chega ao captador é
+    # "ontem estava conectado e hoje não está". Sem este campo, esse
+    # diagnóstico exige acesso ao painel do Render; com ele, a própria
+    # ferramenta de status responde.
+    backend = runtime.config.token_store_backend
+    autorizacao_sobrevive_a_reinicio = backend != TOKEN_STORE_BACKEND_MEMORY
+
     return {
         "componente": "mcp-instagram",
         "oauth": "configurado",
         "instagram": "conectado" if conectado else "nao_conectado",
         "status": "operacional",
+        "onde_o_token_fica_guardado": backend,
+        "autorizacao_sobrevive_a_reinicio": autorizacao_sobrevive_a_reinicio,
+        "aviso_de_persistencia": (
+            None
+            if autorizacao_sobrevive_a_reinicio
+            else (
+                "O token está apenas na memória deste servidor. Quando o serviço "
+                "reiniciar ou hibernar, a autorização será perdida e será preciso "
+                "autorizar de novo. Para a autorização durar, configure "
+                "INSTAGRAM_TOKEN_STORE_BACKEND com 'ponte' e as variáveis da ponte."
+            )
+        ),
         "conta_conectada": runtime.connected_user_id() if conectado else None,
         "escopos_configurados": list(runtime.config.scopes),
         "somente_leitura": runtime.config.somente_leitura,
@@ -354,6 +391,124 @@ def instagram_desconectar() -> dict:
         ),
         "como_revogar": COMO_REVOGAR,
     }
+
+
+# =====================================================================
+# Ferramentas de negócio: LEITURA da conta
+# =====================================================================
+#
+# Todas somente leitura. O cliente usado aqui recebe um transporte que
+# expõe apenas `get`, então nenhuma destas ferramentas pode publicar,
+# editar, excluir, comentar ou responder mensagem, mesmo por engano.
+#
+# O cliente é preguiçoso e único no processo pelo mesmo motivo do
+# runtime: ele lê o token do TokenStore a cada chamada, e precisa ser o
+# MESMO TokenStore que o callback preencheu.
+
+_CLIENTE_NAO_RESOLVIDO = object()
+_cliente_leitura: "ClienteLeituraInstagram | None | object" = _CLIENTE_NAO_RESOLVIDO
+
+
+def get_cliente_leitura() -> "ClienteLeituraInstagram | None":
+    """
+    Devolve o cliente de leitura único do processo, ou None se a Camada 2
+    não estiver configurada. Não acessa rede: o transporte só abre
+    conexão quando `get` é de fato chamado.
+    """
+    global _cliente_leitura
+    if _cliente_leitura is _CLIENTE_NAO_RESOLVIDO:
+        runtime = get_instagram_runtime()
+        if runtime is None:
+            _cliente_leitura = None
+        else:
+            _cliente_leitura = ClienteLeituraInstagram(
+                transporte=TransporteGraphHttpx(),
+                obter_token=runtime.token_store.get_access_token,
+            )
+    return _cliente_leitura  # type: ignore[return-value]
+
+
+def _executar_leitura(operacao) -> dict:
+    """
+    Executa uma leitura e traduz as falhas possíveis em resposta de
+    ferramenta. A mensagem de erro da Meta é repassada como veio: ela
+    diz exatamente o que faltou (permissão, métrica indisponível, id
+    inexistente) e não contém credencial. Trocá-la por um texto genérico
+    só tornaria o problema mais difícil de resolver.
+    """
+    cliente = get_cliente_leitura()
+
+    if cliente is None:
+        return {
+            "status": "nao_configurado",
+            "detalhe": "A conexão com o Instagram não está configurada neste servidor.",
+            "variaveis_ausentes": missing_instagram_env_vars(),
+        }
+
+    try:
+        return {"status": "ok", "dados": operacao(cliente)}
+    except SemAutorizacaoError as erro:
+        return {"status": "nao_conectado", "detalhe": str(erro)}
+    except ErroDaApi as erro:
+        return {"status": "recusado_pela_meta", **erro.como_dicionario()}
+    except ErroDeTransporte as erro:
+        return {"status": "falha_de_rede", "detalhe": str(erro)}
+
+
+@mcp.tool()
+def instagram_perfil() -> dict:
+    """
+    Lê os dados do perfil da conta conectada: nome de usuário, tipo de
+    conta, número de seguidores, número de publicações e biografia.
+
+    Somente leitura. Nada é alterado na conta.
+    """
+    return _executar_leitura(lambda cliente: cliente.perfil())
+
+
+@mcp.tool()
+def instagram_publicacoes(limite: int = LIMITE_PUBLICACOES_PADRAO) -> dict:
+    """
+    Lista as publicações mais recentes, da mais nova para a mais antiga,
+    com legenda, tipo, link, data, curtidas e comentários.
+
+    `limite` aceita de 1 a 50; valor fora da faixa é ajustado para o mais
+    próximo em vez de virar erro. Somente leitura.
+    """
+    return _executar_leitura(lambda cliente: cliente.publicacoes(limite))
+
+
+@mcp.tool()
+def instagram_metricas_publicacao(id_publicacao: str) -> dict:
+    """
+    Métricas de uma publicação específica: alcance, curtidas,
+    comentários, salvamentos, compartilhamentos, interações e
+    visualizações.
+
+    O `id_publicacao` vem do campo `id` devolvido por
+    `instagram_publicacoes`. Somente leitura.
+
+    Nem toda métrica existe para toda publicação: o conjunto varia com o
+    tipo de mídia e com o tipo de conta. Quando a Meta recusa uma
+    métrica, a resposta traz a mensagem dela, não um erro genérico.
+    """
+    return _executar_leitura(lambda cliente: cliente.metricas_publicacao(id_publicacao))
+
+
+@mcp.tool()
+def instagram_metricas_conta(dias: int = JANELA_DIAS_PADRAO) -> dict:
+    """
+    Métricas agregadas da conta na janela pedida: alcance,
+    visualizações, interações e contas engajadas.
+
+    `dias` aceita de 1 a 30, que é o teto da Meta para esta consulta;
+    valor maior é reduzido a 30 em vez de virar erro. Somente leitura.
+
+    Conta do tipo Comercial entrega mais métrica que Criador de
+    conteúdo. Se algo vier recusado, a resposta traz a explicação da
+    própria Meta.
+    """
+    return _executar_leitura(lambda cliente: cliente.metricas_conta(dias))
 
 
 @mcp.custom_route(INSTAGRAM_CALLBACK_PATH, methods=["GET"])
