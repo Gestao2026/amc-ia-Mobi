@@ -25,3 +25,6 @@ painel/pipeline-*.html
 __pycache__/
 *.pyc
 node_modules/
+
+# Credenciais (certificados digitais, senhas). Nunca versionar nem sincronizar
+_credenciais-nao-sincronizar/
