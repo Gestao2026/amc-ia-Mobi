@@ -150,6 +150,47 @@ O token de longa duração da Meta vale **60 dias**. A troca é feita em duas et
 
 A renovação automática antes do vencimento (endpoint `refresh_access_token`) **não está implementada** nesta etapa. Hoje, ao expirar, basta rodar `instagram_oauth_iniciar` de novo. Implementar a renovação é o passo natural seguinte se a conexão for ficar permanente.
 
+## Onde o token fica guardado, e por que isso importa
+
+Definido pela variável `INSTAGRAM_TOKEN_STORE_BACKEND`. Em produção o valor é `ponte`: o token vai para o MySQL da HostGator através de um arquivo PHP, cifrado com uma chave que existe **apenas no Render**.
+
+O padrão em Linux, quando a variável não é declarada, é `memory`. E foi assim que este componente rodou até 21/08/2026, com uma consequência que chegava à captadora como um mistério: **"ontem estava conectado e hoje não está"**.
+
+A explicação é que o plano gratuito do Render adormece o serviço após cerca de 15 minutos ocioso, e memória se apaga. A autorização morria a cada hibernação, sem aviso.
+
+Por isso `instagram_mcp_status` passou a responder três campos novos:
+
+```json
+"onde_o_token_fica_guardado": "ponte",
+"autorizacao_sobrevive_a_reinicio": true,
+"aviso_de_persistencia": null
+```
+
+Com o backend `memory`, o terceiro campo traz um aviso explicando que a autorização será perdida. Antes disso, esse diagnóstico exigia acesso ao painel da hospedagem; agora a própria ferramenta responde.
+
+Instalação da ponte: [`ponte-hostgator/`](ponte-hostgator/). **Leia a seção das armadilhas antes de começar**, ela poupa horas.
+
+## A hibernação derruba a conexão, e o token não é o culpado
+
+Vale separar duas coisas que somem juntas quando o serviço adormece:
+
+| O que morre | Sintoma | Resolvido pela ponte? |
+|---|---|---|
+| Token do Instagram | conta desautorizada | **sim** |
+| Sessão do Claude | conector pede "Reconectar" | não |
+
+A sessão da Camada 1 vive em memória por decisão explícita da v1 (ver `auth_claude/session_store.py`), então ela morre mesmo com a ponte configurada.
+
+Contorno em uso desde 21/08/2026: um ping externo (cron-job.org) chama `/.well-known/oauth-authorization-server` a cada 10 minutos, das 8h às 20h em dias úteis:
+
+```
+*/10 8-20 * * 1-5
+```
+
+**A janela de horário não é preferência, é necessidade.** O Render oferece cerca de 750 horas de instância por mês na conta inteira, e dois serviços acordados 24 horas consumiriam 1.460.
+
+**Aumente o tempo limite do ping para 30 segundos.** O primeiro ping depois de um período parado encontra o serviço dormindo, e acordar leva uns 12 segundos. Com o limite baixo, o ping desiste no meio, o serviço volta a dormir, e o ciclo se repete indefinidamente. Foi exatamente o que aconteceu na primeira tentativa: o LinkedIn acertou de primeira e nunca mais dormiu, o Instagram errou de primeira e ficou preso no ciclo.
+
 ## Segurança
 
 - Nenhum segredo em arquivo versionado. Tudo vem do ambiente, e o `.env` está no `.gitignore`.
