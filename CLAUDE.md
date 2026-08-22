@@ -301,6 +301,12 @@ aderência ao edital, capacidade técnica, potencial de impacto, coerência meto
 - `/captador-anuncio`. Gerar anúncios para o captador alcançar gestores de OSC.
 - `/assessoria-estruturar`. Estruturar o serviço (escopo, pacotes, precificação) e a proposta comercial.
 
+**Redes sociais (Instagram e LinkedIn):**
+- `/rede-habilitar`. Habilitar uma rede como conector, do painel de desenvolvedor até a primeira leitura confirmada. Contém o Gate de Capacidade: nunca escrever código para algo que a API não permite àquela conta.
+- `/redes-diagnosticar`. Descobrir por que uma rede parou de responder e destravar, separando as três camadas (conector, autorização, capacidade).
+
+> As conexões caem de forma previsível: toda segunda de manhã e depois de cada publicação de código, porque a sessão do Claude vive em memória e o Render hiberna. Reconectar no painel resolve. Não tratar como defeito.
+
 **Apoio e venda:**
 - `/sala-agentes`. Abrir a Sala dos Agentes, o escritório ao vivo onde os agentes andam e trabalham conforme o sistema executa.
 - `/assessoria-pitch`. Playbook de venda do contrato anual de assessoria.
