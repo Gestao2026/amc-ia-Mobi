@@ -6,6 +6,107 @@ Arquivos deste diretório **não** são deployados pelo Render. Eles vão para a
 Render (mcp-instagram) --HTTPS autenticado--> ponte.mobilizando.org/token-instagram.php --> MySQL localhost
 ```
 
+---
+
+## LEIA ISTO ANTES: os caminhos reais da conta rosepa59
+
+Instalado e funcionando em 21/08/2026. Esta seção existe porque a instalação levou horas por causa de duas armadilhas que nenhuma ferramenta mostrava com clareza. Ler daqui poupa esse tempo.
+
+### Armadilha 1. Existem duas pastas `ponte-mcp`
+
+A raiz da conta é `/home2/rosepa59`, e **dentro dela existe outra pasta chamada `home2`**. A árvore real é:
+
+```
+/home2/rosepa59/
+├── home2/rosepa59/ponte-mcp/        ← ESTA é a que o servidor web usa
+│   ├── mcp-linkedin-config.php
+│   ├── mcp-instagram-config.php
+│   └── public/                      ← docroot de ponte.mobilizando.org
+│       ├── .well-known/             (validação do certificado SSL)
+│       ├── .htaccess
+│       ├── token.php
+│       └── token-instagram.php
+│
+└── ponte-mcp/                       ← duplicata, IGNORAR
+    └── public/
+```
+
+**Como saber qual é a certa:** a verdadeira contém o `token.php` que responde na web e a pasta `.well-known/acme-challenge`, que só existe em raiz de site de verdade.
+
+O caminho de destino ao mover arquivos, portanto, é:
+
+```
+/home2/rosepa59/home2/rosepa59/ponte-mcp/public
+```
+
+Parece errado. Não é.
+
+### Armadilha 2. O Gerenciador de Arquivos do cPanel mente
+
+Durante a instalação ele, em sequência:
+
+- afirmou que `token-instagram.php` não existia, enquanto o próprio cPanel respondia `File exists` ao tentar criá-lo;
+- escondeu o `.htaccess` mesmo com "mostrar arquivos ocultos" ligado;
+- listou uma pasta com um item quando ela tinha quatro.
+
+**A busca funciona quando a listagem falha.** Use o campo de pesquisa do gerenciador para encontrar arquivos, e clique duas vezes no resultado para abrir a pasta que os contém.
+
+**Não confie na listagem para concluir que algo não existe.** Confie no servidor: um `curl` do endereço público responde com a verdade.
+
+### Armadilha 3. O diálogo "Copiar" espera uma pasta, não um nome de arquivo
+
+Informar `/caminho/arquivo-novo.php` faz o cPanel tratar isso como pasta de destino e criar a estrutura inteira em duplicata. Foi assim que a segunda `ponte-mcp` nasceu.
+
+Para copiar renomeando, copie para outra pasta e renomeie depois, ou crie o arquivo e cole o conteúdo.
+
+### Armadilha 4. O `.htaccess` é compartilhado e fecha a porta por padrão
+
+Existe **um único** `.htaccess` no docroot, servindo os dois componentes. A regra libera uma lista fechada de nomes:
+
+```apache
+<FilesMatch "^(?!(token|token-instagram)\.php$).*$">
+    Require all denied
+</FilesMatch>
+```
+
+Um arquivo novo naquela pasta **nasce bloqueado com 403** até ser acrescentado a essa lista. Se o seu arquivo responde 403, é aqui.
+
+### Armadilha 5. O `token.php` em produção difere do que estava no repositório
+
+Na versão que roda, o alvo **não** vem do arquivo de configuração: está escrito dentro do próprio programa, numa seção "Alvo FIXO". Trocar `ALVO` no config não tem efeito.
+
+Ao criar a ponte de um componente novo, são **quatro** linhas a mudar, não uma:
+
+| Linha | De | Para |
+|---|---|---|
+| cabeçalho | LinkedIn | Instagram |
+| `$caminhoConfig` | `mcp-linkedin-config.php` | `mcp-instagram-config.php` |
+| `$alvo` | `mcp-linkedin:linkedin-access-token` | `mcp-instagram:instagram-access-token` |
+| `$tabela` (padrão) | `mcp_linkedin_tokens` | `mcp_instagram_tokens` |
+
+A terceira é a mais importante: sem ela o Instagram grava com a etiqueta do LinkedIn, **sobrescreve o token dele e derruba os dois**.
+
+### Armadilha 6. O config do LinkedIn não declara `DB_TABLE`
+
+Ele funciona porque o PHP cai no padrão `mcp_linkedin_tokens`. Ao copiar esse arquivo como base para outro componente, **é obrigatório acrescentar a linha `DB_TABLE`**, senão o componente novo grava na tabela errada.
+
+### Como confirmar que ficou certo, sem depender do cPanel
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' -X POST \
+  https://ponte.mobilizando.org/token-instagram.php \
+  -H 'Content-Type: application/json' -d '{"acao":"ler"}'
+```
+
+| Resposta | Significado |
+|---|---|
+| **401** | **certo.** No ar, config lido e completo, recusando por falta do segredo |
+| 403 | bloqueado pelo `.htaccess` |
+| 404 | arquivo não está no docroot real (ver Armadilha 1) |
+| 500 | config não encontrado, ou com campo vazio |
+
+Vale testar também um arquivo que não existe: se responder **403** em vez de 404, o `.htaccess` está ativo.
+
 ## Por que a ponte existe
 
 O MySQL da HostGator só aceita conexão externa se um IP for liberado em **Remote MySQL**. Os IPs de saída do Render são faixas CIDR **compartilhadas com todos os outros clientes da mesma região** (IPs dedicados são um add-on pago). Liberar essa faixa deixaria o banco alcançável por qualquer serviço hospedado no Render.

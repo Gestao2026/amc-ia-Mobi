@@ -2,9 +2,51 @@
 
 ## Status
 
-O servidor MCP está implementado com as **duas camadas de OAuth prontas**: a Camada 1 (Claude.ai ↔ este servidor, Etapa 7A) e a Camada 2 (este servidor ↔ LinkedIn, Etapa 7B). O fluxo `MCP → autorização → callback → troca do authorization code → armazenamento do token` está completo e coberto por testes, mas **nunca foi executado contra o LinkedIn real**: depende de cadastrar o Redirect URI no LinkedIn Developer Portal e configurar as credenciais no Render.
+**Em produção e funcionando desde 21/08/2026.** Publicado no Render em `https://mcp-linkedin-run7.onrender.com`, autorizado contra o LinkedIn real, com o token guardado no MySQL da HostGator através da ponte. Leitura do perfil confirmada em uso real.
 
-**Nenhuma ferramenta de negócio do LinkedIn** (ler publicações, engajamento, comentários, ou publicar) existe ainda. Nenhum deploy foi feito.
+As seções "Etapa N" mais abaixo são o registro histórico da construção, e algumas descrevem estados que já foram superados. Esta seção de status é a fonte da verdade sobre o que vale hoje.
+
+### O que este servidor faz
+
+| Ferramenta | O que entrega |
+|---|---|
+| `linkedin_mcp_status` | diagnóstico da conexão, sem acessar o LinkedIn |
+| `linkedin_oauth_iniciar` | monta a URL de autorização |
+| `linkedin_oauth_status` | informa se há autorização válida guardada |
+| `linkedin_perfil` | nome, foto e identificador do membro |
+| `linkedin_publicar` | publica texto no perfil pessoal, **em duas etapas** |
+
+### O que ele NÃO faz, e não é falta de código
+
+Ler métricas, ler engajamento, ler publicações existentes e publicar como Página exigem a **Community Management API**, que não está aprovada no aplicativo nem entrou na fila de análise. É limitação do lado do LinkedIn, sem contorno técnico deste lado.
+
+Produtos aprovados no aplicativo em 21/08/2026: Biblioteca de Anúncios, **Compartilhe no LinkedIn** (que concede `w_member_social`), API de Publicidade, **Login com OpenID Connect** e API de Gerenciamento de Eventos.
+
+### A trava da publicação
+
+Este componente escreve, ao contrário do `mcp-instagram`, que é somente leitura. Como o transporte precisa saber escrever, a proteção não pode ser estrutural. Ela é explícita e tem três partes:
+
+1. `texto` é obrigatório e vem de quem chama. Não há valor padrão e o servidor nunca gera conteúdo.
+2. `confirmado` tem padrão `False`. Uma chamada distraída devolve a prévia em vez de publicar.
+3. A prévia mostra o texto exato, para a decisão ser tomada sobre o que será publicado.
+
+Guardado por `test_publicar_exige_confirmacao_explicita` e por `test_a_unica_ferramenta_que_escreve_e_a_de_publicar`, que mantém a lista de ferramentas fechada.
+
+### Onde o token fica guardado
+
+No MySQL da HostGator, através da ponte HTTPS (`LINKEDIN_TOKEN_STORE_BACKEND=ponte`). Cifrado em AES-256-GCM com uma chave que existe **apenas no Render**: quem tiver o banco inteiro leva só texto embaralhado.
+
+Isso é o que faz a autorização sobreviver a reinício e a fim de semana. Ver [`ponte-hostgator/`](ponte-hostgator/).
+
+### A hibernação, e o que fazer com ela
+
+O plano gratuito do Render adormece o serviço após cerca de 15 minutos ocioso. Quando ele dorme, a **sessão do Claude morre** (ela vive em memória, decisão explícita da v1) e o conector passa a pedir "Reconectar".
+
+O token sobrevive, porque está na ponte. A sessão não.
+
+Contorno em uso: um ping externo (cron-job.org) chama `/.well-known/oauth-authorization-server` a cada 10 minutos, das 8h às 20h em dias úteis. A janela é obrigatória, não estética: o Render dá cerca de 750 horas mensais por conta, e dois serviços acordados 24 horas consumiriam 1.460.
+
+Fora dessa janela, os serviços dormem e é preciso reconectar.
 
 ## Etapa 2. MCP local mínimo
 
