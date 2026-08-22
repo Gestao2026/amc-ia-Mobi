@@ -18,7 +18,7 @@ echo Backup iniciado em %date% %time% >> "%LOG%"
 
 rem --- 1. Projeto AMC IA (disco local -> pasta de backups) --------------------
 robocopy "C:\amc-ia-Mobi\minhas-oscs"  "%BASE%\amc-ia-mobi\minhas-oscs"  /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
-robocopy "C:\amc-ia-Mobi\captador"     "%BASE%\amc-ia-mobi\captador"     /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi\marketing"    "%BASE%\amc-ia-mobi\marketing"    /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\base-editais" "%BASE%\amc-ia-mobi\base-editais" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\parcerias"    "%BASE%\amc-ia-mobi\parcerias"    /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\docs"         "%BASE%\amc-ia-mobi\docs"         /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
@@ -63,7 +63,7 @@ rem     Se o disco C: morrer, a copia acima morre junto. Esta linha mantem uma
 rem     copia do projeto na nuvem. Para desligar, comente as tres linhas abaixo.
 rem     As credenciais do bloco 3 NAO entram aqui, de proposito.
 robocopy "C:\amc-ia-Mobi\minhas-oscs"  "G:\Meu Drive\AMC-IA-Backup\minhas-oscs"  /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
-robocopy "C:\amc-ia-Mobi\captador"     "G:\Meu Drive\AMC-IA-Backup\captador"     /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi\marketing"    "G:\Meu Drive\AMC-IA-Backup\marketing"    /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\base-editais" "G:\Meu Drive\AMC-IA-Backup\base-editais" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 
 echo Backup concluido em %date% %time% >> "%LOG%"

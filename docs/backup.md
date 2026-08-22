@@ -25,7 +25,7 @@ A tarefa do Windows **"AMC IA - Backup diario para o Google Drive"** roda todo d
 | O que é copiado | Para onde |
 |---|---|
 | `minhas-oscs/` | `C:\Users\rosep\Backups\amc-ia-mobi\minhas-oscs\` |
-| `captador/` | `C:\Users\rosep\Backups\amc-ia-mobi\captador\` |
+| `marketing/` | `C:\Users\rosep\Backups\amc-ia-mobi\marketing\` |
 | `base-editais/` | `C:\Users\rosep\Backups\amc-ia-mobi\base-editais\` |
 | `parcerias/` | `C:\Users\rosep\Backups\amc-ia-mobi\parcerias\` |
 | `docs/` | `C:\Users\rosep\Backups\amc-ia-mobi\docs\` |
@@ -49,7 +49,7 @@ a pasta como está, é um cofre de senhas ou um arquivo criptografado.
 
 ## A segunda camada, na nuvem
 
-O mesmo script mantém uma cópia de `minhas-oscs`, `captador` e `base-editais` em
+O mesmo script mantém uma cópia de `minhas-oscs`, `marketing` e `base-editais` em
 `G:\Meu Drive\AMC-IA-Backup`. Só essas três. A pasta de credenciais fica de fora
 de propósito, conforme a seção acima.
 
