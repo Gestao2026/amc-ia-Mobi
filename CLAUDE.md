@@ -91,6 +91,38 @@ Se descobrir um token vazado em um arquivo: avisar o usuário imediatamente, rec
 
 ---
 
+## PASTA VAZIA NÃO SE APAGA (REGRA GLOBAL, PRIORIDADE ABSOLUTA)
+
+> Decisão da captadora em 24/08/2026. Vale para todo o ambiente, e nomeadamente para estas duas pastas:
+>
+> - `06 - Clientes` da `_82` **no Drive**, acessada pela unidade `M:`.
+> - `C:\Users\rosep\Desktop\_82 - Rosepaula Aparecida Andrade Rodrigues\06 - Clientes\18 - Outros Modelos`, **na Área de Trabalho**. É o modelo em branco da estrutura: 97 pastas, das quais **52 estão vazias de propósito**. Ali a pasta vazia não é sobra, é o próprio produto.
+
+**Pasta sem documento dentro é estrutura, não é sobra.** Ela foi criada de propósito, para receber o documento quando ele chegar, e é o que torna previsível onde cada coisa vai.
+
+1. **Nunca apagar pasta vazia.** Nem para "limpar", nem para "organizar", nem ao concluir uma estruturação, nem porque uma auditoria a listou.
+2. **Nunca listar pasta vazia como problema** em leitura, diagnóstico ou relatório. Contar quantas existem é informação; chamar de pendência é erro.
+3. **Nunca usar a Lixeira** para nada, em nenhuma pasta. Excluir é decisão da captadora, tomada por ela, na hora que ela quiser. Isto já valia e continua valendo.
+4. A captadora está corrigindo a estrutura **à mão**. Nada em `06 - Clientes` se cria, renomeia, move ou apaga sem ela avisar que terminou.
+5. Ao replicar a estrutura em outro lugar (cópia da Área de Trabalho, backup, projeto), **replicar também as pastas vazias**. Elas fazem parte do desenho.
+
+Se uma operação automática ameaçar remover pasta vazia (script de limpeza, sincronização com espelhamento, `robocopy /MIR`), parar e avisar antes de rodar.
+
+### A pasta `_82` inteira é intocável
+
+Nenhuma pasta chamada **`_82 - Rosepaula Aparecida Andrade Rodrigues`** se apaga, em nenhuma hipótese, nem no Google Drive nem na Área de Trabalho. Vale para a pasta raiz e para qualquer subpasta dela, em qualquer nível, com ou sem conteúdo.
+
+Isso inclui, com todas as letras:
+
+- `G:\.shortcut-targets-by-id\1YxXksuP6SHlVKA4bT5gaC0WG4Wy4OXej\_82 - Rosepaula Aparecida Andrade Rodrigues` e a mesma pasta pela unidade `M:`.
+- `C:\Users\rosep\Desktop\_82 - Rosepaula Aparecida Andrade Rodrigues`.
+- `C:\Users\rosep\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues`.
+- `C:\Users\rosep\Backups\pasta-82\`, que é a cópia de segurança das anteriores.
+
+Não apagar, não mover para a Lixeira, não "aposentar", não substituir por atalho, não deixar nenhum script tocar nelas. Se um plano de organização levar a remover qualquer uma, o plano muda, não a pasta. A pasta do Drive nem sequer é da captadora: ela é apenas Editora.
+
+---
+
 ## REGRA DE ABERTURA DE SESSÃO (EXECUÇÃO DETERMINÍSTICA)
 
 > Esta regra tem prioridade sobre qualquer outra instrução de abertura.
@@ -211,6 +243,7 @@ O sistema trabalha em dois contextos distintos, conforme a fase:
 |---|---|---|
 | Perfil da OSC | `minhas-oscs/{slug}/perfil-osc.md` | `.md` |
 | Edital analisado | `minhas-oscs/{slug}/projetos/{edital}/edital.md` | `.md` |
+| Dossiê do Edital (entrega ao cliente) | pasta do edital, junto com o edital e os anexos | `.docx` + `.pdf` |
 | Parecer de elegibilidade (CaptaDoc) | `minhas-oscs/{slug}/projetos/{edital}/elegibilidade.md` | `.md` |
 | Proposta completa (CaptaBuilder) | `minhas-oscs/{slug}/projetos/{edital}/proposta.md` | `.md` |
 | Orçamento técnico (CaptaBudget) | `minhas-oscs/{slug}/projetos/{edital}/orcamento.md` | `.md` |
@@ -285,6 +318,7 @@ aderência ao edital, capacidade técnica, potencial de impacto, coerência meto
 - `/captahub-sincronizar`. Reconciliar carteira e pipeline com o CaptaHub nos dois sentidos (puxar atualizações e subir o que está só local).
 - `/edital-minerar`. Puxar os editais do CaptaHub e listar os mais alinhados ao perfil da OSC ativa (por escopo, valor, prazo e área).
 - `/edital-analisar`. Ler um edital (PDF, link ou texto colado) e extrair critérios, prazos, exigências, o que pontua e o que derruba.
+- `/edital-dossie`. Produzir o Dossiê do Edital, documento único em Word e PDF para enviar ao cliente, com categorias, ficha de controle documental por etapa, território, critérios um a um, riscos e divergências.
 
 **Projeto (os 4 agentes):**
 - `/projeto-elegibilidade`. CaptaDoc. Cruza edital com o perfil da OSC e dá o veredito: APTO, APTO COM PENDÊNCIAS ou INAPTO, com checklist documental.
