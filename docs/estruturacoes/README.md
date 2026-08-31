@@ -35,6 +35,7 @@
 | 23 | 2026-08-28 | [Auditoria dos documentos de 27/08](2026-08-28-23-auditoria-dos-documentos-de-27-08.md) | 65 arquivos e 61 pastas com carimbo de 27/08 | Concluída. Somente leitura, nada foi alterado |
 | 24 | 2026-08-30 | [Desligamento do encaminhamento da editais para a gestao](2026-08-30-24-desligamento-do-encaminhamento-editais-para-gestao.md) | Gmail `editais.mobilizando` e `gestao.mobilizando` | Concluída |
 | 25 | 2026-08-31 | [Correção da contagem de propostas enviadas e a ponte com a planilha](2026-08-31-25-correcao-da-contagem-de-propostas-enviadas.md) | Base Airtable (Projetos, Editais, uma automação), `scripts/`, `docs/` | Concluída. **1 pendência com a captadora** |
+| 26 | 2026-08-31 | [Carga dos editais vivos no pipeline do CaptaHub](2026-08-31-26-carga-dos-editais-vivos-no-pipeline-do-captahub.md) | Pipeline do CaptaHub (3 projetos criados), `docs/` | Concluída. **2 pendências com a captadora** |
 
 ## Como usar
 
