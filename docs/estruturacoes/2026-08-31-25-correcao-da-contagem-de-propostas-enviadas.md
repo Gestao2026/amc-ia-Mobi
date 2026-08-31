@@ -5,7 +5,7 @@
 | Data | 2026-08-31 |
 | Pasta afetada | Base Airtable `appKWLTFSCcWucXfQ` (tabelas Projetos e Editais, uma automação), `scripts/`, `docs/` |
 | Tipo | Correção de regra de negócio, criação de campo, ajuste de fórmula e script novo |
-| Situação | Concluída. **4 pendências com a captadora**, listadas no item 6 |
+| Situação | Concluída. **2 pendências com a captadora**, listadas no item 6 |
 | Autorizada por | A captadora, passo a passo: confirmou que os nove projetos foram submetidos e reprovados, autorizou a correção, o `--aplicar` e a criação do projeto do PNAB BH Fomento |
 | Reversível | Sim. Campos novos podem ser excluídos, fórmulas têm a versão anterior transcrita no item 5, e a automação tem `revert_action` pelo actionId |
 
@@ -92,7 +92,7 @@ arquivo. Por isso só duas datas foram gravadas.
 | Projetos com Data de submissão | 3 | 5 |
 | Projetos marcados como enviados | 3 | **12** |
 | Editais em "A triar" | 37 | 35 |
-| Fichas em Não Submetidos | 36 | 36 (as 9 indevidas continuam, ver item 6) |
+| Fichas em Não Submetidos | 36 | **27** (as 9 indevidas foram apagadas) |
 
 O script de leitura da planilha, na primeira execução, encontrou: 84 linhas com
 edital preenchido, **0 editais faltando no Airtable**, **0 prazos divergentes**,
@@ -114,11 +114,10 @@ alimentar nada, e pode ser ocultada.
 
 ## 6. Pendências com a captadora
 
-1. **Publicar a automação.** O Airtable guarda a mudança como rascunho: ela só
-   entra em vigor quando alguém abre a automação "Enviar para Não Submetidos" e
-   clica em **Update**. Enquanto isso não acontecer, a versão antiga roda às 7h.
-2. **Apagar as nove fichas indevidas** em Não Submetidos, depois de publicar a
-   automação. A exclusão pela API foi bloqueada pelas permissões do ambiente.
+1. ~~Publicar a automação.~~ **Feito na mesma noite.** Ver o item 8 abaixo: não
+   existia botão a apertar, e a mudança já estava valendo.
+2. ~~Apagar as nove fichas indevidas.~~ **Feito na mesma noite.** A tabela Não
+   Submetidos ficou com 27 registros.
 3. **Acrescentar a coluna DATA DE ENVIO** na planilha mestra, ao lado de STATUS.
    É o buraco que originou tudo, e o script avisa toda vez até ela existir.
 4. **Sete projetos** existem na planilha e não no Airtable: Almira Lopes ×
@@ -147,7 +146,32 @@ criadas.
   "Aprovado, 30 dias para abertura da conta". As duas coisas não podem ser
   verdade, e isso não foi resolvido hoje.
 
-## 8. Rastreabilidade
+## 8. O botão de publicar que não existe
+
+Ao alterar uma automação pela API, a ferramenta avisa que a mudança fica como
+rascunho e só passa a valer quando alguém clica em **Update** na tela do
+Airtable. Esse aviso levou a captadora a procurar, sem sucesso, um botão em
+quatro telas diferentes.
+
+**O botão não existe.** Verificado ao vivo em 31/08/2026, pelo navegador: a tela
+da automação tem apenas "História" e "Automação de testes". Ao abrir a automação
+no editor e rodar o teste do passo, a consulta `get_automation` passou a devolver
+`deployedVersion: null`, ou seja, o que roda e o rascunho voltaram a ser a mesma
+coisa. A alteração feita pela API entrou em vigor sozinha.
+
+Regra para as próximas vezes: **depois de alterar uma automação pela API,
+conferir com `get_automation` e `includeDeployedVersion: true`.** Se
+`deployedVersion` vier `null`, está publicado. Não mandar ninguém procurar botão.
+
+O teste do passo "Encontre registros" é leitura pura e não cria nada. Já testar a
+**automação inteira** cria registro de verdade, e não deve ser usado para
+conferência.
+
+**Sujeira gerada e removida:** durante essa navegação foi criado um registro em
+branco na tabela Não Submetidos, às 19h32, sem edital e sem vínculo. Foi apagado
+na sequência. A tabela fechou com 27.
+
+## 9. Rastreabilidade
 
 `docs/plano-operacao-mapa-airtable.md` (o plano de operação escrito hoje),
 `scripts/ler-planilha-submissao.py`, memória

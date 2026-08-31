@@ -238,8 +238,8 @@ editais deles. O número real de oportunidades perdidas era **27, não 36**.
 A correção não foi achar as datas, que não existem em sistema nenhum: foi trocar o
 critério. O campo **Foi enviado** marca como enviado quem tem data **ou** está no grupo
 Submetido, que já inclui Reprovado, e o rollup **Propostas enviadas (real)** passou a
-alimentar a Situação do edital e a varredura das 7h. *Falta ainda publicar a automação
-(botão Update) e apagar as 9 fichas antigas.*
+alimentar a Situação do edital e a varredura das 7h. *As 9 fichas antigas foram
+apagadas na mesma noite, e a tabela Não Submetidos fechou com 27.*
 
 **2. Categoria vazia em 78 dos 79 editais.** É a Categoria que cruza com a área temática
 do cliente para responder "para quem serve este edital". Sem ela, a triagem é memória, e
@@ -271,7 +271,7 @@ diferença entre uma grade de 79 linhas e uma lista de cinco coisas para fazer h
 ### Semana 1. Fazer o número dizer a verdade
 
 1. ~~Preencher a Data de submissão dos 9 reprovados.~~ **Feito em 31/08**, pelo critério
-   novo. Falta publicar a automação (botão Update) e apagar as 9 fichas indevidas.
+   novo, com as 9 fichas indevidas apagadas em seguida.
 2. ~~Decidir os 3 editais que vencem hoje.~~ **Feito em 31/08:** PNAB BH Fomento foi
    submetido e ganhou projeto, Amazônia Legal e EDP foram marcados Descartado.
 3. Acrescentar a coluna **DATA DE ENVIO** na planilha mestra, ao lado de STATUS. É o
