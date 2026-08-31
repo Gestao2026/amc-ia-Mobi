@@ -11,6 +11,11 @@
 > e é para isso que serve esta folha.
 >
 > **Já resolvidos em 31/08 por recriação:** FAVORECICLE 2025 e ArcelorMittal Investe 2027. Restam 41.
+>
+> **O BIP tem um edital por trilha**, conferido em 31/08: BIP Cultura (`db38b8ac`), BIP Esporte (`1ff18f09`),
+> BIP Reciclagem (`f3244082`), BIP Fundo da Pessoa Idosa (`63ab1471`) e BIP FIA (`c3347702`), todos do PROSAS
+> e contínuos. A ficha genérica "Banco de Incentivados da Prosas – BIP" (`c2282489`) é a guarda-chuva antiga,
+> com prazo vencido em 31/12/2025, e **não deve ser usada**.
 
 Confiança: **alta** significa título idêntico ou quase, pode ligar direto. **Média** significa
 candidato plausível que precisa do seu olho antes. **Sem candidato** significa que não existe
@@ -29,6 +34,8 @@ e não de um edital com prazo.
 | EDITAL DE CHAMAMENTO PÚBLICO Nº 01/2026 - FOMENTO À EXECUÇ | `submetido` | sem OSC | Edital De Chamamento Público PNAB Nº 01/2026 Fomento | `5bf0865b` | 2026-06-01 | título 97% igual |
 | Edital de Chamamento Público SNSA/MCID nº 01/2026 APOIO À  | `reprovado` | sem OSC |  Chamamento Público SNSA/MCID nº 01/2026 - APOIOÀ IN | `68e1d14c` | 2026-07-31 | título 96% igual |
 | Programa Shell de Patrocinios Incentivados 2026 | `checklist` | STK Produções Ltda | Edital de Patrocínio Shell Cultural 2026 | `83e81534` | 2026-10-31 | confirmado por você hoje |
+| BIP Esporte - Banco de Incentivados Prosas | `encontrar_cliente` | sem OSC | BIP: Esporte | `1ff18f09` | contínuo | trilha própria, conferido em 31/08 |
+| BIP Cultura - Banco de Incentivados Prosas | `selecionado` | Berê Xikrin | BIP: Cultura | `db38b8ac` | contínuo | trilha própria, conferido em 31/08 |
 
 ## Confiança média. Confira antes de ligar
 
@@ -44,8 +51,6 @@ e não de um edital com prazo.
 | PNAB 2026 SECULT-MG EDITAL DE CHAMAMENTO PÚBLICO Nº 01/202 | `reprovado` | sem OSC | EDITAL DE CHAMAMENTO PÚBLICO Nº 003/2026 SELEÇÃO DE  | `0ca6ed0c` | 2026-05-15 | título 77% igual |
 | EDITAL LEI MUNICIPAL DE INCENTIVO À CULTURA 2026 – FUNDO M | `submetido` | sem OSC | Edital da Lei Municipal de Incentivo à Cultura 2026 | `44444e81` | 2026-06-03 | título 76% igual |
 | EDITAL LEI MUNICIPAL DE INCENTIVO À CULTURA 2026 – FUNDO M | `submetido` | sem OSC | Edital da Lei Municipal de Incentivo à Cultura 2026 | `44444e81` | 2026-06-03 | título 76% igual |
-| BIP Esporte - Banco de Incentivados Prosas | `encontrar_cliente` | sem OSC | Banco de Incentivados da Prosas – BIP | `c2282489` | 2025-12-31 | título 75% igual |
-| BIP Cultura - Banco de Incentivados Prosas | `selecionado` | Berê Xikrin | Banco de Incentivados da Prosas – BIP | `c2282489` | 2025-12-31 | título 75% igual |
 | Programa Energisa Cultural. Eles Sabem (Bandeja Films) | `checklist` | sem OSC | Energisa Cultural | `de9a0766` | sem prazo | achado pela busca, não pelo título |
 | Usiminas - Patrocínios e Doações (Investimento Direto) | `encontrar_cliente` | sem OSC | DOAÇÕES USIMINAS | `1bd9ebc8` | 2025-10-09 | achado pela busca, não pelo título |
 | Lojas Renner - Patrocínio Cultural Contínuo | `encontrar_cliente` | sem OSC | Edital Instituto Lojas Renner 2026 | `db9edc67` | sem prazo | achado pela busca, não pelo título |
