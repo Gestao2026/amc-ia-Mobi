@@ -1,0 +1,472 @@
+#!/usr/bin/env python3
+"""Lê a planilha mestra de submissões e compara com o painel do Airtable.
+
+A PONTE, NÃO A FONTE
+  A captadora digita na planilha, que é onde o trabalho já acontece. Este script
+  lê a planilha, compara com o Airtable e MOSTRA as diferenças. Ele não decide
+  nada sozinho: a lista sai na tela e a captadora escolhe o que sobe.
+
+REGRA DE OURO DESTE SCRIPT
+  Por padrão ele NÃO GRAVA NADA. Só com --aplicar ele escreve, e mesmo assim
+  apenas dois campos de projetos que já existem no Airtable:
+      Status  e  Data de submissão
+  Ele NUNCA cria edital, NUNCA cria projeto, NUNCA apaga registro e NUNCA
+  toca em elegibilidade, nota técnica, chance de aprovação, valores ou
+  observações. Registro novo entra pela mão da captadora, como sempre.
+
+A COLUNA QUE PRECISA EXISTIR NA PLANILHA
+  "DATA DE ENVIO", ao lado de STATUS. Sem ela a planilha não guarda a data em
+  que a proposta saiu, e foi por isso que em 31/08/2026 sete de nove datas de
+  submissão não puderam ser recuperadas de sistema nenhum. O script avisa
+  quando a coluna não existe, e segue comparando o resto.
+
+O QUE ELE COMPARA
+  1. Editais da planilha que não existem no Airtable.
+  2. Prazo de submissão divergente entre os dois.
+  3. Projetos (cliente cruzado com edital) que não existem no Airtable.
+  4. Status divergente entre a planilha e o Airtable.
+  5. Data de envio preenchida na planilha e vazia no Airtable.
+
+CONFIGURAÇÃO (tudo no .env, nunca no código)
+  AIRTABLE_TOKEN     criar em airtable.com/create/tokens
+  AIRTABLE_BASE_ID   appKWLTFSCcWucXfQ
+
+USO
+  python scripts/ler-planilha-submissao.py              (só confere e mostra)
+  python scripts/ler-planilha-submissao.py --aplicar    (grava o que foi listado)
+  python scripts/ler-planilha-submissao.py --planilha "C:/caminho/outra.xlsx"
+"""
+
+import argparse
+import json
+import os
+import sys
+import time
+import unicodedata
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import date, datetime
+from pathlib import Path
+
+RAIZ = Path(__file__).resolve().parent.parent
+
+PLANILHA_PADRAO = (
+    Path.home()
+    / "Desktop"
+    / "_82 - Rosepaula Aparecida Andrade Rodrigues"
+    / "04 - Controle de Submissão_"
+    / "01 - Mineração de Editais"
+    / "01 - Planejamento de Submissões"
+    / "1 - Controle de Submissão_.xlsx"
+)
+
+ABAS = ("GERAL", "REPROVADOS", "EXCLUIDOS")
+LINHA_DO_CABECALHO = 2
+
+TABELA_EDITAIS = "tbl3uBAYg70FBwLoN"
+TABELA_PROJETOS = "tbl3gUoVzDCKEzuEC"
+TABELA_CLIENTES = "tblNT6WFUIOPklCoD"
+
+F_EDITAL_TITULO = "fldEceFV4Tl7freud"
+F_EDITAL_PRAZO = "fldpoVjvyoucdIK7R"
+
+F_PROJ_NOME = "fldSa8cmaS1sNih7Q"
+F_PROJ_OSC = "fldCCXR6rpxoK0TbF"
+F_PROJ_EDITAL = "fldorrhyd9w6Vqs4G"
+F_PROJ_STATUS = "fldBx1pugR9S5J6rf"
+F_PROJ_DATA_ENVIO = "fldJuZqCdYZtFZiCu"
+
+F_CLIENTE_NOME = "fldwn5FhCvz8DOvhu"
+
+# Campos que este script jamais escreve. Estão listados para deixar explícito
+# que a ausência deles é decisão, não esquecimento.
+NUNCA_ESCREVER = (
+    "Elegibilidade",
+    "Documentação",
+    "Valor solicitado",
+    "Nota técnica",
+    "Chance de aprovação",
+    "Valor aprovado",
+    "Resultado",
+    "Observações",
+    "Pasta local",
+)
+
+# Nomes curtos que a planilha usa para os clientes. A chave é o que aparece na
+# coluna CLIENTE, o valor é um pedaço da razão social gravada no Airtable.
+# Só entra aqui o caso em que o nome curto não está contido na razão social.
+APELIDOS = {
+    "e-missao": "voluntariado e-missao",
+    "mededicas": "coletivo mededicas",
+    "kuyper": "instituto kuyper",
+    "ponto cultural": "associacao ponto cultural",
+    "georgia": "silas machado",
+    "semear": "associacao semear",
+    "catadores": "agentes ambientais e catadores",
+    "levanta e brilha": "levanta e brilha",
+    "faz de conta": "faz de conta",
+    "santa casa": "santa casa de misericordia",
+    "berê xikrin": "bere xikrin",
+    "bere xikrin": "bere xikrin",
+}
+
+
+def carregar_env():
+    env = {}
+    caminho = RAIZ / ".env"
+    if caminho.exists():
+        for linha in caminho.read_text(encoding="utf-8").splitlines():
+            linha = linha.strip()
+            if not linha or linha.startswith("#") or "=" not in linha:
+                continue
+            chave, valor = linha.split("=", 1)
+            env[chave.strip()] = valor.strip().strip('"').strip("'")
+    for chave in ("AIRTABLE_TOKEN", "AIRTABLE_BASE_ID"):
+        if chave in os.environ:
+            env[chave] = os.environ[chave]
+    return env
+
+
+def normalizar(texto):
+    """Tira acento, pontuação de sobra e caixa. Usado só para casar, nunca para gravar."""
+    texto = unicodedata.normalize("NFKD", str(texto or ""))
+    texto = texto.encode("ascii", "ignore").decode().lower()
+    return " ".join(texto.replace("\n", " ").replace("º", "").split())
+
+
+def chave_curta(texto, tamanho=45):
+    """Prefixo normalizado. A planilha corta títulos longos, o Airtable não."""
+    return normalizar(texto)[:tamanho]
+
+
+def para_data(valor):
+    if valor in (None, ""):
+        return None
+    if isinstance(valor, datetime):
+        return valor.date()
+    if isinstance(valor, date):
+        return valor
+    texto = str(valor).strip()
+    for formato in ("%Y-%m-%d", "%d/%m/%Y", "%d/%m/%y", "%Y-%m-%d %H:%M:%S"):
+        try:
+            return datetime.strptime(texto, formato).date()
+        except ValueError:
+            continue
+    return None
+
+
+def br(d):
+    return d.strftime("%d/%m/%Y") if d else "vazio"
+
+
+class Airtable:
+    def __init__(self, token, base_id):
+        self.token = token
+        self.base_id = base_id
+
+    def _requisicao(self, metodo, url, params=None, corpo=None):
+        if params:
+            url += "?" + urllib.parse.urlencode(params)
+        dados = json.dumps(corpo).encode("utf-8") if corpo is not None else None
+        req = urllib.request.Request(
+            url,
+            data=dados,
+            method=metodo,
+            headers={
+                "Authorization": f"Bearer {self.token}",
+                "Content-Type": "application/json",
+            },
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as erro:
+            detalhe = erro.read().decode("utf-8", "replace")[:300]
+            raise SystemExit(f"Airtable respondeu {erro.code}: {detalhe}")
+
+    def listar(self, tabela):
+        registros, offset = [], None
+        while True:
+            params = {"pageSize": 100, "returnFieldsByFieldId": "true"}
+            if offset:
+                params["offset"] = offset
+            resposta = self._requisicao(
+                "GET", f"https://api.airtable.com/v0/{self.base_id}/{tabela}", params=params
+            )
+            registros.extend(resposta.get("records", []))
+            offset = resposta.get("offset")
+            if not offset:
+                break
+        return registros
+
+    def atualizar(self, tabela, lote):
+        return self._requisicao(
+            "PATCH",
+            f"https://api.airtable.com/v0/{self.base_id}/{tabela}",
+            corpo={"records": lote},
+        )
+
+    def opcoes_de_status(self):
+        """Lê as opções reais do campo Status, para não gravar valor que a lista recusa."""
+        resposta = self._requisicao(
+            "GET", f"https://api.airtable.com/v0/meta/bases/{self.base_id}/tables"
+        )
+        for tabela in resposta.get("tables", []):
+            if tabela.get("id") != TABELA_PROJETOS:
+                continue
+            for campo in tabela.get("fields", []):
+                if campo.get("id") == F_PROJ_STATUS:
+                    escolhas = (campo.get("options") or {}).get("choices") or []
+                    return [e["name"] for e in escolhas]
+        return []
+
+
+def ler_planilha(caminho):
+    try:
+        import openpyxl
+    except ImportError:
+        raise SystemExit(
+            "Falta a biblioteca openpyxl para ler a planilha.\n"
+            "Instale com:  pip install openpyxl"
+        )
+
+    if not caminho.exists():
+        raise SystemExit(
+            f"Não encontrei a planilha em:\n  {caminho}\n"
+            "Se ela mudou de lugar, passe o caminho novo com --planilha."
+        )
+
+    livro = openpyxl.load_workbook(caminho, data_only=True, read_only=True)
+    linhas, tem_coluna_envio = [], False
+
+    for nome_aba in ABAS:
+        if nome_aba not in livro.sheetnames:
+            continue
+        aba = livro[nome_aba]
+        cabecalho = {}
+        for numero, linha in enumerate(aba.iter_rows(values_only=True), start=1):
+            if numero == LINHA_DO_CABECALHO:
+                for indice, celula in enumerate(linha):
+                    rotulo = normalizar(celula)
+                    if rotulo and rotulo not in cabecalho:
+                        cabecalho[rotulo] = indice
+                if "data de envio" in cabecalho:
+                    tem_coluna_envio = True
+                continue
+            if numero <= LINHA_DO_CABECALHO or not cabecalho:
+                continue
+
+            def coluna(rotulo):
+                indice = cabecalho.get(rotulo)
+                if indice is None or indice >= len(linha):
+                    return None
+                return linha[indice]
+
+            nome = (coluna("nome") or "").strip() if isinstance(coluna("nome"), str) else coluna("nome")
+            if not nome:
+                continue
+            linhas.append(
+                {
+                    "aba": nome_aba,
+                    "linha": numero,
+                    "edital": str(nome).strip(),
+                    "cliente": str(coluna("cliente") or "").split("\n")[0].strip(),
+                    "status": str(coluna("status") or "").strip(),
+                    "data_limite": para_data(coluna("data limite")),
+                    "data_envio": para_data(coluna("data de envio")),
+                }
+            )
+
+    livro.close()
+    return linhas, tem_coluna_envio
+
+
+def indexar_por_titulo(registros, campo):
+    indice = {}
+    for registro in registros:
+        titulo = (registro.get("fields") or {}).get(campo)
+        if not titulo:
+            continue
+        indice.setdefault(chave_curta(titulo), registro)
+    return indice
+
+
+def casar_cliente(nome_planilha, clientes_por_chave):
+    alvo = normalizar(nome_planilha)
+    if not alvo:
+        return None
+    apelido = APELIDOS.get(alvo)
+    if apelido:
+        alvo = apelido
+    for chave, registro in clientes_por_chave.items():
+        if alvo in chave or chave in alvo:
+            return registro
+    return None
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Compara a planilha mestra de submissões com o painel do Airtable."
+    )
+    parser.add_argument(
+        "--aplicar",
+        action="store_true",
+        help="grava as diferenças de Status e Data de submissão (sem isto, só mostra)",
+    )
+    parser.add_argument(
+        "--planilha",
+        type=Path,
+        default=PLANILHA_PADRAO,
+        help="caminho da planilha, quando não for a mestra da _82",
+    )
+    args = parser.parse_args()
+
+    env = carregar_env()
+    token = env.get("AIRTABLE_TOKEN")
+    base_id = env.get("AIRTABLE_BASE_ID")
+    if not token or not base_id:
+        raise SystemExit(
+            "Faltam AIRTABLE_TOKEN e AIRTABLE_BASE_ID no .env.\n"
+            "Gere o token em airtable.com/create/tokens com escopos "
+            "data.records:read e data.records:write nesta base."
+        )
+
+    print(f"Lendo a planilha:\n  {args.planilha}")
+    linhas, tem_coluna_envio = ler_planilha(args.planilha)
+    print(f"  {len(linhas)} linhas com edital preenchido.\n")
+
+    if not tem_coluna_envio:
+        print("AVISO: a planilha não tem a coluna DATA DE ENVIO.")
+        print("  Acrescente uma coluna com esse nome ao lado de STATUS, na linha 2.")
+        print("  É ela que guarda o dia em que a proposta saiu, e sem ela a data")
+        print("  só existe no comprovante do portal.\n")
+
+    airtable = Airtable(token, base_id)
+    print("Lendo o Airtable...")
+    editais = airtable.listar(TABELA_EDITAIS)
+    projetos = airtable.listar(TABELA_PROJETOS)
+    clientes = airtable.listar(TABELA_CLIENTES)
+    print(f"  {len(editais)} editais, {len(projetos)} projetos, {len(clientes)} clientes.\n")
+
+    editais_por_chave = indexar_por_titulo(editais, F_EDITAL_TITULO)
+    clientes_por_chave = {
+        normalizar((c.get("fields") or {}).get(F_CLIENTE_NOME)): c
+        for c in clientes
+        if (c.get("fields") or {}).get(F_CLIENTE_NOME)
+    }
+
+    # Projetos indexados por (id do cliente, id do edital).
+    projetos_por_par = {}
+    for projeto in projetos:
+        campos = projeto.get("fields") or {}
+        for id_osc in campos.get(F_PROJ_OSC) or []:
+            for id_edital in campos.get(F_PROJ_EDITAL) or []:
+                projetos_por_par[(id_osc, id_edital)] = projeto
+
+    faltam_editais, prazos, faltam_projetos, status_divergente, datas = [], [], [], [], []
+    opcoes_status = airtable.opcoes_de_status()
+    opcoes_por_chave = {normalizar(o): o for o in opcoes_status}
+
+    for item in linhas:
+        edital = editais_por_chave.get(chave_curta(item["edital"]))
+        if not edital:
+            faltam_editais.append(item)
+            continue
+
+        prazo_airtable = para_data((edital.get("fields") or {}).get(F_EDITAL_PRAZO))
+        if item["data_limite"] and prazo_airtable and item["data_limite"] != prazo_airtable:
+            prazos.append((item, prazo_airtable))
+
+        cliente = casar_cliente(item["cliente"], clientes_por_chave)
+        if not cliente:
+            continue
+
+        projeto = projetos_por_par.get((cliente["id"], edital["id"]))
+        if not projeto:
+            faltam_projetos.append((item, cliente))
+            continue
+
+        campos = projeto.get("fields") or {}
+        atual = campos.get(F_PROJ_STATUS)
+        desejado = opcoes_por_chave.get(normalizar(item["status"]))
+        if item["status"] and desejado and atual != desejado:
+            status_divergente.append((item, projeto, atual, desejado))
+
+        if item["data_envio"] and not campos.get(F_PROJ_DATA_ENVIO):
+            datas.append((item, projeto))
+
+    print("=" * 72)
+    print("DIFERENÇAS ENTRE A PLANILHA E O AIRTABLE")
+    print("=" * 72)
+
+    print(f"\n1. Editais da planilha que não existem no Airtable: {len(faltam_editais)}")
+    for item in faltam_editais:
+        print(f"   [{item['aba']} linha {item['linha']}] {item['edital'][:70]}")
+    if faltam_editais:
+        print("   (Edital novo entra na mão. Este script nunca cria registro.)")
+
+    print(f"\n2. Prazo divergente: {len(prazos)}")
+    for item, prazo_airtable in prazos:
+        print(
+            f"   {item['edital'][:55]}\n"
+            f"      planilha {br(item['data_limite'])}  x  Airtable {br(prazo_airtable)}"
+        )
+    if prazos:
+        print("   (A palavra final é o edital publicado na URL oficial, nunca o índice.)")
+
+    print(f"\n3. Projetos da planilha que não existem no Airtable: {len(faltam_projetos)}")
+    for item, cliente in faltam_projetos:
+        nome = (cliente.get("fields") or {}).get(F_CLIENTE_NOME)
+        print(f"   {nome[:35]} x {item['edital'][:45]}  [{item['status'] or 'sem status'}]")
+    if faltam_projetos:
+        print("   (Projeto novo entra na mão. Este script nunca cria registro.)")
+
+    print(f"\n4. Status divergente: {len(status_divergente)}")
+    for item, projeto, atual, desejado in status_divergente:
+        nome = (projeto.get("fields") or {}).get(F_PROJ_NOME) or projeto["id"]
+        print(f"   {nome[:60]}\n      Airtable '{atual}'  ->  planilha '{desejado}'")
+
+    print(f"\n5. Data de envio na planilha e vazia no Airtable: {len(datas)}")
+    for item, projeto in datas:
+        nome = (projeto.get("fields") or {}).get(F_PROJ_NOME) or projeto["id"]
+        print(f"   {nome[:60]}  ->  {br(item['data_envio'])}")
+
+    # Um mesmo projeto pode aparecer em mais de uma linha da planilha (o edital
+    # costuma existir na aba GERAL e de novo na REPROVADOS). O Airtable recusa
+    # o lote com o mesmo id repetido, então junta-se tudo por registro.
+    por_registro = {}
+    for _item, projeto, _atual, desejado in status_divergente:
+        por_registro.setdefault(projeto["id"], {})[F_PROJ_STATUS] = desejado
+    for item, projeto in datas:
+        por_registro.setdefault(projeto["id"], {})[F_PROJ_DATA_ENVIO] = item["data_envio"].isoformat()
+    lote = [{"id": chave, "fields": campos} for chave, campos in por_registro.items()]
+
+    print("\n" + "=" * 72)
+    if not lote:
+        print("Nada a gravar. A planilha e o Airtable estão de acordo nos dois campos")
+        print("que este script escreve (Status e Data de submissão).")
+        return
+
+    if not args.aplicar:
+        print(f"Modo conferência. NADA foi gravado. {len(lote)} projetos seriam atualizados.")
+        print("Para gravar, rode de novo com --aplicar.")
+        print("\nCampos que este script nunca escreve, em nenhum modo:")
+        for nome in NUNCA_ESCREVER:
+            print(f"  - {nome}")
+        return
+
+    enviados = 0
+    for inicio in range(0, len(lote), 10):
+        pedaco = lote[inicio : inicio + 10]
+        airtable.atualizar(TABELA_PROJETOS, pedaco)
+        enviados += len(pedaco)
+        print(f"  gravados {enviados}/{len(lote)}")
+        time.sleep(0.25)
+
+    print(f"\nConcluído. {enviados} projetos atualizados.")
+    print("Nenhum registro foi criado nem apagado.")
+
+
+if __name__ == "__main__":
+    main()

@@ -27,6 +27,14 @@
 | 15 | 2026-08-23 | [Consolidação dos editais entre a MOBI e a _82](2026-08-23-15-consolidacao-editais-mobi-vs-82.md) | `MOBI\03-EDITAIS` e `_82\04 - Controle de Submissão_` | Concluída. **3 pendências de decisão** |
 | 16 | 2026-08-23 | [Os 4 logos repetidos na pasta APLICAVEIS são intencionais](2026-08-23-16-duplicatas-de-logo-intencionais.md) | `OneDrive E-missão\Documentos\9. MOBILIZANDO MKT LOGO` | Concluída. Diagnóstico, nada foi excluído |
 | 17 | 2026-08-24 | [Consolidação do marketing numa pasta única](2026-08-24-17-consolidacao-do-marketing.md) | `MOBI\06-MARKETING` (extinta) e `Documentos\9. MOBILIZANDO MKT LOGO` | Concluída. **3 pendências de decisão** |
+| 18 | 2026-08-25 | [Painel no Airtable e auditoria documental da carteira](2026-08-25-18-painel-airtable-e-auditoria-da-carteira.md) | Base Airtable, CaptaHub e `CaptaDrive` no Drive | Concluída. **6 pendências de tela** |
+| 19 | 2026-08-26 | [Regras de fonte, tabela Captações, automações ligadas e a primeira carga do mapa](2026-08-26-19-regras-de-fonte-captacoes-e-carga-do-mapa.md) | Base Airtable e planilha mestra da `_82` | Concluída. **6 pendências com a captadora** |
+| 20 | 2026-08-26 | [Desligamento das sincronizações entre as cópias da _82](2026-08-26-20-desligamento-das-sincronizacoes-da-82.md) | `scripts/`. Nenhuma pasta de documento tocada | Concluída. **4 pendências com a captadora** |
+| 21 | 2026-08-28 | [Desligamento da automação na _82 da Área de Trabalho](2026-08-28-21-desligamento-da-automacao-na-82-da-area-de-trabalho.md) | `scripts/backup-diario.bat`. Nenhuma pasta de documento tocada | Concluída. **3 pendências com a captadora** |
+| 22 | 2026-08-28 | [Limpeza das cópias divergentes da _82 e exceção do Meu Drive local](2026-08-28-22-limpeza-das-copias-divergentes-e-excecao-do-meu-drive-local.md) | Drive, `Backups\pasta-82\atual`, `_credenciais-nao-sincronizar\`, `Meu Drive local` (excluída) | Concluída. **4 pendências com a captadora** |
+| 23 | 2026-08-28 | [Auditoria dos documentos de 27/08](2026-08-28-23-auditoria-dos-documentos-de-27-08.md) | 65 arquivos e 61 pastas com carimbo de 27/08 | Concluída. Somente leitura, nada foi alterado |
+| 24 | 2026-08-30 | [Desligamento do encaminhamento da editais para a gestao](2026-08-30-24-desligamento-do-encaminhamento-editais-para-gestao.md) | Gmail `editais.mobilizando` e `gestao.mobilizando` | Concluída |
+| 25 | 2026-08-31 | [Correção da contagem de propostas enviadas e a ponte com a planilha](2026-08-31-25-correcao-da-contagem-de-propostas-enviadas.md) | Base Airtable (Projetos, Editais, uma automação), `scripts/`, `docs/` | Concluída. **4 pendências com a captadora** |
 
 ## Como usar
 
@@ -83,6 +91,9 @@ Estas valem para o ambiente todo, não só para a pasta que as originou.
 - Enquanto a captadora estiver corrigindo a estrutura à mão, nada se cria, renomeia, move ou apaga na pasta em que ela está trabalhando, até ela avisar que terminou.
 
 **Sobre a pasta `_82`**
+- **A `_82` do Drive é a fonte da verdade da estrutura.** A cópia da Área de Trabalho é derivada. Quando as duas divergirem, o alinhamento é sempre do Drive para a Área de Trabalho, em sentido único.
+- **Nenhuma sincronização de duas vias roda entre as cópias**, desde 26/08/2026. Sincronizador aditivo não sobrescreve, ele duplica, e duplicação em estrutura de pasta é mais cara de desfazer do que perda de arquivo.
+- **Antes de afirmar que um trabalho se desfez, conferir a data de alteração dos dois lados e identificar qual cópia está na tela.** Três pastas com o mesmo nome em três lugares fazem parecer que a estrutura voltou atrás sozinha.
 - **Nenhuma pasta chamada `_82 - Rosepaula Aparecida Andrade Rodrigues` se apaga**, nem no Google Drive nem na Área de Trabalho. Vale para a raiz e para qualquer subpasta, em qualquer nível, com ou sem conteúdo.
 - Inclui a pasta compartilhada no Drive (unidade `M:`), a cópia da Área de Trabalho, a cópia em `C:\Users\rosep\Meu Drive` e o backup em `C:\Users\rosep\Backups\pasta-82`.
 - Não apagar, não mover para a Lixeira, não "aposentar", não substituir por atalho, não deixar script tocar nelas. Se um plano de organização levar a remover qualquer uma, **o plano muda, não a pasta**.
