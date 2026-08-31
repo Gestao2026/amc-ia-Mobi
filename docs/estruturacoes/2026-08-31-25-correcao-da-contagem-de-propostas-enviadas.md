@@ -5,7 +5,7 @@
 | Data | 2026-08-31 |
 | Pasta afetada | Base Airtable `appKWLTFSCcWucXfQ` (tabelas Projetos e Editais, uma automação), `scripts/`, `docs/` |
 | Tipo | Correção de regra de negócio, criação de campo, ajuste de fórmula e script novo |
-| Situação | Concluída. **2 pendências com a captadora**, listadas no item 6 |
+| Situação | Concluída. **1 pendência com a captadora**, listada no item 6 |
 | Autorizada por | A captadora, passo a passo: confirmou que os nove projetos foram submetidos e reprovados, autorizou a correção, o `--aplicar` e a criação do projeto do PNAB BH Fomento |
 | Reversível | Sim. Campos novos podem ser excluídos, fórmulas têm a versão anterior transcrita no item 5, e a automação tem `revert_action` pelo actionId |
 
@@ -81,6 +81,11 @@ arquivo. Por isso só duas datas foram gravadas.
    para Reprovado, fechando a incoerência entre os dois campos.
 10. **Projeto criado:** Coletivo Medêdicas × PNAB BH Fomento 2026 (Ciclo 2),
     submetido em 31/08, R$ 80.000, com o id do CaptaHub gravado.
+11. **Seis projetos criados**, os que a planilha tinha e o Airtable não: Almira
+    Lopes × Essencis e × MAPFRE, STK × Shell, Ponto Cultural × Ambev e ×
+    Usiminas, e-Missão × Prefeitura de BH. Todos entraram como **Mapeado**,
+    porque a planilha traz essas linhas sem status. Depois deles, o script de
+    conferência devolve zero diferença nas cinco checagens.
 
 ## 4. Estado antes e depois
 
@@ -88,7 +93,7 @@ arquivo. Por isso só duas datas foram gravadas.
 |---|---|---|
 | Editais não submetidos | 36 | **27** |
 | Editais com proposta enviada | 2 | **12** |
-| Projetos no Airtable | 14 | 15 |
+| Projetos no Airtable | 14 | **21** |
 | Projetos com Data de submissão | 3 | 5 |
 | Projetos marcados como enviados | 3 | **12** |
 | Editais em "A triar" | 37 | 35 |
@@ -120,9 +125,11 @@ alimentar nada, e pode ser ocultada.
    Submetidos ficou com 27 registros.
 3. **Acrescentar a coluna DATA DE ENVIO** na planilha mestra, ao lado de STATUS.
    É o buraco que originou tudo, e o script avisa toda vez até ela existir.
-4. **Sete projetos** existem na planilha e não no Airtable: Almira Lopes ×
-   Essencis e × MAPFRE, STK × Shell, Ponto Cultural × Ambev e × Usiminas,
-   e-Missão × Prefeitura de BH. O oitavo, PNAB BH Fomento, já foi criado.
+4. ~~Sete projetos existem na planilha e não no Airtable.~~ **Feito na mesma
+   noite:** os sete foram criados. Fica uma decisão pendente no
+   e-Missão × Prefeitura de BH: o prazo era 13/08 e passou sem proposta, então
+   o status pode ser Sem Tempo Hábil em vez de Mapeado, dependendo se havia
+   intenção de concorrer.
 
 Ainda em aberto, de sessões anteriores e reconfirmado hoje: a data do MROSC, o
 prazo real dos dois PNAB SECULT (a Secult prorrogou os editais do Ciclo 2), a

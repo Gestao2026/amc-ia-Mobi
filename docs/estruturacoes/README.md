@@ -34,7 +34,7 @@
 | 22 | 2026-08-28 | [Limpeza das cópias divergentes da _82 e exceção do Meu Drive local](2026-08-28-22-limpeza-das-copias-divergentes-e-excecao-do-meu-drive-local.md) | Drive, `Backups\pasta-82\atual`, `_credenciais-nao-sincronizar\`, `Meu Drive local` (excluída) | Concluída. **4 pendências com a captadora** |
 | 23 | 2026-08-28 | [Auditoria dos documentos de 27/08](2026-08-28-23-auditoria-dos-documentos-de-27-08.md) | 65 arquivos e 61 pastas com carimbo de 27/08 | Concluída. Somente leitura, nada foi alterado |
 | 24 | 2026-08-30 | [Desligamento do encaminhamento da editais para a gestao](2026-08-30-24-desligamento-do-encaminhamento-editais-para-gestao.md) | Gmail `editais.mobilizando` e `gestao.mobilizando` | Concluída |
-| 25 | 2026-08-31 | [Correção da contagem de propostas enviadas e a ponte com a planilha](2026-08-31-25-correcao-da-contagem-de-propostas-enviadas.md) | Base Airtable (Projetos, Editais, uma automação), `scripts/`, `docs/` | Concluída. **2 pendências com a captadora** |
+| 25 | 2026-08-31 | [Correção da contagem de propostas enviadas e a ponte com a planilha](2026-08-31-25-correcao-da-contagem-de-propostas-enviadas.md) | Base Airtable (Projetos, Editais, uma automação), `scripts/`, `docs/` | Concluída. **1 pendência com a captadora** |
 
 ## Como usar
 
