@@ -1,0 +1,412 @@
+#!/usr/bin/env python3
+# ========================= TRAVA DE DESATIVACAO =========================
+# Desativado em 31/08/2026. O projeto MAPA foi encerrado e o Airtable saiu
+# de cena. Este script conversa com a base appKWLTFSCcWucXfQ, que nao e mais
+# mantida. Rodar agora escreve em base abandonada ou compara com dado velho.
+# Antes de religar, leia scripts/desativados/LEIA-ME.md.
+import sys as _sys
+_sys.exit("Script desativado em 31/08/2026. Ver scripts/desativados/LEIA-ME.md.")
+# =======================================================================
+"""Sincroniza a carteira de clientes do CaptaHub para o Airtable.
+
+Mão única: CaptaHub manda, Airtable recebe. Nunca o contrário.
+
+REGRA DE OURO DESTE SCRIPT
+  Ele NUNCA cria cliente novo no Airtable e NUNCA apaga nada.
+  Só atualiza os clientes que já existem lá, casando pelo campo "ID CaptaHub".
+
+  O motivo: a API do CaptaHub não devolve a situação comercial (ativo, em
+  negociação, negociado). Ela devolve a carteira inteira, sem distinção. Se o
+  script criasse registro sozinho, subiria cliente que o captador decidiu
+  deixar de fora. Quem entra na carteira do Airtable é decisão humana; o script
+  só mantém em dia o que já foi decidido.
+
+CAMPOS QUE ELE ESCREVE (decidido em 25/08/2026, tabela enxugada)
+  OSC, CNPJ/CPF, Natureza jurídica, Data de fundação, Município, UF,
+  Área temática (a principal) e Áreas temáticas (todas), E-mail, Telefone,
+  Histórico de aprovações e Valor já aprovado.
+
+CAMPOS QUE ELE NUNCA ESCREVE
+  Situação, CaptaDrive, Observações estratégicas e Responsável. São dados que só
+  existem no Airtable. Sobrescrever apagaria o trabalho do captador.
+
+CONFIGURAÇÃO (tudo no .env, nunca no código)
+  CAPTAHUB_API_URL     já existe
+  CAPTAHUB_API_TOKEN   já existe
+  AIRTABLE_TOKEN       criar em airtable.com/create/tokens
+  AIRTABLE_BASE_ID     appKWLTFSCcWucXfQ
+
+USO
+  python scripts/sincronizar-clientes-airtable.py            (aplica)
+  python scripts/sincronizar-clientes-airtable.py --simular  (só mostra)
+"""
+
+import argparse
+import importlib.util
+import json
+import os
+import sys
+import time
+import unicodedata
+import urllib.error
+import urllib.parse
+import urllib.request
+from pathlib import Path
+
+RAIZ = Path(__file__).resolve().parent.parent
+TABELA_CLIENTES = "tblNT6WFUIOPklCoD"
+
+# Campos do Airtable que este script escreve.
+F_OSC = "fldwn5FhCvz8DOvhu"
+F_SIGLA = "fldekiJva7xmkt5Gn"
+F_CNPJ = "fldeYNbD7hbFaM6e2"
+F_NATUREZA = "fldS6GkPaVVqjcBtL"
+F_FUNDACAO = "fld8O4eik1MFS4EHH"
+F_MUNICIPIO = "fldqFB155ENK2cuEK"
+F_UF = "fld6dy1bkFPMknntT"  # UF por extenso, lista da captadora, 26/08/2026
+F_TERRITORIOS = "flds5Z6CC19Xzru92"
+F_AREA_PRINCIPAL = "fldoeLO7auGuThA9i"  # Área temática, escolha única, visível
+F_AREAS = "fldPqgKUmMgMxQjOA"           # Áreas temáticas (todas), oculta, usada na triagem
+F_MISSAO = "fldeXCxGsEjcwA2eE"
+F_DOCS = "fldaWtWrUD60xapZI"
+F_SITE = "fldrMxQS0xtlobKsO"
+F_EMAIL = "fldzCedisnzKQiQfV"
+F_TELEFONE = "fldZ5iYLqNdyIK7kZ"
+F_ID_CAPTAHUB = "fldGxPJCipezYFZp5"
+F_NATUREZA_RAW = "fldBxMyWzR8w40DLh"
+F_AREAS_RAW = "fldnYa19zMSdprC9m"
+F_DOCS_RAW = "fldhfYaxxcOWmvVll"
+F_HISTORICO = "fldtxanFz9CJQcEOQ"
+F_VALOR_APROVADO = "fldRoJ2KoNreENnab"
+
+# Campos protegidos. Estão aqui para ficar documentado que a ausência deles
+# na lista acima é intencional, não esquecimento.
+NUNCA_ESCREVER = {
+    "fldBRUMgO2niLO58U": "Situação",
+    "fldyjbgh01qyFwyMj": "CaptaDrive",
+    "fldYd0qM5NwkQL8lA": "Observações estratégicas",
+    "fldzNlDKUv7HjiYkN": "Pendências documentais",
+    "fld9v27ZkUGLG43xN": "Pasta local",
+    "fldkJGNYKncIwkNV7": "Responsável",
+    "fldXSAWMBSRzFVWom": "Natureza jurídica detalhada",
+}
+
+
+def carregar_env():
+    env = {}
+    caminho = RAIZ / ".env"
+    if caminho.exists():
+        for linha in caminho.read_text(encoding="utf-8").splitlines():
+            linha = linha.strip()
+            if not linha or linha.startswith("#") or "=" not in linha:
+                continue
+            chave, valor = linha.split("=", 1)
+            env[chave.strip()] = valor.strip().strip('"').strip("'")
+    for chave in ("AIRTABLE_TOKEN", "AIRTABLE_BASE_ID"):
+        if chave in os.environ:
+            env[chave] = os.environ[chave]
+    return env
+
+
+def normalizar(texto):
+    texto = unicodedata.normalize("NFKD", texto or "")
+    return texto.encode("ascii", "ignore").decode().lower()
+
+
+# A ordem importa: a primeira chave que aparecer no texto vence.
+# As duas primeiras linhas existem porque o formulário do CaptaHub passou a gravar
+# categorias genéricas em 25/08/2026. Sem elas, tudo caía em "Outra".
+NATUREZAS = [
+    ("entidade sem fins lucrativos", "Associação"),
+    ("entidade empresaria", "Empresa"),
+    ("oscip", "OSCIP"),
+    ("ltda", "Empresa"),
+    ("empresaria", "Empresa"),
+    ("cooperativa", "Cooperativa Social"),
+    ("fundacao", "Fundação"),
+    ("religios", "Organização Religiosa"),
+    ("associa", "Associação"),
+    ("pessoa fisica", "Outra"),
+    ("coletivo", "Outra"),
+]
+
+AREAS = [
+    ("assistencia social", "Assistência Social"),
+    ("socioeducativ", "Assistência Social"),
+    ("scfv", "Assistência Social"),
+    ("seguranca alimentar", "Assistência Social"),
+    ("cultura", "Cultura"),
+    ("audiovisual", "Cultura"),
+    ("danca", "Cultura"),
+    ("musica", "Cultura"),
+    ("artes cenicas", "Cultura"),
+    ("cinema", "Cultura"),
+    ("animacao", "Cultura"),
+    ("educacao", "Educação"),
+    ("esporte", "Esporte"),
+    ("futebol", "Esporte"),
+    ("meio ambiente", "Meio Ambiente"),
+    ("residuos", "Meio Ambiente"),
+    ("reciclav", "Meio Ambiente"),
+    ("ambiental", "Meio Ambiente"),
+    ("climatica", "Meio Ambiente"),
+    ("sustentabilidade", "Meio Ambiente"),
+    ("coleta seletiva", "Meio Ambiente"),
+    ("direitos", "Direitos Humanos"),
+    ("etnodesenvolvimento", "Direitos Humanos"),
+    ("renda", "Empreendedorismo/Renda"),
+    ("economia solidaria", "Empreendedorismo/Renda"),
+    ("inclusao produtiva", "Empreendedorismo/Renda"),
+    ("empreendedor", "Empreendedorismo/Renda"),
+    ("tecnologia", "Ciência e Tecnologia"),
+    ("saude", "Saúde"),
+    ("comunicacao", "Comunicação"),
+]
+
+
+# O CaptaHub devolve a UF em sigla; a lista do Airtable usa o nome por extenso.
+# Os nomes aqui têm que bater LETRA POR LETRA com as opções da lista, senão o
+# Airtable recusa a gravação. Estado que não estiver aqui não é escrito, e o
+# script avisa em vez de falhar.
+UF_POR_EXTENSO = {
+    "AM": "AMAZONAS",
+    "PA": "PARÁ",
+    "MG": "MINAS GERAIS",
+    "PE": "PERNAMBUCO",
+    "BA": "BAHIA",
+    "ES": "ESPIRITO SANTO",
+    "RJ": "RIO DE JANEIRO",
+    "SP": "SÃO PAULO",
+}
+
+DOCUMENTOS = {
+    "cnpj_ativo": "CNPJ ativo",
+    "estatuto_social_registrado": "Estatuto social registrado",
+    "estatuto_social": "Estatuto social registrado",
+    "estatuto_registrado": "Estatuto social registrado",
+    "contrato_social_registrado": "Estatuto social registrado",
+    "estatuto_contrato_social": "Estatuto social registrado",
+    "contrato_social": "Estatuto social registrado",
+    "ata_eleicao_diretoria_atual": "Ata de eleição da diretoria",
+    "ata_diretoria_atual": "Ata de eleição da diretoria",
+    "ata_eleicao_diretoria": "Ata de eleição da diretoria",
+    "cebas": "CEBAS",
+    "inscricao_cnas_conselho_municipal": "Inscrição no CNAS ou conselho municipal",
+    "cnas_municipal": "Inscrição no CNAS ou conselho municipal",
+    "inscricao_conselho_municipal": "Inscrição no CNAS ou conselho municipal",
+    "inscricao_cneas": "Inscrição no CNAS ou conselho municipal",
+    "certidao_negativa_federal": "Certidão federal (RFB/PGFN)",
+    "certidao_federal": "Certidão federal (RFB/PGFN)",
+    "certidao_negativa_estadual": "Certidão estadual",
+    "certidao_estadual": "Certidão estadual",
+    "certidao_negativa_municipal": "Certidão municipal",
+    "certidao_municipal": "Certidão municipal",
+    "certidao_fgts_crf": "FGTS (CRF)",
+    "certidao_fgts": "FGTS (CRF)",
+    "fgts": "FGTS (CRF)",
+    "certidao_regularidade_fgts": "FGTS (CRF)",
+    "certidao_trabalhista_cndt": "Trabalhista (CNDT)",
+    "certidao_cndt": "Trabalhista (CNDT)",
+    "cndt": "Trabalhista (CNDT)",
+    "conta_bancaria_especifica_projetos": "Conta bancária de projetos",
+    "conta_bancaria_projetos": "Conta bancária de projetos",
+    "conta_bancaria_especifica": "Conta bancária de projetos",
+    "conta_bancaria_especifica_projeto": "Conta bancária de projetos",
+    "conta_bancaria": "Conta bancária de projetos",
+    "cadastro_transferegov": "Cadastro no Transferegov",
+    "transferegov": "Cadastro no Transferegov",
+    "cadastro_salic": "Cadastro no SALIC",
+    "cadastro_salic_minc": "Cadastro no SALIC",
+    "cadastro_salic_ancine": "Cadastro no SALIC",
+}
+
+
+def natureza(texto):
+    alvo = normalizar(texto)
+    if not alvo:
+        return None
+    for chave, valor in NATUREZAS:
+        if chave in alvo:
+            return valor
+    return "Outra"
+
+
+def areas(lista):
+    encontradas = []
+    for item in lista or []:
+        alvo = normalizar(item)
+        for chave, valor in AREAS:
+            if chave in alvo and valor not in encontradas:
+                encontradas.append(valor)
+    return encontradas
+
+
+def documentos(bloco):
+    encontrados = []
+    for chave, valor in (bloco or {}).items():
+        if valor is True and chave in DOCUMENTOS:
+            if DOCUMENTOS[chave] not in encontrados:
+                encontrados.append(DOCUMENTOS[chave])
+    return encontrados
+
+
+def reais(valor):
+    return "R$ " + f"{valor:,.2f}".replace(",", "#").replace(".", ",").replace("#", ".")
+
+
+def montar_campos(cliente):
+    campos = {F_OSC: (cliente.get("nome") or "").strip()}
+    if cliente.get("cnpj"):
+        campos[F_CNPJ] = cliente["cnpj"]
+    valor = natureza(cliente.get("natureza_juridica"))
+    if valor:
+        campos[F_NATUREZA] = valor
+    if cliente.get("fundacao"):
+        campos[F_FUNDACAO] = cliente["fundacao"]
+    if cliente.get("municipio"):
+        campos[F_MUNICIPIO] = cliente["municipio"]
+    sigla = (cliente.get("uf") or "").strip().upper()
+    if sigla:
+        extenso = UF_POR_EXTENSO.get(sigla)
+        if extenso:
+            campos[F_UF] = extenso
+        else:
+            print(f"  AVISO: {cliente.get('nome')} tem UF {sigla}, que não existe na lista do Airtable. Acrescente a opção na tela.")
+    lista = areas(cliente.get("areas_tematicas"))
+    if lista:
+        # Duas colunas, de propósito. A principal é a primeira que a captadora
+        # digitou no CaptaHub e é a que se lê na grade. A lista completa fica
+        # oculta e serve para cruzar o cliente com a Categoria do edital.
+        campos[F_AREA_PRINCIPAL] = lista[0]
+        campos[F_AREAS] = lista
+    email = (cliente.get("email") or "").strip()
+    if "@" in email:
+        campos[F_EMAIL] = email
+    if cliente.get("telefone"):
+        campos[F_TELEFONE] = cliente["telefone"].strip()
+    historico = cliente.get("historico_aprovacoes") or []
+    if historico:
+        linhas, total = [], 0
+        for item in historico:
+            valor_item = item.get("valor") or 0
+            total += valor_item
+            linhas.append(f"{item.get('ano', '')} | {reais(valor_item)} | {item.get('financiador', '')}")
+        campos[F_HISTORICO] = "\n".join(linhas)
+        campos[F_VALOR_APROVADO] = round(total, 2)
+    return campos
+
+
+class Airtable:
+    def __init__(self, token, base_id):
+        self.token = token
+        self.base_id = base_id
+
+    def _requisicao(self, metodo, caminho, params=None, corpo=None):
+        url = f"https://api.airtable.com/v0/{self.base_id}{caminho}"
+        if params:
+            url += "?" + urllib.parse.urlencode(params)
+        dados = json.dumps(corpo).encode("utf-8") if corpo is not None else None
+        req = urllib.request.Request(
+            url,
+            data=dados,
+            method=metodo,
+            headers={
+                "Authorization": f"Bearer {self.token}",
+                "Content-Type": "application/json",
+            },
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as erro:
+            detalhe = erro.read().decode("utf-8", "replace")[:300]
+            raise SystemExit(f"Airtable respondeu {erro.code}: {detalhe}")
+
+    def listar_clientes(self):
+        registros, offset = [], None
+        while True:
+            params = {"pageSize": 100, "returnFieldsByFieldId": "true"}
+            if offset:
+                params["offset"] = offset
+            resposta = self._requisicao("GET", f"/{TABELA_CLIENTES}", params=params)
+            registros.extend(resposta.get("records", []))
+            offset = resposta.get("offset")
+            if not offset:
+                break
+        return registros
+
+    def atualizar(self, lote):
+        return self._requisicao("PATCH", f"/{TABELA_CLIENTES}", corpo={"records": lote})
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Sincroniza clientes do CaptaHub para o Airtable.")
+    parser.add_argument("--simular", action="store_true", help="mostra o que faria, sem gravar")
+    args = parser.parse_args()
+
+    env = carregar_env()
+    token = env.get("AIRTABLE_TOKEN")
+    base_id = env.get("AIRTABLE_BASE_ID")
+    if not token or not base_id:
+        raise SystemExit(
+            "Faltam AIRTABLE_TOKEN e AIRTABLE_BASE_ID no .env.\n"
+            "Gere o token em airtable.com/create/tokens com escopos "
+            "data.records:read e data.records:write nesta base."
+        )
+
+    spec = importlib.util.spec_from_file_location("captahub", RAIZ / "scripts" / "captahub-api.py")
+    captahub = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(captahub)
+    cliente_api = captahub.CaptaHubClient.from_env()
+
+    print("Puxando a carteira do CaptaHub...")
+    do_captahub = list(cliente_api.iter_clientes()) if hasattr(cliente_api, "iter_clientes") else \
+        cliente_api.get("/v1/clientes", params={"limit": 200}).get("data", [])
+    print(f"  {len(do_captahub)} clientes no CaptaHub.")
+
+    airtable = Airtable(token, base_id)
+    print("Lendo a carteira do Airtable...")
+    registros = airtable.listar_clientes()
+    por_id = {}
+    for registro in registros:
+        chave = (registro.get("fields") or {}).get(F_ID_CAPTAHUB)
+        if chave:
+            por_id[chave] = registro["id"]
+    print(f"  {len(registros)} clientes no Airtable, {len(por_id)} com ID CaptaHub.")
+
+    lote, ignorados = [], []
+    for cliente in do_captahub:
+        destino = por_id.get(cliente["id"])
+        if not destino:
+            ignorados.append(cliente.get("nome") or cliente["id"])
+            continue
+        lote.append({"id": destino, "fields": montar_campos(cliente)})
+
+    print()
+    print(f"Vai atualizar: {len(lote)}")
+    if ignorados:
+        print(f"Fora da carteira do Airtable, ignorados: {len(ignorados)}")
+        for nome in ignorados:
+            print(f"  - {nome}")
+        print("  (Cliente novo entra na mão. O script nunca cria registro sozinho.)")
+
+    if args.simular:
+        print("\nModo simulação. Nada foi gravado.")
+        return
+
+    enviados = 0
+    for inicio in range(0, len(lote), 10):
+        pedaco = lote[inicio : inicio + 10]
+        airtable.atualizar(pedaco)
+        enviados += len(pedaco)
+        print(f"  gravados {enviados}/{len(lote)}")
+        time.sleep(0.25)
+
+    print(f"\nConcluído. {enviados} clientes atualizados.")
+    print("Campos preservados, nunca escritos por este script:")
+    for nome in NUNCA_ESCREVER.values():
+        print(f"  - {nome}")
+
+
+if __name__ == "__main__":
+    main()

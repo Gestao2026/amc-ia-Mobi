@@ -1,5 +1,10 @@
 # Plano de operação do MAPA CLIENTES
 
+> ⛔ **DESLIGADO EM 31/08/2026.** A captadora encerrou o projeto MAPA e o Airtable saiu de cena.
+> A base continua existindo com os dados intactos, mas **não é mais o painel operacional e ninguém a
+> mantém**. Este documento vira registro histórico: não seguir nada aqui como processo vivo. Os
+> scripts que falavam com a base estão em `scripts/desativados/`.
+
 > Base **MAPA CLIENTES | EDITAIS E PROJETOS** (`appKWLTFSCcWucXfQ`).
 > Escrito em 31/08/2026, a partir da leitura ao vivo da base.
 > As regras de estrutura estão em `docs/regras-de-negocio-airtable.md`. Este documento

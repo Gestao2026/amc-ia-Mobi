@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+# ========================= TRAVA DE DESATIVACAO =========================
+# Desativado em 31/08/2026. O projeto MAPA foi encerrado e o Airtable saiu
+# de cena. Este script conversa com a base appKWLTFSCcWucXfQ, que nao e mais
+# mantida. Rodar agora escreve em base abandonada ou compara com dado velho.
+# Antes de religar, leia scripts/desativados/LEIA-ME.md.
+import sys as _sys
+_sys.exit("Script desativado em 31/08/2026. Ver scripts/desativados/LEIA-ME.md.")
+# =======================================================================
 """Lê a planilha mestra de submissões e compara com o painel do Airtable.
 
 A PONTE, NÃO A FONTE

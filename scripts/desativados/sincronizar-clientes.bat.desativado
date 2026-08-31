@@ -1,0 +1,39 @@
+@echo off
+
+REM ===== TRAVA DE DESATIVACAO =====
+
+REM Desativado em 31/08/2026. Projeto MAPA encerrado, Airtable fora de cena.
+
+echo Script desativado em 31/08/2026. Ver scripts\desativados\LEIA-ME.md.
+
+exit /b 1
+
+REM ================================
+
+@echo off
+rem ---------------------------------------------------------------------------
+rem Sincroniza a carteira de clientes do CaptaHub para o Airtable.
+rem Mao unica: CaptaHub manda, Airtable recebe.
+rem Nunca cria cliente novo e nunca apaga nada. So atualiza quem ja esta la.
+rem Documentado em docs/regras-de-negocio-airtable.md
+rem ---------------------------------------------------------------------------
+
+set PROJETO=C:\amc-ia-Mobi
+set LOG=C:\Users\rosep\Backups\_historico-sincronizacao.log
+
+if not exist "C:\Users\rosep\Backups" mkdir "C:\Users\rosep\Backups"
+
+echo ---------------------------------------- >> "%LOG%"
+echo Sincronizacao iniciada em %date% %time% >> "%LOG%"
+
+cd /d "%PROJETO%"
+set PYTHONIOENCODING=utf-8
+python "%PROJETO%\scripts\sincronizar-clientes-airtable.py" >> "%LOG%" 2>&1
+
+if errorlevel 1 (
+  echo FALHOU. Ver o erro acima. >> "%LOG%"
+) else (
+  echo Concluida com sucesso. >> "%LOG%"
+)
+
+echo Sincronizacao encerrada em %date% %time% >> "%LOG%"

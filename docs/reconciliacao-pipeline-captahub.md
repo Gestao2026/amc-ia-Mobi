@@ -4,8 +4,8 @@
 > "Nenhum campo válido para atualizar". O `edital_id` só é aceito na criação.
 >
 > Existe um caminho pela API: como o `POST` aceita `edital_id` e o `DELETE /v1/projetos/{id}` funciona,
-> dá para recriar a ficha já ligada e apagar a antiga. **Mas o id do projeto muda**, e ele está gravado no
-> Airtable (`ID CaptaHub projeto`) e nos `estado.md` locais; a data de criação vira a de hoje; e o
+> dá para recriar a ficha já ligada e apagar a antiga. **Mas o id do projeto muda**, e ele está gravado nos
+> `estado.md` locais (também estava no Airtable, que saiu de cena em 31/08); a data de criação vira a de hoje; e o
 > Checkpoint do CaptaHub, que não existe na API, se perde em silêncio. Por isso esse caminho só se usa em
 > ficha vazia, em `encontrar_cliente`, sem OSC, valor ou nota. **As demais se ligam na tela do CaptaHub**,
 > e é para isso que serve esta folha.
