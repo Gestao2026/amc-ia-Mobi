@@ -1,8 +1,16 @@
 # Reconciliação do pipeline do CaptaHub. Os 43 projetos sem edital ligado
 
-> Levantado em 31/08/2026. **A ligação não pode ser feita pela API:** o `PATCH /v1/projetos/{id}`
-> recusa o campo `edital_id` com erro 422, "Nenhum campo válido para atualizar". O `edital_id` só é
-> aceito na criação. Logo, esta reconciliação se faz **na tela do CaptaHub**, e esta é a folha de trabalho.
+> Levantado em 31/08/2026. **O `PATCH /v1/projetos/{id}` recusa o campo `edital_id`** com erro 422,
+> "Nenhum campo válido para atualizar". O `edital_id` só é aceito na criação.
+>
+> Existe um caminho pela API: como o `POST` aceita `edital_id` e o `DELETE /v1/projetos/{id}` funciona,
+> dá para recriar a ficha já ligada e apagar a antiga. **Mas o id do projeto muda**, e ele está gravado no
+> Airtable (`ID CaptaHub projeto`) e nos `estado.md` locais; a data de criação vira a de hoje; e o
+> Checkpoint do CaptaHub, que não existe na API, se perde em silêncio. Por isso esse caminho só se usa em
+> ficha vazia, em `encontrar_cliente`, sem OSC, valor ou nota. **As demais se ligam na tela do CaptaHub**,
+> e é para isso que serve esta folha.
+>
+> **Já resolvidos em 31/08 por recriação:** FAVORECICLE 2025 e ArcelorMittal Investe 2027. Restam 41.
 
 Confiança: **alta** significa título idêntico ou quase, pode ligar direto. **Média** significa
 candidato plausível que precisa do seu olho antes. **Sem candidato** significa que não existe
@@ -14,8 +22,8 @@ e não de um edital com prazo.
 
 | Projeto | Estágio | OSC | Edital no CaptaHub | id | Prazo | Como casou |
 |---|---|---|---|---|---|---|
-| Edital Social Lei de Incentivo à Reciclagem FAVORECICLE 20 | `encontrar_cliente` | sem OSC | EDITAL SOCIAL LEI DE INCENTIVO À RECICLAGEM - FAVORE | `88978971` | 2027-10-30 | título idêntico |
-| Edital ArcelorMittal Investe 2027 | `encontrar_cliente` | sem OSC | Edital ArcelorMittal Investe 2027 | `945ff1d5` | 2026-08-16 | título idêntico |
+| Edital Social Lei de Incentivo à Reciclagem FAVORECICLE 20 | `encontrar_cliente` | sem OSC | EDITAL SOCIAL LEI DE INCENTIVO À RECICLAGEM - FAVORE | `88978971` | 2027-10-30 | **feito em 31/08** |
+| Edital ArcelorMittal Investe 2027 | `encontrar_cliente` | sem OSC | Edital ArcelorMittal Investe 2027 | `945ff1d5` | 2026-08-16 | **feito em 31/08** |
 | CHAMADA FAPEMIG/SEDE - 011/2026 - COMPETE MINAS | `submetido` | Quintal Eh | CHAMADA FAPEMIG/SEDE - 011/2026 - COMPETE MINAS | `b7ffe660` | 2026-07-30 | título idêntico |
 | Edital Ambev Brasilidades 2026 | `elaborar_projeto` | Associação Ponto Cultural | Edital Ambev Brasilidades 2026 | `d698d1a3` | 2026-09-30 | título idêntico |
 | EDITAL DE CHAMAMENTO PÚBLICO Nº 01/2026 - FOMENTO À EXECUÇ | `submetido` | sem OSC | Edital De Chamamento Público PNAB Nº 01/2026 Fomento | `5bf0865b` | 2026-06-01 | título 97% igual |
