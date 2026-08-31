@@ -55,16 +55,34 @@ comparação passar a ser com o CaptaHub, é dali que se parte, não do zero.
 
 O `CLAUDE.md` não citava o Airtable em nenhum ponto, então não precisou de ajuste.
 
-## 5. Ponta solta
+## 5. Onde ficou a triagem (resolvido no mesmo dia)
 
-**Onde vive a triagem de editais agora?** O funil do Airtable era quem guardava o
-"isto interessa, aquilo não" (campo `Triagem`, com A triar, Interessa e Descartado,
-sobre 79 editais). O CaptaHub é a fonte da verdade dos editais, mas não guarda
-triagem. A planilha `04 - Controle de Submissão_` guarda o que já foi trabalhado,
-não o que foi descartado.
+A pergunta era onde passa a viver o "isto interessa, aquilo não", já que o campo
+`Triagem` do Airtable morreu com o MAPA. A captadora respondeu: **fica na planilha
+mesmo.**
 
-Fica em aberto, para a captadora decidir. Enquanto não decidir, não assumir nenhum
-substituto.
+Ao abrir a planilha mestra, a triagem já estava lá, e sempre esteve. **Triar é mover
+a linha de aba**, e é assim que funcionava antes de o Airtable existir:
+
+| Aba | O que significa | Linhas em 31/08 |
+|---|---|---|
+| `GERAL` | Em jogo, é o que se trabalha | 52 |
+| `EXCLUIDOS` | Descartado por decisão | 100 |
+| `REPROVADOS` | Foi submetido e não passou | 102 |
+| `TABELA DE PROJETOS` | vazia | 0 |
+| `Status` | dicionário com os 25 status válidos | 25 |
+
+O campo `Triagem` do Airtable era uma reimplementação disso. Não se recria em outro
+lugar sem ela pedir.
+
+**Duas lacunas ficam registradas, as duas para ela decidir:**
+
+1. **Não existe estado "a triar".** Edital novo cai direto na `GERAL` e ou fica, ou
+   vai para `EXCLUIDOS`. Quem nunca foi olhado não se distingue de quem foi olhado e
+   aprovado. O Airtable tinha esse estado e ele se perde aqui.
+2. **Não existe coluna DATA DE ENVIO.** Já era a pendência 3 do registro 25, e agora
+   pesa mais: com o Airtable fora, a planilha virou o único lugar onde essa data
+   poderia viver.
 
 ## 6. Rastreabilidade
 
