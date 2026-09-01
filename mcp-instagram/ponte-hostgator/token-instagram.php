@@ -137,19 +137,41 @@ if (!is_string($acao) || !in_array($acao, [
 }
 
 // ---------------------------------------------------------------
-// 6. Alvo FIXO
+// 6. Alvo: o token da conta, ou uma chave de sessao do Claude
 // ---------------------------------------------------------------
 //
-// O cliente NAO envia o alvo.
+// Esta ponte continua NAO sendo armazenamento generico. Sao dois
+// formatos aceitos, e nenhum outro passa:
 //
-// Isso elimina uma fonte desnecessaria de erro e impede que o cliente
-// escolha outra chave de armazenamento.
+//   mcp-instagram:instagram-access-token        o token da conta
+//   mcp-instagram:claude-access:<64 hex>        sessao da Camada 1
+//   mcp-instagram:claude-refresh:<64 hex>       sessao da Camada 1
 //
-// Este e o unico alvo permitido por esta ponte, e e o que separa o
-// Instagram do LinkedIn: os dois compartilham banco e segredo, mas
-// nunca a etiqueta nem a tabela.
+// O sufixo hexadecimal e o SHA-256 do token de sessao, calculado no
+// Render. A chave nunca carrega o segredo, e o formato fechado impede
+// tanto varrer chaves alheias quanto inventar uma.
+//
+// As chaves de sessao existem para o conector parar de pedir
+// "Reconectar" a cada hibernacao do Render: sem elas, a sessao vive so
+// na memoria do processo e morre junto com ele.
+//
+// Sem 'alvo' na requisicao vale o token da conta, o que mantem
+// compativel a versao anterior desta ponte, em que o cliente nao
+// enviava alvo nenhum.
 
-$alvo = 'mcp-instagram:instagram-access-token';
+$alvoToken = 'mcp-instagram:instagram-access-token';
+$alvo = $entrada['alvo'] ?? $alvoToken;
+
+if (!is_string($alvo)) {
+    responder(400, ['status' => 'erro']);
+}
+
+$alvoPermitido = hash_equals($alvoToken, $alvo)
+    || preg_match('/^mcp-instagram:claude-(access|refresh):[0-9a-f]{64}$/', $alvo) === 1;
+
+if (!$alvoPermitido) {
+    responder(400, ['status' => 'erro']);
+}
 
 // ---------------------------------------------------------------
 // 7. Banco MySQL local

@@ -56,11 +56,17 @@ from starlette.responses import JSONResponse
 from mcp_linkedin.auth_claude.provider import ClaudeAuthProvider
 from mcp_linkedin.auth_claude.session_store import ClaudeSessionStore
 from mcp_linkedin.auth_linkedin.oauth_callback import CallbackOutcome, CallbackParams
-from mcp_linkedin.auth_linkedin.runtime import LinkedInOAuthRuntime, build_runtime
+from mcp_linkedin.auth_linkedin.runtime import (
+    LinkedInOAuthRuntime,
+    build_credential_backend,
+    build_runtime,
+)
 from mcp_linkedin.auth_linkedin.token_exchange import TokenExchangeError, TransportError
 from mcp_linkedin.auth_linkedin.token_store import TokenStoreBackendError
 from mcp_linkedin.config import (
     LINKEDIN_CALLBACK_PATH,
+    TOKEN_STORE_BACKEND_PONTE,
+    TOKEN_STORE_BACKEND_SUPABASE,
     missing_linkedin_env_vars,
     resolve_linkedin_config,
 )
@@ -483,6 +489,74 @@ class ClaudeAuthConfig:
     auth_settings: AuthSettings
 
 
+# Trava de segurança da persistência da sessão pela ponte.
+#
+# O `token.php` publicado hoje só aceita o alvo fixo
+# 'mcp-linkedin:linkedin-access-token' e recusa qualquer outro
+# (hash_equals, seção 5 do arquivo). Persistir a sessão por essa ponte
+# não corrompe nada, mas toda gravação seria recusada em silêncio, o
+# que daria a impressão falsa de que a sessão está protegida.
+#
+# Enquanto a ponte publicada não aceitar o namespace 'mcp-linkedin:claude-*',
+# esta variável fica ausente e a sessão segue só em memória. Ligar SOMENTE
+# depois de publicar a ponte atualizada (ver ponte-hostgator/).
+VARIAVEL_PONTE_SESSAO = "MCP_CLAUDE_SESSION_STORE_PONTE"
+
+
+def ponte_aceita_sessao(env: Mapping[str, str]) -> bool:
+    """
+    True somente quando o operador confirmou, pela variável de ambiente,
+    que a ponte publicada aceita o namespace da sessão.
+
+    É uma confirmação humana de propósito: a capacidade vive no PHP da
+    hospedagem, e nenhuma variável do Render consegue descobri-la sozinha.
+    O padrão é o seguro.
+    """
+    valor = (env.get(VARIAVEL_PONTE_SESSAO) or "").strip().lower()
+    return valor in ("1", "true", "sim")
+
+
+def build_claude_session_backend(env: Mapping[str, str]):
+    """
+    Devolve o armazenamento persistente da sessão da Camada 1, ou None
+    para manter tudo em memória (comportamento da v1).
+
+    Reaproveita a configuração da Camada 2 de propósito, em vez de criar
+    variáveis próprias no Render: a ponte já está configurada e testada
+    ali, e um segundo conjunto de variáveis só multiplicaria a chance de
+    divergirem sem o operador perceber.
+
+    Só os backends remotos servem. 'memory' e 'windows' não sobrevivem ao
+    reinício do contêiner, que é exatamente o problema a resolver.
+
+    A ponte exige confirmação explícita (ver VARIAVEL_PONTE_SESSAO): o PHP
+    publicado hoje trabalha com um alvo fixo, e usá-lo para a sessão faria
+    estrago. O padrão é não persistir.
+
+    Nada aqui pode impedir a Camada 1 de subir: com a Camada 2 ausente,
+    inválida ou sem as dependências do backend, a sessão volta a viver só
+    em memória, e o servidor sobe igual. Perder persistência custa um
+    clique em Reconectar; não subir custa a conexão inteira.
+    """
+    try:
+        config = resolve_linkedin_config(env)
+        if config is None:
+            return None
+
+        # O Supabase guarda uma linha por target_name, então aceita o
+        # namespace da sessão sem nenhuma mudança.
+        if config.token_store_backend == TOKEN_STORE_BACKEND_SUPABASE:
+            return build_credential_backend(config)
+
+        # A ponte, não: depende de qual PHP está publicado (ver a trava).
+        if config.token_store_backend == TOKEN_STORE_BACKEND_PONTE and ponte_aceita_sessao(env):
+            return build_credential_backend(config)
+
+        return None
+    except Exception:
+        return None
+
+
 def resolve_claude_auth_config(env: Mapping[str, str] | None = None) -> ClaudeAuthConfig | None:
     """
     Le a configuracao da Camada 1 do ambiente informado (por padrao,
@@ -508,7 +582,7 @@ def resolve_claude_auth_config(env: Mapping[str, str] | None = None) -> ClaudeAu
     client_secret = env.get("MCP_CLAUDE_CLIENT_SECRET") or None
     base_url = base_url.rstrip("/")
 
-    store = ClaudeSessionStore()
+    store = ClaudeSessionStore(backend=build_claude_session_backend(env))
     provider = ClaudeAuthProvider(client_id=client_id, client_secret=client_secret, store=store)
     token_verifier = ProviderTokenVerifier(provider)
 
