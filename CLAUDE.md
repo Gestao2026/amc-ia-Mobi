@@ -116,10 +116,28 @@ Isso inclui, com todas as letras:
 
 - `G:\.shortcut-targets-by-id\1YxXksuP6SHlVKA4bT5gaC0WG4Wy4OXej\_82 - Rosepaula Aparecida Andrade Rodrigues` e a mesma pasta pela unidade `M:`.
 - `C:\Users\rosep\Desktop\_82 - Rosepaula Aparecida Andrade Rodrigues`.
-- `C:\Users\rosep\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues`.
 - `C:\Users\rosep\Backups\pasta-82\`, que é a cópia de segurança das anteriores.
 
 Não apagar, não mover para a Lixeira, não "aposentar", não substituir por atalho, não deixar nenhum script tocar nelas. Se um plano de organização levar a remover qualquer uma, o plano muda, não a pasta. A pasta do Drive nem sequer é da captadora: ela é apenas Editora.
+
+**Exceção aberta em 28/08/2026:** `C:\Users\rosep\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues` foi excluída, com autorização explícita da captadora, depois de uma análise que confirmou que era uma cópia local antiga, sem sincronizar com nada, e que todo o conteúdo que parecia exclusivo dela (o cliente `01 - Grupo Faz de Novo`) já existia, mais avançado, na cópia viva do Drive (`17 - Faz de Conta`). Registro completo em `docs/estruturacoes/2026-08-28-22-limpeza-das-copias-divergentes-e-excecao-do-meu-drive-local.md`. As três instâncias que restam continuam com a proteção integral desta regra.
+
+---
+
+## NADA RODA SOZINHO (REGRA GLOBAL, PRIORIDADE ABSOLUTA)
+
+> Decisão da captadora em 01/09/2026. Vale para todo o ambiente e tem prioridade sobre qualquer outra regra deste arquivo, inclusive a de abertura de sessão e a de sincronização com o CaptaHub.
+
+**Nenhuma automação roda sem a captadora pedir, na hora em que ela pedir.** Não existe mais tarefa agendada, gancho automático, sincronização de abertura nem envio automático para sistema nenhum.
+
+1. **Nada dispara por horário.** Nenhuma tarefa do Windows, nenhum agendamento em nuvem, nenhum cron. Se algo precisar rodar todo dia, isso é decisão dela, tomada de novo a cada vez.
+2. **Nada dispara por gatilho.** Nenhum gancho (hook) roda ao salvar arquivo, ao terminar comando ou ao abrir conversa.
+3. **Nada é puxado nem enviado sozinho.** A carteira do CaptaHub, os editais, o pipeline e a cópia de segurança só se movem com um comando explícito dela.
+4. **Ao abrir a conversa, leia apenas o disco local.** Nenhuma chamada de API na abertura.
+5. **Antes de rodar qualquer coisa que passe de leitura, pergunte.** Vale para script, sincronização, exportação e cópia de segurança.
+6. **Não recrie o que foi desligado.** Nenhum comando, skill ou agente pode reativar tarefa agendada, gancho ou sincronização automática. Para religar, ela pede, com todas as letras.
+
+O inventário do que estava ligado em 01/09/2026 e do que foi desligado está em `docs/automacoes-desligadas.md`.
 
 ---
 
@@ -127,18 +145,17 @@ Não apagar, não mover para a Lixeira, não "aposentar", não substituir por at
 
 > Esta regra tem prioridade sobre qualquer outra instrução de abertura.
 
-**Ao iniciar QUALQUER nova conversa, a PRIMEIRA ação tem duas partes, nesta ordem:**
+**Ao iniciar QUALQUER nova conversa, a PRIMEIRA ação é ler o disco local, nesta ordem:**
 
-1. **Sincronizar a carteira com o CaptaHub (automático, sem o captador pedir).** Se houver token no `.env` (`CAPTAHUB_API_TOKEN` + `CAPTAHUB_API_URL`), puxe a carteira de clientes com `python3 scripts/captahub-api.py clientes`. O CaptaHub é a fonte da verdade da carteira: a lista de OSCs vem sempre de lá. O `perfil-osc.md` local é a cópia de trabalho enriquecida, ligada à OSC do CaptaHub pelo id.
-2. **Ler a OSC ativa local.** Leia `minhas-oscs/.ativa`.
+1. **Ler a OSC ativa.** Leia `minhas-oscs/.ativa`.
+2. **Ler o perfil dela.** Leia `minhas-oscs/{ativa}/perfil-osc.md` e o estado dos projetos abertos.
 
-Cruze a carteira do CaptaHub com as pastas locais de `minhas-oscs/` (case por "ID CaptaHub" gravado no perfil; na falta, por nome). Decida o fluxo:
+**Nenhuma chamada ao CaptaHub acontece na abertura** (ver NADA RODA SOZINHO). A carteira só é puxada quando a captadora pedir. Decida o fluxo com o que está no disco:
 
-- **Há OSC ativa local:** apresente-se, mostre a OSC ativa e o estágio dos projetos abertos. Confirme em uma linha que ela está sincronizada com o CaptaHub (ou sinalize se for "só local", ainda fora da carteira). Se a carteira tiver OSCs ainda não importadas, liste-as em uma linha e ofereça `/osc-importar`.
-- **Não há OSC ativa local, mas o CaptaHub está conectado:** NÃO empurre o `/osc-nova`. Apresente a carteira já puxada (lista numerada: nome, UF, área) e pergunte com qual OSC trabalhar. Ao escolher, importe com `/osc-importar` (cria a pasta e o `perfil-osc.md`, gravando o id do CaptaHub). Só ofereça `/osc-nova` se a OSC não estiver na carteira.
-- **CaptaHub NÃO conectado:** trabalhe com as OSCs locais; ofereça `/captahub-conectar` para sincronizar a carteira, ou `/osc-nova` para cadastrar a primeira.
+- **Há OSC ativa local:** apresente-se, mostre a OSC ativa e o estágio dos projetos abertos. Se o perfil não trouxer a linha "ID CaptaHub", sinalize em uma linha que ela está "só local", sem sair puxando nada para conferir.
+- **Não há OSC ativa local:** liste as OSCs que já existem em `minhas-oscs/` e pergunte com qual trabalhar. Se a desejada não estiver ali, ofereça `/osc-importar` (que puxa do CaptaHub, sob pedido) ou `/osc-nova`.
 
-**Regra de sincronização:** a carteira (quem são as OSCs) é espelho do CaptaHub. Não invente OSC fora da carteira nem sobrescreva dado local sem o aval do captador. OSC que existe só localmente fica sinalizada como "fora do CaptaHub" até o captador decidir subir.
+**Regra de sincronização:** a carteira continua sendo espelho do CaptaHub, mas só quando a captadora manda sincronizar. Não invente OSC fora da carteira nem sobrescreva dado local sem o aval dela. OSC que existe só localmente fica sinalizada como "fora do CaptaHub" até ela decidir subir.
 
 **Únicas exceções (não force o fluxo de abertura):**
 1. A primeira mensagem começa com `/` (o usuário invocou um comando explícito).
@@ -151,13 +168,13 @@ Se a mensagem trouxer informações úteis (nome da OSC, área de atuação, um 
 
 ## SINCRONIZAÇÃO BIDIRECIONAL COM O CAPTAHUB (CARTEIRA E PIPELINE)
 
-> O captador escolheu sincronização nos dois sentidos. Quando o CaptaHub está conectado (`CAPTAHUB_API_TOKEN` no `.env`), a carteira de OSCs e o pipeline de projetos ficam espelhados com o CaptaHub, automaticamente. Toda chamada usa `python3 scripts/captahub-api.py`.
+> A sincronização continua existindo nos dois sentidos, mas **só sob pedido**. Desde 01/09/2026 nada sobe nem desce sozinho (ver NADA RODA SOZINHO): cada movimento é a captadora que manda fazer. Toda chamada usa `python3 scripts/captahub-api.py`.
 
 **Identidade (para nunca duplicar).** Cada OSC local guarda no `perfil-osc.md` a linha `ID CaptaHub: {id}`; cada projeto guarda no `estado.md` a linha `ID CaptaHub projeto: {id}`. A correspondência é sempre por id. Na ausência de id, case por nome (OSC) ou por `edital_id` + `cliente_id` (projeto), e grave o id assim que descobrir. A identidade de um edital é o `id` (uuid), nunca a URL nem o título.
 
-**Sentido CaptaHub para a AMC IA (puxar, automático).** A lista de OSCs (carteira) e os editais vêm do CaptaHub. Puxe na abertura e no `/osc-trocar` (ver REGRA DE ABERTURA) e no `/edital-minerar`.
+**Sentido CaptaHub para a AMC IA (puxar, sob pedido).** A lista de OSCs (carteira) e os editais vêm do CaptaHub quando a captadora rodar `/captahub-sincronizar`, `/osc-importar`, `/osc-trocar` ou `/edital-minerar`. Nunca na abertura da conversa.
 
-**Sentido AMC IA para o CaptaHub (subir, automático).**
+**Sentido AMC IA para o CaptaHub (subir, sob pedido).** Nenhum PATCH sai sozinho. Ao fechar uma etapa, ofereça em uma linha o que dá para gravar no CaptaHub e espere o OK. Com o OK:
 - **OSC nova ou só-local:** ao cadastrar (`/osc-nova`) ou ao detectar uma OSC que existe só local, crie o cliente no CaptaHub (`cliente-criar`) e grave o id no `perfil-osc.md`. Ao atualizar o perfil (`/osc-perfil`), suba as mudanças (`cliente-atualizar`). Atenção: `status_documental` SUBSTITUI o objeto inteiro, então sempre mande o checklist completo.
 - **Projeto:** ao abrir um projeto para um edital (a partir da elegibilidade APTA), crie o projeto no CaptaHub (`projeto-criar --nome --cliente-id --edital-id`) e grave o id no `estado.md`. A cada etapa, faça o PATCH:
   - Orçamento pronto (`/projeto-orcamento`): `projeto-atualizar --valor-solicitado {total}`.
@@ -168,6 +185,7 @@ Se a mensagem trouxer informações úteis (nome da OSC, área de atuação, um 
 - Os sub-agentes (CaptaScore, CaptaBudget) não chamam a API; quem faz o PATCH é o comando, depois do agente entregar.
 
 **Segurança do sync.**
+- Nunca suba nada sem o OK explícito da captadora, mesmo com a etapa recém-fechada e o id em mãos.
 - Idempotência sempre: cheque o id antes de criar; nunca duplique OSC nem projeto.
 - Anuncie em uma linha o que subiu ("Sincronizado com o CaptaHub: nota gravada no projeto"). Sem ruído técnico, sem expor detalhes de implementação.
 - Se a API falhar, NÃO trave a elaboração: avise que a sincronização ficou pendente e siga; tente de novo no próximo passo.
