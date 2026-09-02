@@ -137,6 +137,15 @@ Não apagar, não mover para a Lixeira, não "aposentar", não substituir por at
 5. **Antes de rodar qualquer coisa que passe de leitura, pergunte.** Vale para script, sincronização, exportação e cópia de segurança.
 6. **Não recrie o que foi desligado.** Nenhum comando, skill ou agente pode reativar tarefa agendada, gancho ou sincronização automática. Para religar, ela pede, com todas as letras.
 
+### As duas exceções, autorizadas a ficar ligadas para sempre
+
+> Decisão da captadora em 01/09/2026, tomada com as duas na mesa. **Nenhuma delas pode ser parada, desligada, pausada ou removida até ela pedir.** A regra acima não as alcança.
+
+1. **Google Drive e OneDrive.** São programas da máquina dela, não automações deste projeto. Ficam rodando sempre. Não sugerir desligar, não encerrar processo, não desabilitar tarefa de inicialização, nem "só para testar". Desligar o Google Drive derruba a unidade `G:` e com ela o acesso à pasta `_82` e a vários caminhos deste projeto.
+2. **Os conectores do Instagram e do LinkedIn.** Ficam de pé, no ar, com a ponte na HostGator e os dois serviços no Render. Eles não rodam sozinhos: são servidores parados que só acordam quando uma conversa chama, e por isso não ferem a regra. Não desativar serviço, não remover conector, não revogar token.
+
+Se alguma dessas quatro peças precisar mesmo ser mexida, pare e pergunte antes.
+
 O inventário do que estava ligado em 01/09/2026 e do que foi desligado está em `docs/automacoes-desligadas.md`.
 
 ---

@@ -33,21 +33,23 @@ A cópia anterior do arquivo de configuração ficou em
 
 Os scripts correspondentes estão em `scripts/desativados/`.
 
-## O que continua ligado, e por quê
+## O que fica ligado para sempre, por decisão dela
 
-Estes não são automações do projeto. São programas do computador dela, que
-sincronizam arquivos o tempo todo:
+> Autorizado pela captadora em 01/09/2026, com as duas na mesa. **Nenhuma destas
+> pode ser parada, pausada, desabilitada ou removida até ela pedir.** A regra
+> "nada roda sozinho" não alcança nenhuma delas.
 
-- **Google Drive (GoogleDriveFS)**, que mantém a unidade `G:` montada. Vários
-  caminhos deste projeto e a pasta `_82` dependem dele.
-- **OneDrive**, que veio com o Windows.
+**Google Drive (GoogleDriveFS) e OneDrive.** São programas do computador dela,
+não automações deste projeto. O Google Drive mantém a unidade `G:` montada, e
+dela dependem a pasta `_82` e vários caminhos daqui. Não sugerir desligar, não
+encerrar processo, não mexer na inicialização.
 
-Desligar qualquer um dos dois é decisão dela, e muda o funcionamento da máquina
-inteira, não só deste projeto.
+**Os conectores do Instagram e do LinkedIn.** A ponte na HostGator e os dois
+serviços no Render continuam de pé. Eles não rodam sozinhos: ficam parados até
+uma conversa chamar, e por isso nunca feriram a regra. Não desativar serviço, não
+remover conector, não revogar token.
 
-Os conectores do Instagram e do LinkedIn também continuam de pé, mas eles não
-rodam sozinhos: são servidores que ficam parados até alguém chamar, e quem chama
-é uma conversa em andamento.
+Se alguma dessas quatro peças precisar mesmo ser mexida, parar e perguntar antes.
 
 ## A consequência que precisa ficar clara
 
