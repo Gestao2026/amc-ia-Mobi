@@ -29,9 +29,17 @@ A cópia anterior do arquivo de configuração ficou em
 | Sincronização entre as cópias da pasta `_82` | 26/08/2026 |
 | Leitura da planilha de submissão | 31/08/2026 |
 | Encaminhamento da caixa `editais.mobilizando` | 30/08/2026 |
+| Quatro automações de e-mail da base do Airtable | 02/09/2026, apagadas |
+| Automação "Enviar para Não Submetidos" do Airtable | 02/09/2026, desligada de verdade |
 | Leitura da `_82` da Área de Trabalho pelo backup | 28/08/2026 |
 
 Os scripts correspondentes estão em `scripts/desativados/`.
+
+> **Atenção ao Airtable.** O projeto MAPA foi desligado em 31/08/2026, mas as
+> automações da base continuaram publicadas e mandando e-mail diário para
+> `gestao.mobilizando@gmail.com` até 02/09/2026. Desligar o projeto não desliga
+> as automações da base: são coisas separadas. O registro completo, com a
+> configuração das cinco, está em `docs/airtable-automacoes/`.
 
 ## O que fica ligado para sempre, por decisão dela
 
