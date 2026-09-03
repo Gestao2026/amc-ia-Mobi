@@ -78,15 +78,41 @@ Com 262 GB livres e 1,56 GB de uso, isso não é problema por muitos anos.
 > conteúdo dela foi conferido arquivo por arquivo e já estava na pasta
 > `Credenciais AMC IA` da Área de Trabalho, que é agora o lugar único.
 
-## O que ainda não está protegido
+## A pasta `_82` do Drive
 
-**A pasta `_82` no Google Drive do mentor não entra no backup diário.** Só existe
-a cópia pontual de 20/08/2026, que é da versão local. Os arquivos que só existem
-no Drive, entre eles dois documentos de identidade de dirigente do Levanta e
-Brilha, seguem sem cópia sob controle da captadora.
+Desde 21/08/2026 ela **entra** no backup diário. O script lê
+`G:\.shortcut-targets-by-id\...\_82 - Rosepaula Aparecida Andrade Rodrigues` e grava em
+`C:\Users\rosep\Backups\pasta-82\atual`. A primeira carga baixou 10,43 GB; as
+seguintes copiam só o que mudou.
 
-Pendência registrada em
-[docs/estruturacoes/2026-08-20-02-pasta-82-diagnostico.md](estruturacoes/2026-08-20-02-pasta-82-diagnostico.md).
+O sentido importa: **a origem é a nuvem e o destino é o disco.** É o inverso dos
+outros blocos. Protege contra o dono da pasta apagar algo ou revogar o acesso, já
+que a captadora é apenas Editora, não dona.
+
+Ficam de fora os `desktop.ini`, que o Drive recria sozinho na máquina e não
+existem na nuvem, e os ponteiros `.gdoc`, `.gsheet` e `.gslides`, que não têm
+conteúdo próprio.
+
+> A frase anterior desta seção, que dizia que a `_82` não entrava no backup,
+> ficou desatualizada entre 21/08 e 26/08/2026. Corrigida no registro
+> [20 das estruturações](estruturacoes/2026-08-26-20-desligamento-das-sincronizacoes-da-82.md).
+
+## Sincronização entre as cópias da `_82`: desligada
+
+Existem três cópias da `_82`, em estados diferentes: a do Drive, que é a fonte da
+verdade da estrutura, a da Área de Trabalho e a de `C:\Users\rosep\Meu Drive`,
+que é sobra de um espelhamento antigo e não sincroniza com nada.
+
+**Desde 26/08/2026 nenhuma automação sincroniza essas cópias entre si.** O script
+que fazia isso nos dois sentidos foi desligado e está em
+`scripts/desativados/sincronizar-82.ps1.desativado`.
+
+O motivo está no registro 20 acima. Em resumo: ele é aditivo e nunca apaga, então,
+com as duas pontas divergentes, rodar não sobrescreve, duplica. A `06 - Clientes`
+ficaria com a estrutura corrigida e a antiga lado a lado.
+
+O backup descrito na seção anterior continua ligado, porque é leitura de mão única
+para um cofre e não altera nenhuma das três cópias de trabalho.
 
 ## Como restaurar
 

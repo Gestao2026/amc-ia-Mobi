@@ -28,3 +28,6 @@ node_modules/
 
 # Credenciais (certificados digitais, senhas). Nunca versionar nem sincronizar
 _credenciais-nao-sincronizar/
+
+# Relatorios detalhados das estruturacoes (citam nomes de arquivo e dados pessoais)
+docs/estruturacoes/_detalhado/
