@@ -95,8 +95,8 @@ Se descobrir um token vazado em um arquivo: avisar o usuário imediatamente, rec
 
 > Decisão da captadora em 24/08/2026. Vale para todo o ambiente, e nomeadamente para estas duas pastas:
 >
-> - `06 - Clientes` da `_82` **no Drive**, acessada pela unidade `M:`.
-> - `C:\Users\rosep\Desktop\_82 - Rosepaula Aparecida Andrade Rodrigues\06 - Clientes\18 - Outros Modelos`, **na Área de Trabalho**. É o modelo em branco da estrutura: 97 pastas, das quais **52 estão vazias de propósito**. Ali a pasta vazia não é sobra, é o próprio produto.
+> - `06 - Clientes` da `_82` no **Meu Drive da captadora**, que é a fonte da verdade, e a mesma pasta na `_82` da mentora, acessada pela unidade `M:`.
+> - O **modelo em branco da estrutura**: 97 pastas, das quais **52 estão vazias de propósito**. Ali a pasta vazia não é sobra, é o próprio produto. Desde 01/09/2026 ele existe apenas em `C:\Users\rosep\Backups\desktop-82\atual\06 - Clientes\18 - Outros Modelos`, porque saiu junto com a `_82` da Área de Trabalho e não foi para a nova fonte da verdade. **Decisão pendente com a captadora.**
 
 **Pasta sem documento dentro é estrutura, não é sobra.** Ela foi criada de propósito, para receber o documento quando ele chegar, e é o que torna previsível onde cada coisa vai.
 
@@ -115,12 +115,14 @@ Nenhuma pasta chamada **`_82 - Rosepaula Aparecida Andrade Rodrigues`** se apaga
 Isso inclui, com todas as letras:
 
 - `G:\.shortcut-targets-by-id\1YxXksuP6SHlVKA4bT5gaC0WG4Wy4OXej\_82 - Rosepaula Aparecida Andrade Rodrigues` e a mesma pasta pela unidade `M:`.
-- `C:\Users\rosep\Desktop\_82 - Rosepaula Aparecida Andrade Rodrigues`.
-- `C:\Users\rosep\Backups\pasta-82\`, que é a cópia de segurança das anteriores.
+- `G:\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues`, a **fonte da verdade** desde 01/09/2026.
+- `C:\Users\rosep\Backups\pasta-82\`, `Backups\meu-drive-82\` e `Backups\desktop-82\`, que são as cópias de segurança das anteriores.
 
 Não apagar, não mover para a Lixeira, não "aposentar", não substituir por atalho, não deixar nenhum script tocar nelas. Se um plano de organização levar a remover qualquer uma, o plano muda, não a pasta. A pasta do Drive nem sequer é da captadora: ela é apenas Editora.
 
 **Exceção aberta em 28/08/2026:** `C:\Users\rosep\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues` foi excluída, com autorização explícita da captadora, depois de uma análise que confirmou que era uma cópia local antiga, sem sincronizar com nada, e que todo o conteúdo que parecia exclusivo dela (o cliente `01 - Grupo Faz de Novo`) já existia, mais avançado, na cópia viva do Drive (`17 - Faz de Conta`). Registro completo em `docs/estruturacoes/2026-08-28-22-limpeza-das-copias-divergentes-e-excecao-do-meu-drive-local.md`. As três instâncias que restam continuam com a proteção integral desta regra.
+
+**Atualização de 01/09/2026:** a `_82` deixou de existir na Área de Trabalho. A captadora migrou a estrutura, à mão, para o Google Drive dela, `G:\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues`, que passou a ser a **fonte da verdade** e é a única cópia de que ela é dona. A pasta da mentora continua protegida e continua no script de backup, mas deixou de ser a referência. A nova pasta ganhou um bloco no `scripts/backup-diario.bat`, copiando para `Backups\meu-drive-82\atual`, porque Google Drive é sincronização e não backup. **Esse script não roda sozinho** (ver NADA RODA SOZINHO): enquanto a captadora não mandar executar, a fonte da verdade segue sem cópia no disco. Registro completo em `docs/estruturacoes/2026-09-01-29-a-82-do-meu-drive-vira-a-fonte-da-verdade.md`.
 
 ---
 
@@ -269,7 +271,7 @@ O sistema trabalha em dois contextos distintos, conforme a fase:
 | Entrega | Caminho | Formato |
 |---|---|---|
 | Perfil da OSC | `minhas-oscs/{slug}/perfil-osc.md` | `.md` |
-| Edital analisado | `minhas-oscs/{slug}/projetos/{edital}/edital.md` | `.md` |
+| Edital analisado (primeira leitura, 11 blocos) | `minhas-oscs/{slug}/projetos/{edital}/edital.md`, estrutura em `minhas-oscs/MODELO-edital.md` | `.md` |
 | Dossiê do Edital (entrega ao cliente) | pasta do edital, junto com o edital e os anexos | `.docx` + `.pdf` |
 | Parecer de elegibilidade (CaptaDoc) | `minhas-oscs/{slug}/projetos/{edital}/elegibilidade.md` | `.md` |
 | Proposta completa (CaptaBuilder) | `minhas-oscs/{slug}/projetos/{edital}/proposta.md` | `.md` |

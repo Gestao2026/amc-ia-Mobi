@@ -20,25 +20,31 @@ Pergunte como o captador vai fornecer o edital:
 ## Passo 2. Anúncio
 
 ```
-🔍 Próximo passo: analisar o edital e extrair critérios, prazos e exigências (8 pontos). Tempo estimado: 2 a 4 minutos.
+🔍 Próximo passo: fazer a primeira leitura do edital e dos anexos (11 blocos). Tempo estimado: 4 a 8 minutos.
 ```
 
-## Passo 3. Extração
+## Passo 3. A primeira leitura
 
-Consulte `.claude/skills/editais-fundamentos/SKILL.md`. Extraia e organize:
+**Leia `minhas-oscs/MODELO-edital.md` antes de começar.** Ele define os 11 blocos e todos os campos do `edital.md`. A extração segue aquele modelo, na ordem, e não uma lista livre.
 
-1. **Identificação.** Órgão, número do edital, objeto, modalidade (termo de fomento, colaboração, chamamento, lei de incentivo).
-2. **Quem pode participar.** Natureza jurídica aceita, tempo de existência, território, área temática.
-3. **Documentos exigidos** para habilitação.
-4. **Valores.** Teto total, teto por item ou categoria, percentuais máximos (pessoal, administrativo), contrapartida exigida.
-5. **Despesas permitidas e vedadas.**
-6. **Critérios de pontuação** e seus pesos. O que mais pontua e o que derruba.
-7. **Prazos.** Data e hora de submissão, vigência do projeto, cronograma do edital.
-8. **Forma de submissão.** Plataforma (Transferegov, sistema próprio), formato dos anexos, formulário oficial.
+Consulte também `.claude/skills/editais-fundamentos/SKILL.md`.
 
-## Passo 4. Salvamento
+Leia o edital inteiro **e cada anexo**, não só o edital. A maior parte do que decide está nos anexos: o termo de execução costuma fixar o valor real, os formulários revelam qual campo alimenta qual critério, as planilhas revelam a estrutura de rubricas, e os anexos de critérios trazem a escala que o corpo do edital não detalha.
 
-Crie ou atualize a pasta `minhas-oscs/{ativa}/projetos/{edital-slug}/` e salve `edital.md` com a extração. Crie também um `estado.md` marcando a etapa "edital analisado". Informe o caminho.
+Regras de preenchimento, todas do modelo:
+
+- Todo campo cita o item do edital ou do anexo.
+- Campo sem previsão no edital fica escrito **não encontrado**, com onde foi procurado. Nunca deduzir pelo que é comum no setor.
+- Campo que não se aplica fica escrito **não se aplica**.
+- Documento facultativo que pontua vem rotulado como facultativo, separado do obrigatório.
+- Os três momentos da ficha documental (inscrição, habilitação, prestação de contas) nunca se misturam.
+- Divergência entre edital e anexo vai numerada no bloco 11, com a leitura mais exigente adotada.
+
+## Passo 4. Salvamento e entrega
+
+Crie ou atualize a pasta `minhas-oscs/{ativa}/projetos/{edital-slug}/` e salve `edital.md` com os 11 blocos. Crie também um `estado.md` marcando a etapa "edital analisado". Informe o caminho.
+
+**Na tela, mostre apenas os blocos 1 e 2**, o semáforo e a ficha do edital. É o que decide se vale a pena entrar. O resto fica no arquivo. Só gere Word e PDF se o captador pedir, com `/edital-dossie`.
 
 ## Passo 5. Próximo passo
 

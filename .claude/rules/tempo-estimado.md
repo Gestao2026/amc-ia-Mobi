@@ -8,7 +8,8 @@
 | Operação | Tempo estimado |
 |---|---|
 | Minerar editais na base local (filtro + ranking) | cerca de 30 segundos |
-| Analisar um edital colado ou em PDF | 2 a 4 minutos |
+| Primeira leitura do edital e dos anexos (11 blocos) | 4 a 8 minutos |
+| Montar o Dossiê do Edital a partir da primeira leitura | 2 a 4 minutos |
 | Atualizar a base de editais | 3 a 6 minutos |
 
 ## Projeto (os 4 agentes)

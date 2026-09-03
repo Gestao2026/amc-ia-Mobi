@@ -36,6 +36,10 @@
 | 24 | 2026-08-30 | [Desligamento do encaminhamento da editais para a gestao](2026-08-30-24-desligamento-do-encaminhamento-editais-para-gestao.md) | Gmail `editais.mobilizando` e `gestao.mobilizando` | Concluída |
 | 25 | 2026-08-31 | [Correção da contagem de propostas enviadas e a ponte com a planilha](2026-08-31-25-correcao-da-contagem-de-propostas-enviadas.md) | Base Airtable (Projetos, Editais, uma automação), `scripts/`, `docs/` | Concluída. **1 pendência com a captadora** |
 | 26 | 2026-08-31 | [Carga dos editais vivos no pipeline do CaptaHub](2026-08-31-26-carga-dos-editais-vivos-no-pipeline-do-captahub.md) | Pipeline do CaptaHub (3 projetos criados), `docs/` | Concluída. **2 pendências com a captadora** |
+| 27 | 2026-08-31 | [Desligamento do projeto MAPA e saída do Airtable](2026-08-31-27-desligamento-do-projeto-mapa-airtable.md) | `scripts/`, `scripts/desativados/`, `docs/`. Nenhuma pasta de documento tocada | Concluída. **1 ponta solta** |
+| 28 | 2026-09-01 | [Comparação byte a byte das duas pastas _82 na Área de Trabalho](2026-09-01-28-comparacao-byte-a-byte-das-duas-pastas-82.md) | As duas cópias da `_82` na Área de Trabalho | Concluída. Somente leitura. **37 conteúdos só na antiga, 95 só na nova** |
+| 29 | 2026-09-01 | [A _82 do Meu Drive vira a fonte da verdade](2026-09-01-29-a-82-do-meu-drive-vira-a-fonte-da-verdade.md) | `Meu Drive` da captadora, Área de Trabalho, `scripts/backup-diario.bat` | Concluída. **2 pendências** |
+| 30 | 2026-09-03 | [A leitura do edital passa a ter modelo](2026-09-03-30-a-leitura-do-edital-passa-a-ter-modelo.md) | `.claude/`, `minhas-oscs/MODELO-edital.md`, `CLAUDE.md` | Concluída. **5 pendências** |
 
 ## Como usar
 
@@ -92,13 +96,15 @@ Estas valem para o ambiente todo, não só para a pasta que as originou.
 - Enquanto a captadora estiver corrigindo a estrutura à mão, nada se cria, renomeia, move ou apaga na pasta em que ela está trabalhando, até ela avisar que terminou.
 
 **Sobre a pasta `_82`**
-- **A `_82` do Drive é a fonte da verdade da estrutura.** A cópia da Área de Trabalho é derivada. Quando as duas divergirem, o alinhamento é sempre do Drive para a Área de Trabalho, em sentido único.
+- **A fonte da verdade da estrutura é a `_82` no Meu Drive da captadora**, desde 01/09/2026 (estruturação 29). É a única cópia de que ela é dona. A `_82` do Drive da mentora continua protegida e continua no backup, mas deixou de ser a referência.
+- **A Área de Trabalho não guarda mais estrutura documental.** As duas cópias que viviam lá deixaram de existir em 01/09/2026.
+- **Pasta que vive na nuvem precisa de cópia no disco.** Google Drive é sincronização, não backup: exclusão e corrupção sincronizam junto.
 - **Nenhuma sincronização de duas vias roda entre as cópias**, desde 26/08/2026. Sincronizador aditivo não sobrescreve, ele duplica, e duplicação em estrutura de pasta é mais cara de desfazer do que perda de arquivo.
 - **Antes de afirmar que um trabalho se desfez, conferir a data de alteração dos dois lados e identificar qual cópia está na tela.** Três pastas com o mesmo nome em três lugares fazem parecer que a estrutura voltou atrás sozinha.
 - **Nenhuma pasta chamada `_82 - Rosepaula Aparecida Andrade Rodrigues` se apaga**, nem no Google Drive nem na Área de Trabalho. Vale para a raiz e para qualquer subpasta, em qualquer nível, com ou sem conteúdo.
-- Inclui a pasta compartilhada no Drive (unidade `M:`), a cópia da Área de Trabalho, a cópia em `C:\Users\rosep\Meu Drive` e o backup em `C:\Users\rosep\Backups\pasta-82`.
+- Inclui a pasta no Meu Drive da captadora, a pasta compartilhada da mentora (unidade `M:`) e os backups em `Backups\pasta-82`, `Backups\meu-drive-82` e `Backups\desktop-82`.
 - Não apagar, não mover para a Lixeira, não "aposentar", não substituir por atalho, não deixar script tocar nelas. Se um plano de organização levar a remover qualquer uma, **o plano muda, não a pasta**.
-- A pasta do Drive não é da captadora. Ela é Editora, não dona.
+- A pasta da mentora não é da captadora. Nela, a captadora é Editora, não dona.
 
 **Sobre o que não cabe em nenhuma pasta**
 - **A máquina não usa a Lixeira. Nunca.** Nem para duplicata conferida, nem para lixo de sistema, nem para pasta inteira já consolidada em outro lugar. Excluir é decisão da captadora, tomada por ela, na hora que ela quiser.
