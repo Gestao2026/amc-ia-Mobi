@@ -32,7 +32,9 @@ Execute as buscas em paralelo sempre que possível, várias queries por fonte.
 
 ## Saída
 
-Apresente no chat uma tabela priorizada (até 10): edital, órgão, escopo, valor, prazo (confirmado na fonte), aderência, motivo, link. Deixe explícito em uma linha: "Fonte: varredura web. Esses editais ainda não estão no CaptaHub." Para os de ALTA aderência, ofereça abrir o projeto e sugira cadastrá-los no CaptaHub para entrarem na carteira.
+**Salve sempre a varredura** em `minhas-oscs/{ativa}/varredura-web/{tema}-{AAAA-MM-DD}.md`, onde `{tema}` é o assunto pesquisado em minúsculas e sem acento (ex: `educacao-infantil-pe-2026-09-10.md`). O arquivo registra: a data da varredura, o perfil da OSC usado como filtro, os termos de busca, a tabela completa dos achados e, ao final, as fontes consultadas que não renderam resultado. Sem esse arquivo a pesquisa se perde e a próxima varredura repete o mesmo trabalho: antes de varrer, leia as varreduras anteriores dessa pasta. O arquivo fica na pasta da OSC, e não em `base-editais/`, porque traz o perfil do cliente, que não vai para o repositório público.
+
+Apresente também no chat uma tabela priorizada (até 10): edital, órgão, escopo, valor, prazo (confirmado na fonte), aderência, motivo, link. Deixe explícito em uma linha: "Fonte: varredura web. Esses editais ainda não estão no CaptaHub." Informe o caminho do arquivo salvo. Para os de ALTA aderência, ofereça abrir o projeto e sugira cadastrá-los no CaptaHub para entrarem na carteira.
 
 Emita também o bloco machine-readable, nos mesmos campos dos editais do CaptaHub (use `id` no formato `"web:{slug}"`, mais `title`, `institution`, `scope`, `category`, `value` em reais ou null, `deadline` AAAA-MM-DD ou null, `is_continuous`, `url`, `description`), para o fluxo seguir:
 
