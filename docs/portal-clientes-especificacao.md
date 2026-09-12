@@ -15,7 +15,7 @@ O portal é o lugar onde a captadora e a organização cliente acompanham **um e
 **Ele não é**, e isso é decisão de projeto:
 
 1. Não tem funil, kanban, valores nem status de carteira. A gestão da carteira continua no CaptaHub.
-2. Não dispara nada por conta própria, com uma única exceção, pedida pela captadora em 12/09/2026: os lembretes de prazo do item 5. Fora deles, tudo acontece porque alguém clicou.
+2. Não dispara nada por conta própria, com uma única exceção, pedida pela captadora em 12/09/2026: os e-mails do item 5. Fora deles, tudo acontece porque alguém clicou.
 3. Não recebe arquivos. Os documentos continuam no Drive do cliente. O portal guarda o nome de cada documento e se ele já foi enviado.
 4. Não fala com o CaptaHub nem com a AMC IA. Nenhuma integração nesta primeira versão.
 
@@ -158,9 +158,13 @@ Dia D em 05/10/2026, segunda. Dossiê enviado em 11/09/2026, sexta. Ritmo padrã
 | Aprovação | qui, 01/10 (D-4) | 2 dias úteis depois do projeto |
 | Submissão | sex, 02/10 (D-3) | o D-2 caía num sábado |
 
-## 5. Os lembretes automáticos
+## 5. Os e-mails do portal
 
 > Exceção autorizada pela captadora em 12/09/2026 à regra "nada roda sozinho" do `CLAUDE.md`. A rotina vive dentro do portal, não no ambiente da AMC IA. Quando o portal entrar no ar, a exceção é registrada no `CLAUDE.md` e em `docs/automacoes-desligadas.md`, com a data.
+
+O portal manda **três tipos de e-mail, e nenhum além destes**: o lembrete de prazo, o aviso de atividade que exige ação do outro lado, e o resumo diário da captadora. Dentro do portal, os dois lados veem tudo pelo registro do edital, independentemente de e-mail.
+
+### 5.1. Lembretes de prazo
 
 **Quem recebe.** A pessoa da organização cliente, com cópia para a captadora em toda mensagem.
 
@@ -181,9 +185,37 @@ Dia D em 05/10/2026, segunda. Dossiê enviado em 11/09/2026, sexta. Ritmo padrã
 
 **O texto da mensagem.** Assunto: "{Edital}: {entrega} vence em {data}". Corpo curto, em português: o que falta, a data com o dia da semana, o link para a página do edital e a frase "Se você já enviou, marque no portal para o lembrete parar".
 
+### 5.2. Avisos de atividade, na hora
+
+Só oito eventos geram e-mail na hora, porque só eles pedem uma ação do outro lado.
+
+**Do cliente para a captadora:**
+
+1. deu o OK para seguir, inclusive quando a resposta é "não vamos entrar" ou "tenho dúvidas";
+2. marcou o esboço ou a ideia como enviado;
+3. marcou os documentos extras como enviados;
+4. respondeu a aprovação, aprovando ou pedindo ajustes.
+
+**Da captadora para o cliente:**
+
+5. um edital novo foi aberto para a organização dele;
+6. documentos foram acrescentados à lista;
+7. o projeto foi enviado para aprovação;
+8. o projeto foi submetido, com o número do protocolo.
+
+Cada aviso diz o que aconteceu, em qual edital, e traz o link da página. **Nenhum outro evento gera e-mail na hora:** um documento marcado no meio de vários, um campo do roteiro preenchido, uma observação escrita, uma troca de ritmo ou de data entram no resumo do dia.
+
+### 5.3. O resumo diário da captadora
+
+Um e-mail por dia útil, às 18h de Brasília, **só para a captadora**, com o que os clientes mexeram no dia, agrupado por organização e por edital. **Em dia sem atividade, o e-mail não sai.** O cliente nunca recebe este resumo.
+
+### 5.4. Regras comuns aos três
+
+**Nada se repete.** O que já foi contado por um aviso na hora não volta no resumo do dia.
+
 **Como desligar:**
 
-- A captadora desliga por edital, por organização ou tudo de uma vez, num interruptor no painel dela.
+- A captadora desliga cada um dos três tipos separadamente, e desliga por edital, por organização ou tudo de uma vez, num interruptor no painel dela.
 - O cliente pode parar de receber, por um link no rodapé do e-mail. Quando ele para, a captadora vê isso no portal.
 - Enquanto o portal estiver em teste, nenhum lembrete é enviado a ninguém.
 
@@ -236,6 +268,8 @@ Pensado primeiro para o celular, porque é dali que o cliente responde. Texto em
 10. O interruptor da captadora desliga os lembretes na hora, por edital e no geral, e o link do rodapé desliga os do cliente.
 11. O edital apagado some das listas do cliente na hora, continua inteiro em Apagados, volta ao mesmo estado quando restaurado e não sai de lá por tempo.
 12. O cliente não consegue apagar nada, por nenhum caminho.
+13. O aviso na hora sai nos oito eventos do item 5.2, e em nenhum outro.
+14. O resumo diário não sai em dia sem atividade e não repete o que já foi avisado na hora.
 
 ## 10. O que fica para depois
 
