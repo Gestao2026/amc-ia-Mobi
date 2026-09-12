@@ -15,7 +15,7 @@ O portal é o lugar onde a captadora e a organização cliente acompanham **um e
 **Ele não é**, e isso é decisão de projeto:
 
 1. Não tem funil, kanban, valores nem status de carteira. A gestão da carteira continua no CaptaHub.
-2. Não dispara e-mail, lembrete nem qualquer aviso automático. Nada roda sozinho. Se um dia a captadora quiser lembretes, isso entra como decisão à parte.
+2. Não dispara nada por conta própria, com uma única exceção, pedida pela captadora em 12/09/2026: os lembretes de prazo do item 5. Fora deles, tudo acontece porque alguém clicou.
 3. Não recebe arquivos. Os documentos continuam no Drive do cliente. O portal guarda o nome de cada documento e se ele já foi enviado.
 4. Não fala com o CaptaHub nem com a AMC IA. Nenhuma integração nesta primeira versão.
 
@@ -78,7 +78,19 @@ Nome, órgão, link, dia D, data do dossiê e ritmo (ou deixar o ritmo sugerido)
 
 ### 3.7. Finalizar edital (só administradora)
 
-Botão na página do edital. Pede confirmação, grava a data e passa o edital para Finalizados. A partir daí ele fica **só para leitura, para os dois lados**. Não existe apagar edital no portal: nem para a administradora.
+Botão na página do edital. Pede confirmação, grava a data e passa o edital para Finalizados. A partir daí ele fica **só para leitura, para os dois lados**.
+
+### 3.8. Apagar e restaurar (só administradora)
+
+Erro acontece: edital criado em duplicidade, dia D digitado errado, documento repetido. Por isso existe apagar, e ele é só da administradora.
+
+- **Apagar um edital** pede confirmação e passa o edital para **Apagados**, onde ele continua inteiro, com tudo o que foi escrito. Ele some das listas do cliente na hora.
+- **Restaurar** devolve o edital ao estado em que estava, em andamento ou finalizado.
+- **Apagar de vez** existe, pede uma segunda confirmação e é definitivo. Só a administradora chega nele.
+- **Nada sai de Apagados por tempo.** O que está lá fica lá até ela decidir. Não há limpeza automática.
+- **Linha de documento:** a administradora remove a linha errada. O cliente não remove nenhuma.
+- **O cliente nunca apaga nada**, nem edital, nem documento, nem resposta.
+- O registro guarda quem apagou, o que apagou e quando. **O registro não se apaga.**
 
 ## 4. As regras de prazo
 
@@ -146,7 +158,40 @@ Dia D em 05/10/2026, segunda. Dossiê enviado em 11/09/2026, sexta. Ritmo padrã
 | Aprovação | qui, 01/10 (D-4) | 2 dias úteis depois do projeto |
 | Submissão | sex, 02/10 (D-3) | o D-2 caía num sábado |
 
-## 5. Os dados
+## 5. Os lembretes automáticos
+
+> Exceção autorizada pela captadora em 12/09/2026 à regra "nada roda sozinho" do `CLAUDE.md`. A rotina vive dentro do portal, não no ambiente da AMC IA. Quando o portal entrar no ar, a exceção é registrada no `CLAUDE.md` e em `docs/automacoes-desligadas.md`, com a data.
+
+**Quem recebe.** A pessoa da organização cliente, com cópia para a captadora em toda mensagem.
+
+**Sobre o que.** Só as quatro entregas do cliente: OK para seguir, documentos extras, esboço e aprovação. As entregas da Mobilizando nunca geram e-mail ao cliente.
+
+**Quando sai:**
+
+- 3 dias corridos antes do prazo da entrega;
+- no dia do prazo;
+- depois do prazo, a cada 2 dias, enquanto a entrega não for marcada como feita.
+
+**Os limites, que impedem o lembrete de virar spam:**
+
+- No máximo **uma mensagem por dia por edital**. Se duas entregas vencem no mesmo dia, vão juntas, na mesma mensagem.
+- No máximo **5 avisos de atraso** por entrega.
+- Nada é enviado depois do dia D, nem em edital finalizado, apagado, ou com a entrega já marcada como feita.
+- A rotina roda **uma vez por dia útil, às 8h de Brasília**. Em sábado, domingo e feriado nacional não sai nada.
+
+**O texto da mensagem.** Assunto: "{Edital}: {entrega} vence em {data}". Corpo curto, em português: o que falta, a data com o dia da semana, o link para a página do edital e a frase "Se você já enviou, marque no portal para o lembrete parar".
+
+**Como desligar:**
+
+- A captadora desliga por edital, por organização ou tudo de uma vez, num interruptor no painel dela.
+- O cliente pode parar de receber, por um link no rodapé do e-mail. Quando ele para, a captadora vê isso no portal.
+- Enquanto o portal estiver em teste, nenhum lembrete é enviado a ninguém.
+
+**Registro e falhas.** Todo e-mail enviado entra no registro do edital: para quem foi, quando saiu e o que dizia. Se o envio falhar, o portal mostra o erro para a captadora e não fica tentando para sempre.
+
+**O que isso exige, e é tarefa da captadora.** O envio depende de um serviço de e-mail ligado ao portal e da verificação do domínio `mobilizando.org` no DNS da HostGator, para as mensagens saírem em nome da Mobilizando e não caírem na caixa de spam do cliente. Enquanto o domínio não estiver verificado, o remetente é um endereço do próprio serviço de envio.
+
+## 6. Os dados
 
 **organizacoes:** id, nome, criada_em.
 
@@ -162,22 +207,22 @@ Dia D em 05/10/2026, segunda. Dossiê enviado em 11/09/2026, sexta. Ritmo padrã
 
 Nenhuma data é gravada calculada: o portal guarda o dia D, a data do dossiê e o ritmo, e calcula o resto na hora. Assim, mudar uma regra corrige todos os editais de uma vez.
 
-## 6. Segurança e privacidade
+## 7. Segurança e privacidade
 
 1. **Isolamento por organização.** O cliente só lê e escreve linhas da organização dele. A regra vale no banco de dados, não só na tela.
 2. **Campos travados.** O que é da administradora não muda pela conta do cliente, mesmo por caminho indireto.
 3. **Dado mínimo.** Só nome e e-mail das pessoas. Nada de CPF, documento pessoal, senha de portal de edital ou chave de acesso.
 4. **Nenhum segredo no código.** Toda chave fica na configuração do próprio Lovable, nunca escrita no projeto.
-5. **Nada se apaga.** Não existe botão de excluir edital nem de excluir documento já enviado. Finalizar é o fim da linha.
+5. **Apagar é decisão da captadora, e só dela.** O cliente não apaga nada. Apagar manda para Apagados, de onde dá para restaurar; apagar de vez pede uma segunda confirmação. Nada é removido por tempo nem por rotina automática.
 6. **Registro de quem fez.** Toda marcação guarda quem marcou e quando.
 
-## 7. Aparência
+## 8. Aparência
 
 A identidade já existe no site da Mobilizando e se repete aqui: verde #1d624d como cor principal, dourado #d1b484 para destaque, roxo #7f126f e azul-marinho #070552 como apoio, fontes Poppins nos títulos e Inter no texto. Feito em verde, atrasado em vermelho #B42318, próximo do prazo em dourado. Papel de cada lado com cor própria: Mobilizando em verde, cliente em roxo.
 
 Pensado primeiro para o celular, porque é dali que o cliente responde. Texto em português do Brasil, com acentuação correta e sem travessão.
 
-## 8. Critérios de aceite (a conferência da Fase 3)
+## 9. Critérios de aceite (a conferência da Fase 3)
 
 1. Um cliente de teste não enxerga, de jeito nenhum, o edital de outra organização.
 2. Sem login, nenhuma página mostra dado de cliente. Só a página "Como trabalhamos juntos" abre.
@@ -187,8 +232,11 @@ Pensado primeiro para o celular, porque é dali que o cliente responde. Texto em
 6. O edital finalizado fica só para leitura e continua visível na lista.
 7. O PDF do edital sai com tudo o que está na tela.
 8. A página funciona no celular, com o polegar, sem zoom.
-9. Nenhum e-mail sai do portal sem alguém clicar.
+9. Nenhum e-mail sai fora das regras do item 5: em teste não sai nenhum, no mesmo dia nunca sai mais de uma mensagem por edital, e depois do dia D não sai nada.
+10. O interruptor da captadora desliga os lembretes na hora, por edital e no geral, e o link do rodapé desliga os do cliente.
+11. O edital apagado some das listas do cliente na hora, continua inteiro em Apagados, volta ao mesmo estado quando restaurado e não sai de lá por tempo.
+12. O cliente não consegue apagar nada, por nenhum caminho.
 
-## 9. O que fica para depois
+## 10. O que fica para depois
 
-Lembretes por e-mail ou WhatsApp, envio de arquivo pelo portal, endereço próprio em mobilizando.org, relatório de desempenho por cliente e qualquer conversa com o CaptaHub. Cada um desses é uma decisão nova da captadora.
+Lembrete por WhatsApp, envio de arquivo pelo portal, endereço próprio em mobilizando.org, relatório de desempenho por cliente e qualquer conversa com o CaptaHub. Cada um desses é uma decisão nova da captadora.
