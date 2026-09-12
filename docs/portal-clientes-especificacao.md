@@ -50,7 +50,7 @@ E-mail e senha. Link para recuperar a senha. Nada mais.
 
 ### 3.3. Painel da administradora
 
-Lista das organizações. Em cada linha: o nome, quantos editais em andamento, a próxima entrega com data e a situação em cor. As organizações com entrega atrasada aparecem primeiro. Botões: **Nova organização**, **Convidar pessoa**, **Novo edital**.
+Lista das organizações. Em cada linha: o nome, quantos editais em andamento, a próxima entrega com data e a situação em cor. As organizações com entrega atrasada aparecem primeiro. Botões: **Nova organização**, **Convidar pessoa**, **Novo edital** e **Exportar tudo**, que baixa uma planilha com todas as organizações, editais, entregas, documentos e respostas. A exportação é a cópia de segurança fora da plataforma, e só a administradora chega nela.
 
 ### 3.4. Painel do cliente
 
@@ -80,6 +80,8 @@ Nome, órgão, link, dia D, data do dossiê e ritmo (ou deixar o ritmo sugerido)
 
 Botão na página do edital. Pede confirmação, grava a data e passa o edital para Finalizados. A partir daí ele fica **só para leitura, para os dois lados**.
 
+O edital finalizado nasce com o resultado **aguardando**. Quando o resultado do edital sair, a administradora marca **aprovado** ou **reprovado**, com a data, e o cliente vê isso na lista de Finalizados. O portal não guarda valor aprovado, etapa de carteira nem prestação de contas: isso continua no CaptaHub.
+
 ### 3.8. Apagar e restaurar (só administradora)
 
 Erro acontece: edital criado em duplicidade, dia D digitado errado, documento repetido. Por isso existe apagar, e ele é só da administradora.
@@ -91,6 +93,18 @@ Erro acontece: edital criado em duplicidade, dia D digitado errado, documento re
 - **Linha de documento:** a administradora remove a linha errada. O cliente não remove nenhuma.
 - **O cliente nunca apaga nada**, nem edital, nem documento, nem resposta.
 - O registro guarda quem apagou, o que apagou e quando. **O registro não se apaga.**
+
+### 3.9. Privacidade (aberta, sem login)
+
+Página curta, em linguagem simples, ligada no rodapé de todas as telas e no rodapé dos e-mails. Diz:
+
+- **O que o portal guarda:** nome e e-mail das pessoas da organização, os dados do edital e o que os dois lados escrevem sobre o projeto. Não guarda documento pessoal, arquivo, CPF nem dado bancário.
+- **Quem vê:** a própria organização e a Mobilizando. Ninguém mais, e nenhum cliente vê o de outro.
+- **Por quanto tempo:** enquanto durar a assessoria, e enquanto a organização não pedir a exclusão.
+- **Como pedir cópia ou exclusão:** por e-mail para a Mobilizando, com o prazo de resposta.
+- **Quem é o responsável:** a Mobilizando, com o e-mail de contato.
+
+O texto final é escrito na Fase 2 e revisado pela captadora antes de qualquer cliente entrar.
 
 ## 4. As regras de prazo
 
@@ -229,7 +243,7 @@ Um e-mail por dia útil, às 18h de Brasília, **só para a captadora**, com o q
 
 **pessoas:** id (do login), nome, email, papel (administradora ou cliente), organizacao_id (vazio para administradora), criada_em.
 
-**editais:** id, organizacao_id, nome, orgao, link, dia_d, data_dossie, ritmo (padrao, folga, apertado ou vazio para sugerido), situacao (andamento ou finalizado), finalizado_em, criado_em, atualizado_em. Guarda também as respostas: ok_resposta, ok_observacoes, esboco_tipo, esboco_oque, esboco_paraquem, esboco_onde, esboco_quando, esboco_como, esboco_comquem, esboco_quanto, esboco_jaexiste, duvidas, aprovacao_resposta, aprovacao_quem, aprovacao_ajustes, protocolo, submetido_em.
+**editais:** id, organizacao_id, nome, orgao, link, dia_d, data_dossie, ritmo (padrao, folga, apertado ou vazio para sugerido), situacao (andamento ou finalizado), finalizado_em, resultado (aguardando, aprovado ou reprovado), resultado_em, criado_em, atualizado_em. Guarda também as respostas: ok_resposta, ok_observacoes, esboco_tipo, esboco_oque, esboco_paraquem, esboco_onde, esboco_quando, esboco_como, esboco_comquem, esboco_quanto, esboco_jaexiste, duvidas, aprovacao_resposta, aprovacao_quem, aprovacao_ajustes, protocolo, submetido_em.
 
 **entregas:** id, edital_id, chave (ok, docs, esboco, projeto, aprovacao, submissao), feito, feito_em.
 
@@ -247,6 +261,8 @@ Nenhuma data é gravada calculada: o portal guarda o dia D, a data do dossiê e 
 4. **Nenhum segredo no código.** Toda chave fica na configuração do próprio Lovable, nunca escrita no projeto.
 5. **Apagar é decisão da captadora, e só dela.** O cliente não apaga nada. Apagar manda para Apagados, de onde dá para restaurar; apagar de vez pede uma segunda confirmação. Nada é removido por tempo nem por rotina automática.
 6. **Registro de quem fez.** Toda marcação guarda quem marcou e quando.
+7. **Privacidade declarada.** A página do item 3.9 fica aberta e ligada no rodapé de todas as telas e dos e-mails.
+8. **Saída garantida.** A exportação em planilha permite tirar tudo da plataforma a qualquer momento, sem depender de ninguém.
 
 ## 8. Aparência
 
@@ -270,6 +286,9 @@ Pensado primeiro para o celular, porque é dali que o cliente responde. Texto em
 12. O cliente não consegue apagar nada, por nenhum caminho.
 13. O aviso na hora sai nos oito eventos do item 5.2, e em nenhum outro.
 14. O resumo diário não sai em dia sem atividade e não repete o que já foi avisado na hora.
+15. O edital finalizado mostra o resultado, e só a administradora muda esse campo.
+16. A página de privacidade abre sem login e está ligada no rodapé das telas e dos e-mails.
+17. A exportação em planilha traz todas as organizações, editais, entregas, documentos e respostas, e só a administradora consegue baixar.
 
 ## 10. O que fica para depois
 
