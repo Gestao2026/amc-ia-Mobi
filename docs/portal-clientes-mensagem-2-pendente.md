@@ -1,6 +1,8 @@
-# Portal do Cliente. Mensagem 2, pendente de crédito
+# Portal do Cliente. Mensagem 2, enviada em 13/09/2026
 
-> Escrita em 12/09/2026 e **não enviada**: o Lovable recusou com "workspace is out of credits".
+> **Enviada em 13/09/2026** e concluída pelo Lovable, com custo de 5 créditos. O agente fez a correção de segurança, o painel, Apagados e Notificações, e parou antes da página do edital, que saiu numa mensagem seguinte (2,6 créditos). O texto abaixo fica como registro.
+>
+> Escrita em 12/09/2026, quando a primeira tentativa foi recusada com "workspace is out of credits".
 > Quando houver crédito, esta mensagem vai inteira, de uma vez só, para gastar um crédito apenas.
 > Contexto e regras completas em `docs/portal-clientes-especificacao.md`.
 
