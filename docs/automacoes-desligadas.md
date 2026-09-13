@@ -57,7 +57,24 @@ serviços no Render continuam de pé. Eles não rodam sozinhos: ficam parados at
 uma conversa chamar, e por isso nunca feriram a regra. Não desativar serviço, não
 remover conector, não revogar token.
 
-Se alguma dessas quatro peças precisar mesmo ser mexida, parar e perguntar antes.
+**As rotinas agendadas na nuvem do claude.ai.** Autorizadas pela captadora em
+13/09/2026. Diferente das anteriores, estas rodam por horário. Não aparecem nas
+tarefas do Windows nem no agendador do aplicativo: vivem na conta do claude.ai, e
+por isso ficaram fora do levantamento de 01/09.
+
+| Rotina | Situação em 13/09/2026 | Quando roda (Brasília) | Atualiza |
+|---|---|---|---|
+| Radar de Editais (PPL + Geral) | ligada | todo dia, 08h20 | `painel-geral` e `painel-ppl` |
+| Resumo matinal | ligada | segunda a sexta, 08h | `Resumo da manhã` |
+| Radar de Mercado e Patrocínio | religada por ela em 13/09, depois de suspensa pela plataforma em 12/09 por computador ausente | todo dia, 09h | `Radar de Mercado e Patrocínio` e dois PDFs na Área de Trabalho |
+| Radar de Editais, cópia antiga | desligada | era 08h | os mesmos dois painéis |
+
+O Radar de Editais **move para a lixeira do Gmail os alertas que processou**. É a
+única escrita externa dessas rotinas. O Resumo matinal só lê. Religar o Radar de
+Mercado é decisão dela, e religado ele fica coberto pela mesma exceção. Não
+desligar, não pausar, não editar e não apagar nenhuma sem ela pedir.
+
+Se alguma dessas peças precisar mesmo ser mexida, parar e perguntar antes.
 
 ## A consequência que precisa ficar clara
 
