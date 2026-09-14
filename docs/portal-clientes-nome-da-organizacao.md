@@ -20,7 +20,7 @@ No painel da administradora (src/routes/_authenticated/painel.tsx), no cartão d
 2. BANCO
 a) Gatilho BEFORE UPDATE em public.organizacoes que grava o nome sem espaços nas pontas e recusa nome vazio, com a mensagem "O nome da organização não pode ficar vazio."
 b) Gatilho AFTER UPDATE em public.organizacoes que, quando o nome muda, insere uma linha em public.registro com edital_id nulo, acao "Corrigiu o nome da organização", detalhe "de {nome antigo} para {nome novo}", autor_id = auth.uid() e autor_nome do perfil de quem alterou. A função é SECURITY DEFINER com search_path fixo. A tela não grava registro: quem grava é o gatilho.
-c) Só a administradora altera organização, como já é hoje. Não crie regra de linha nova e não mude permissão.
+c) Conceda de volta UPDATE em public.organizacoes ao papel authenticated. Essa permissão foi retirada na blindagem porque ainda não havia tela que editasse organização; agora há. A regra de linha "organizacoes admin total" já garante que só a administradora altera, e o cliente continua só lendo a própria organização. Não crie regra de linha nova e não mude nenhuma outra permissão.
 
 Texto em português do Brasil, com acentuação correta e sem travessão.
 
@@ -31,5 +31,5 @@ Não altere regras de linha, permissões nem gatilhos fora do que foi pedido.
 ## Conferência depois do envio (sem crédito, só leitura)
 
 1. Diferença entre versões: só `painel.tsx` e uma migração com os dois gatilhos de `organizacoes`.
-2. `pg_trigger` em `organizacoes` com os dois gatilhos; `pg_policies` de `organizacoes` iguais às de antes.
+2. `pg_trigger` em `organizacoes` com os dois gatilhos; `pg_policies` de `organizacoes` iguais às de antes; `authenticated` com SELECT, INSERT e UPDATE em `organizacoes` e nenhuma outra permissão mudada.
 3. Na tela, a captadora corrige um nome qualquer e volta ao original. **Teste que grava, feito por ela.** Depois, SELECT no registro mostra as duas linhas "Corrigiu o nome da organização", com o nome dela e a hora.

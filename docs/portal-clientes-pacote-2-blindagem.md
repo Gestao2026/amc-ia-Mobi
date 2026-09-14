@@ -1,6 +1,17 @@
 # Portal do Cliente. Pacote 2, blindagem do banco
 
-> **Situação em 14/09/2026, 2h10: enviado pela metade, nada aplicado.** Com o OK da captadora, o texto inteiro foi enviado. O Lovable fez só a leitura do código e das migrações, gastou 1,1 crédito e parou sem alterar nada, pedindo uma nova mensagem para continuar. A continuação (abaixo, em "Continuação a enviar") foi recusada por falta de crédito. Conferido por SELECT logo depois: banco igual ao retrato (77 permissões do `anon`, registro com CASCADE, `escopo_id` presente, 8 gatilhos).
+> **Situação em 14/09/2026, 13h: APLICADO E CONFERIDO.** Continuação enviada às 13h01 com o OK da captadora; o Lovable terminou às 13h05, com duas migrações (`20260914160256` e `20260914160505`) e ajustes em `edital.tsx`, `apagados.tsx`, `notificacoes.tsx`, `types.ts` e `perfil.functions.ts`. Conferência sem crédito, por SELECT e pela diferença entre versões:
+> - `anon` sem nenhuma permissão nas 11 tabelas. Permissões padrão das tabelas criadas pelo `postgres` sem `anon`. **Ponto de atenção:** a permissão padrão do `supabase_admin` ainda dá tudo ao `anon` em tabela nova criada por esse papel; as migrações do Lovable rodam como `postgres`, então o risco é baixo, mas conferir depois de todo pacote.
+> - `authenticated` sem TRUNCATE, REFERENCES e TRIGGER. **Diferenças em relação ao quadro 1c, justificadas pelo código:** `organizacoes` ficou sem UPDATE, `convites` sem DELETE e `config_notificacoes` sem DELETE. Consequência: o texto do nome da organização passou a pedir o UPDATE de volta.
+> - Registro com SET NULL, `edital_nome`, travado contra alteração e exclusão, e leitura total pela administradora (feita alterando a regra "registro le", não com regra nova). Apagar de vez só em Apagados, com linha "Apagou o edital de vez". Funções donas do `postgres`, que ignora regras de linha, então a gravação do registro no apagamento não é barrada.
+> - `config_notificacoes` com `organizacao_id` e `edital_id`, as duas chaves com CASCADE, a checagem por escopo e `escopo_id` removido.
+> - Convite: gatilho de minúsculas, índice único entre pendentes e busca exata. O convite pendente da `e-missao.ong.br`, criado às 23h07 de 13/09, já estava normalizado.
+> - `editais.atualizado_em` com gatilho; a trava de finalizado e apagado não compara essa coluna, então não há conflito.
+> - As 8 travas antigas intactas, mais 10 gatilhos novos (18 no total).
+> - Código: sem `ilike`, sem `autor_id`, `autor_nome`, `autor_papel`, `feito_por` e `enviado_em` nas gravações; nome digitado para apagar de vez e seção "Apagados de vez".
+> - **Falta o teste de comportamento (item 7 da conferência), que grava no banco dentro de uma transação desfeita e pede o OK da captadora.**
+>
+> **Situação anterior, 14/09/2026, 2h10: enviado pela metade, nada aplicado.** Com o OK da captadora, o texto inteiro foi enviado. O Lovable fez só a leitura do código e das migrações, gastou 1,1 crédito e parou sem alterar nada, pedindo uma nova mensagem para continuar. A continuação (abaixo, em "Continuação a enviar") foi recusada por falta de crédito. Conferido por SELECT logo depois: banco igual ao retrato (77 permissões do `anon`, registro com CASCADE, `escopo_id` presente, 8 gatilhos).
 >
 > **Quando houver crédito:** enviar só a "Continuação a enviar", não o texto inteiro de novo. O Lovable guarda a conversa. Logo depois, e só depois, vai `docs/portal-clientes-nome-da-organizacao.md`.
 >
