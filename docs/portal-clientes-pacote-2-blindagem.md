@@ -1,6 +1,10 @@
 # Portal do Cliente. Pacote 2, blindagem do banco
 
-> **Escrito em 14/09/2026 e não enviado.** Espera a leitura e o OK da captadora.
+> **Situação em 14/09/2026, 2h10: enviado pela metade, nada aplicado.** Com o OK da captadora, o texto inteiro foi enviado. O Lovable fez só a leitura do código e das migrações, gastou 1,1 crédito e parou sem alterar nada, pedindo uma nova mensagem para continuar. A continuação (abaixo, em "Continuação a enviar") foi recusada por falta de crédito. Conferido por SELECT logo depois: banco igual ao retrato (77 permissões do `anon`, registro com CASCADE, `escopo_id` presente, 8 gatilhos).
+>
+> **Quando houver crédito:** enviar só a "Continuação a enviar", não o texto inteiro de novo. O Lovable guarda a conversa.
+>
+> Escrito em 14/09/2026 e aprovado pela captadora na mesma madrugada.
 > Custo previsto: 2,5 a 3 créditos. O Lovable pode parar para pedir aprovação do plano ou da mudança no banco: a aprovação é no editor.
 > Base: `docs/portal-clientes-arquitetura.md`, pacote 2 (defeitos 7, 1, 3, 4 e 17, convite com e-mail exato e `atualizado_em`).
 
@@ -82,6 +86,16 @@ Acrescente em public.editais a coluna atualizado_em (timestamptz, obrigatória, 
 - a lista das permissões finais de anon e authenticated por tabela;
 - a lista dos gatilhos criados, com a tabela e o momento de cada um;
 - as diferenças que você encontrou entre o quadro do item 1c e o código.
+
+Texto em português do Brasil, com acentuação correta e sem travessão.
+
+Não altere regras de linha, permissões nem gatilhos fora do que foi pedido.
+
+---
+
+## Continuação a enviar (copiar daqui)
+
+Continue a partir da migração, exatamente conforme a mensagem anterior (itens 1 a 8). Não refaça a auditoria: use o que você já levantou. Não abra agentes auxiliares. Ordem: uma migração única com os itens 1 a 7 do banco; depois os ajustes de código em edital.tsx, apagados.tsx, notificacoes.tsx, types.ts e perfil.functions.ts; depois a compilação; e por fim a resposta pedida no item 8, incluindo as diferenças que a auditoria encontrou entre o quadro do item 1c e o código. Se ainda assim não couber, aplique a migração inteira e os ajustes de código que mantêm o portal funcionando com ela, e liste o que faltou.
 
 Texto em português do Brasil, com acentuação correta e sem travessão.
 
