@@ -1,6 +1,8 @@
 # Portal do Cliente. Nome da organização editável
 
-> **Escrito em 14/09/2026 e não enviado.** Aprovado pela captadora para ir **logo depois da continuação do pacote 2**, nunca antes nem junto: o registro da mudança de nome depende do `edital_id` opcional e da leitura total do registro pela administradora, que entram no pacote 2.
+> **Situação em 14/09/2026, 13h30: APLICADO E CONFERIDO, falta o teste na tela da captadora.** Enviado às 13h23 com o OK dela; o Lovable parou para aprovar o plano, ela aprovou no editor, e ele terminou às 13h28. Conferência sem crédito: `authenticated` com SELECT, INSERT e UPDATE em `organizacoes` e as outras 10 tabelas iguais ao pacote 2; `anon` sem nenhuma permissão; regras de linha iguais; dois gatilhos novos em `organizacoes` (`normaliza_nome_organizacao`, antes, e `registra_correcao_nome_organizacao`, depois, SECURITY DEFINER com search_path fixo), somando 20 gatilhos; em `painel.tsx`, o componente `EditarNomeOrganizacao` só no painel da administradora, com Salvar travado quando vazio ou igual e a atualização da lista `organizacoes`. O Lovable abriu o painel com a sessão da captadora no ambiente de teste dele só para clicar em Editar e Cancelar, sem salvar: o registro seguiu com 0 linhas e os 8 nomes intactos.
+>
+> **Situação anterior: escrito em 14/09/2026 e não enviado.** Aprovado pela captadora para ir **logo depois da continuação do pacote 2**, nunca antes nem junto: o registro da mudança de nome depende do `edital_id` opcional e da leitura total do registro pela administradora, que entram no pacote 2.
 > Custo previsto: cerca de 1 crédito.
 > Antecipa, do pacote 11, só o nome editável. O resto da ficha da organização continua lá.
 
