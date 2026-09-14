@@ -1,6 +1,8 @@
 # Portal do Cliente. Mensagem 3, pendente de crédito
 
-> Escrita em 13/09/2026 e **não enviada**: o Lovable recusou com "workspace is out of credits".
+> **Enviada em 14/09/2026 e concluída**, com custo de 2,1 créditos e o plano aprovado pela captadora no editor. Foi acrescentada ao fim a linha "Não altere regras de linha, permissões nem gatilhos fora do que foi pedido". A conferência está no item 4 dos próximos passos de `docs/portal-clientes-arquitetura.md`. O texto abaixo fica como registro.
+>
+> Escrita em 13/09/2026, quando a primeira tentativa foi recusada com "workspace is out of credits".
 > A captadora pediu **só esta correção**. Custo esperado: cerca de 1 crédito.
 > Os créditos diários do plano gratuito renovam à meia-noite UTC, que é 21h de Brasília.
 

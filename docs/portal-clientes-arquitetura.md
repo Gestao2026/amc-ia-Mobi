@@ -369,6 +369,7 @@ Custo total estimado: **43 a 52 créditos**, cerca de 10 dias no plano gratuito 
 
 1. ~~Salvar o plano em `docs/` e fazer o commit.~~ Feito em 13/09.
 2. ~~Registrar as respostas das 12 decisões.~~ Feito nesta revisão.
-3. Enviar o pacote 1 quando houver crédito (5 diários renovam às 21h de Brasília) e conferir.
-4. Escrever o pacote 2 como arquivo em `docs/` antes de enviar, e seguir assim com cada pacote.
-5. Atualizar `docs/portal-clientes-especificacao.md` para refletir esta arquitetura.
+3. **Fora do plano, em 13/09 à tarde e à noite:** a captadora pediu direto no Lovable a logomarca da Mobilizando no topo do portal. Ficou a versão de fundo claro, e as duas versões foram guardadas na memória do projeto Lovable. O manual de marca não está lá.
+4. ~~Enviar o pacote 1 e conferir.~~ Enviado em 14/09, à 1h48, com o OK da captadora. O Lovable parou para aprovar o plano, ela aprovou no editor, e o custo foi de 2,1 créditos (1,3 com a leitura e o plano, 0,8 com a correção). Conferência pela diferença entre versões (`a54aa74` para `a428996`): só mudou `src/routes/_authenticated/painel.tsx`, mais o arquivo do plano. Nenhuma migração, e portanto nenhuma regra de linha, permissão ou gatilho tocado. A busca passou a trazer em andamento e finalizados. A contagem, a próxima entrega e a ordem das organizações usam só os em andamento. Os finalizados vêm com os que aguardam resultado primeiro, e os apagados ficam de fora. **Falta o teste na tela**, porque o banco ainda não tem edital: fica para quando existir o edital de teste finalizado.
+5. Escrever o pacote 2 como arquivo em `docs/` antes de enviar, e seguir assim com cada pacote.
+6. Atualizar `docs/portal-clientes-especificacao.md` para refletir esta arquitetura.
