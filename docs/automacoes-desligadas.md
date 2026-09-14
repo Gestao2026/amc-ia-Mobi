@@ -66,11 +66,18 @@ por isso ficaram fora do levantamento de 01/09.
 |---|---|---|---|
 | Radar de Editais (PPL + Geral) | ligada | todo dia, 08h20 | `painel-geral` e `painel-ppl` |
 | Resumo matinal | ligada | segunda a sexta, 08h | `Resumo da manhã` |
-| Radar de Mercado e Patrocínio | religada por ela em 13/09, depois de suspensa pela plataforma em 12/09 por computador ausente | todo dia, 09h | `Radar de Mercado e Patrocínio` e dois PDFs na Área de Trabalho |
+| Radar de Mercado e Patrocínio | religada por ela em 13/09, depois de suspensa pela plataforma em 12/09 por computador ausente | todo dia, 09h | `Radar de Mercado e Patrocínio` e dois PDFs entregues na conversa da rotina (até 12/09 iam para a Área de Trabalho) |
 | Radar de Editais, cópia antiga | desligada | era 08h | os mesmos dois painéis |
 
-O Radar de Editais **move para a lixeira do Gmail os alertas que processou**. É a
-única escrita externa dessas rotinas. O Resumo matinal só lê. Religar o Radar de
+O Radar de Editais e o Radar de Mercado **movem para a lixeira do Gmail os alertas
+que processaram**, cada um só os do seu tema. São as únicas escritas externas dessas
+rotinas. O Resumo matinal só lê.
+
+Em 13/09/2026 ela decidiu que o Radar de Mercado não depende mais do computador:
+os PDFs passam a ser entregues na conversa da rotina. O texto novo está em
+`C:\Users\rosep\Downloads\Radar-Mercado-prompt-atualizado.txt` e ainda precisa ser
+colado por ela no aplicativo do claude.ai, junto com a retirada da pasta da Área de
+Trabalho e do vínculo com o computador. Religar o Radar de
 Mercado é decisão dela, e religado ele fica coberto pela mesma exceção. Não
 desligar, não pausar, não editar e não apagar nenhuma sem ela pedir.
 
