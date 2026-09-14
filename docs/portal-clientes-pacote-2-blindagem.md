@@ -2,7 +2,9 @@
 
 > **Situação em 14/09/2026, 2h10: enviado pela metade, nada aplicado.** Com o OK da captadora, o texto inteiro foi enviado. O Lovable fez só a leitura do código e das migrações, gastou 1,1 crédito e parou sem alterar nada, pedindo uma nova mensagem para continuar. A continuação (abaixo, em "Continuação a enviar") foi recusada por falta de crédito. Conferido por SELECT logo depois: banco igual ao retrato (77 permissões do `anon`, registro com CASCADE, `escopo_id` presente, 8 gatilhos).
 >
-> **Quando houver crédito:** enviar só a "Continuação a enviar", não o texto inteiro de novo. O Lovable guarda a conversa.
+> **Quando houver crédito:** enviar só a "Continuação a enviar", não o texto inteiro de novo. O Lovable guarda a conversa. Logo depois, e só depois, vai `docs/portal-clientes-nome-da-organizacao.md`.
+>
+> **Mudança no banco feita fora do Lovable, depois do retrato:** em 14/09, com o OK da captadora, o nome "INSTITUTO DE DESENVOLVIMENTO INTEGRAL KUYPER" foi trocado por "Instituto de Desenvolvimento Integral Kuyper" (UPDATE de uma linha em `organizacoes`). Nenhuma regra, permissão ou gatilho foi tocado.
 >
 > Escrito em 14/09/2026 e aprovado pela captadora na mesma madrugada.
 > Custo previsto: 2,5 a 3 créditos. O Lovable pode parar para pedir aprovação do plano ou da mudança no banco: a aprovação é no editor.
