@@ -1,5 +1,7 @@
 # Portal do Cliente Mobilizando. Nova arquitetura e plano de execução
 
+> **Desde 14/09/2026, este plano está abaixo de `docs/portal-clientes-mapa-operacional-v1.md`**, a fonte da verdade da operação do portal, que por sua vez está abaixo do documento "Como trabalhamos juntos". Revisão pendente: absorver o Farol, o modelo de etapa principal com entregas paralelas e o escopo novo aprovado (seção 19 do mapa), e refazer a conta de créditos.
+
 > **Revisão de 13/09/2026, com a captadora.** Entraram:
 > - as respostas das 12 decisões, com a decisão 2 trocada pela regra "nenhum prazo mascarado";
 > - os encerramentos, com desistência e prazo perdido;
