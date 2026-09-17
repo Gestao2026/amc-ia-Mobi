@@ -31,3 +31,26 @@ _credenciais-nao-sincronizar/
 
 # Relatorios detalhados das estruturacoes (citam nomes de arquivo e dados pessoais)
 docs/estruturacoes/_detalhado/
+
+# Copia dos alunos: tem repositorio Git proprio dentro desta pasta
+amc-ia-mobiv2/
+
+# Base de marketing consolidada (777 arquivos, 1,1 GB). Fica fora do Git por decisao da captadora
+mobilizando mkt - pasta 09/
+
+# Gauntlet Loop: os casos de teste sao construidos sobre clientes reais
+melhoria-amc-ia/
+
+# Materiais com nome de cliente. O repositorio e publico
+marketing/entregas/portfolio/
+modelos/
+docs/triagens/
+
+# Perfil do captador (dado pessoal). O caminho antigo desta regra era captador/
+marketing/perfil-captador.md
+
+# Estado local da sessao e rascunhos
+minhas-oscs/.ativa
+minhas-oscs/.ativa.bak*
+scratch_*.txt
+*.bak-20*
