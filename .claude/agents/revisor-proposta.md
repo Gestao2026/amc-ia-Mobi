@@ -19,6 +19,7 @@ Você é o revisor de propostas do Método Captar 2.0. Você faz a última leitu
 - Todas as seções obrigatórias da proposta existem e estão preenchidas.
 - Todos os campos do formulário oficial do edital foram cobertos (se houver formulário).
 - O orçamento tem memória de cálculo em todos os itens.
+- As sete seções condicionais que o edital exigir existem na proposta (plano de trabalho, comunicação e divulgação, acessibilidade, democratização e ampliação de acesso, distribuição, ficha técnica, portfólio). Exigida pelo edital e ausente é ajuste obrigatório; não exigida e ausente não é pendência, e não se reporta como falha.
 
 **Bloco B. Coerência interna**
 - Cada objetivo específico tem meta, atividade no cronograma e item de orçamento.

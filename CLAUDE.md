@@ -324,6 +324,8 @@ Os quatro tratam, em ordem, os quatro motivos recorrentes de reprovação: edita
 
 título, resumo executivo, justificativa, problema central, objetivo geral, objetivos específicos, público-alvo, metas, metodologia, cronograma, equipe, orçamento resumido, monitoramento e avaliação, resultados esperados, sustentabilidade, contrapartida, diferenciais competitivos, riscos e mitigação. Adaptar ao formulário oficial quando o edital fornecer um.
 
+**Sete peças condicionais**, que entram só quando o edital, o formulário ou um anexo as exige, sempre citando o item que as exige: plano de trabalho, plano de comunicação e divulgação, plano de acessibilidade, plano de democratização e ampliação de acesso, plano de distribuição, ficha técnica e portfólio dos profissionais. Em edital de cultura elas são frequentes e várias pontuam ou eliminam. Nenhuma entra por achismo: seção não pedida rouba espaço da que pontua. Detalhamento na skill `elaboracao-proposta`.
+
 ### Rubricas comuns de orçamento
 
 pessoal e encargos, serviços de terceiros (pessoa física e jurídica), material de consumo, material permanente e equipamento, diárias e passagens, despesas administrativas, contrapartida. Cada item com memória de cálculo e justificativa. Atenção a despesas vedadas pelo edital, teto por categoria e exigência de 3 cotações.
