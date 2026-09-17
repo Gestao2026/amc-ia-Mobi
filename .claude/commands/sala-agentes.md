@@ -8,7 +8,9 @@ Abre a Sala dos Agentes: um escritório em pixel art onde cada agente da captaç
 
 ## Como funciona
 
-O hook `agentes-status.py` (PostToolUse, já registrado no `settings.json`) grava o status do agente ativo em `.claude/agents-memory/agents-status.js` a cada ação. A página `sala-dos-agentes.html` (na raiz do projeto) lê esse arquivo a cada 2 segundos, move o boneco do agente responsável até a estação dele e mostra a atividade num balão. Funciona sem servidor, abrindo direto no navegador.
+> **A sala está parada desde 01/09/2026.** O gancho que a alimentava, `.claude/hooks/agentes-status.py`, foi retirado do `.claude/settings.json` quando a regra NADA RODA SOZINHO desligou todos os ganchos. O script continua no disco, intacto, mas **não está ativo**. A página abre e mostra o último estado gravado antes do desligamento; nenhum boneco se move. Reativar depende de a captadora pedir, com todas as letras.
+
+Quando estava ativo, o funcionamento era este: o gancho `agentes-status.py` (PostToolUse) gravava o status do agente em `.claude/agents-memory/agents-status.js` a cada ação, e a página `sala-dos-agentes.html` (na raiz do projeto) lia esse arquivo a cada 2 segundos, movia o boneco até a estação e mostrava a atividade num balão. Funcionava sem servidor, abrindo direto no navegador.
 
 ## Passos
 

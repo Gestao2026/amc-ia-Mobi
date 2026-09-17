@@ -12,11 +12,13 @@
 | Montar o Dossiê do Edital a partir da primeira leitura | 2 a 4 minutos |
 | Atualizar a base de editais | 3 a 6 minutos |
 
-## Projeto (os 4 agentes)
+## Projeto (os 5 agentes)
 
 | Operação | Tempo estimado |
 |---|---|
 | Parecer de elegibilidade (CaptaDoc) | cerca de 90 segundos |
+| Estratégia de entrada (CaptaEstrategista, 8 análises) | 3 a 6 minutos |
+| Estratégia de entrada, com busca externa de concorrência | 5 a 9 minutos |
 | Elaborar proposta completa (CaptaBuilder) | 4 a 8 minutos |
 | Montar orçamento técnico (CaptaBudget) | 2 a 4 minutos |
 | Avaliação e chance de aprovação (CaptaScore) | 2 a 3 minutos |

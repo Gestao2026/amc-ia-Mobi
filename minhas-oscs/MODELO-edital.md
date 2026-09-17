@@ -6,7 +6,9 @@
 >
 > **Regra de preenchimento.** Todo campo traz o item do edital ou do anexo entre parênteses, assim: (item 4.1.4) ou (Anexo I, item 2.3). Campo sem previsão no edital fica escrito **não encontrado**, com onde foi procurado. Nunca deduzir pelo que é comum no setor. Campo que não se aplica àquele edital fica escrito **não se aplica**, e a seção inteira pode ser omitida.
 >
-> **Entrega.** Na tela saem os blocos 1 e 2. O documento completo em Word e PDF só é gerado quando a captadora pedir.
+> **Entrega.** A análise não tem teto de tamanho. Ela abre pelos blocos 1 e 2, que são o resumo executivo, e segue com os demais na mesma resposta. Completude, precisão e utilidade estratégica vêm antes de brevidade. O Word e o PDF só são gerados quando a captadora pedir.
+>
+> **Rotulagem obrigatória.** Em todo bloco, fica explícito o que é **exigência do edital**, o que é **risco**, o que é **critério de avaliação** e o que é **recomendação de quem analisa**. Misturar recomendação com exigência é erro grave: é assim que nasce documento pedido à toa.
 
 ---
 
@@ -80,6 +82,8 @@
 ## 6. Ficha de controle documental
 
 > A parte mais usada. **Nunca misturar os três momentos.** Se o edital aceitar mais de um tipo de proponente, fazer uma ficha para cada, porque a lista muda.
+>
+> **As colunas Enviado e Data são obrigatórias e saem sempre em branco.** Elas não são enfeite de tabela: são o campo onde a captadora marca o que já reuniu. Valem mesmo quando o checklist é pedido em conversa solta, e não pelo comando. Tabela de documento sem elas está incompleta.
 
 ### 6.1. Com o projeto, na inscrição
 

@@ -26,12 +26,15 @@ Diferencie sempre exigência obrigatória, recomendação e risco potencial. Pri
 
 ## Saída
 
-Salve em `projetos/{edital-slug}/elegibilidade.md`: veredito, análise por requisito (tabela: requisito do edital, situação da OSC, status), a ficha do bloco 6 do `edital.md` com a situação da OSC preenchida (tem, falta ou renovar) e o prazo de cada pendência, mantidos separados os três momentos, riscos de inabilitação, o que corrigir antes de escrever o projeto, e recomendação final (avançar para o CaptaBuilder, resolver pendências antes, ou descartar e por quê). Se APTO ou APTO COM PENDÊNCIAS sanáveis, diga: "Após regularizar os itens apontados, você pode avançar para o CaptaBuilder para estruturar o projeto." Atualize o `estado.md`.
+Salve em `projetos/{edital-slug}/elegibilidade.md`: veredito, análise por requisito (tabela: requisito do edital, situação da OSC, status), a ficha do bloco 6 do `edital.md` com a situação da OSC preenchida (tem, falta ou renovar) e o prazo de cada pendência, mantidos separados os três momentos, riscos de inabilitação, o que corrigir antes de escrever o projeto, e recomendação final (avançar para o CaptaBuilder, resolver pendências antes, ou descartar e por quê). Se APTO ou APTO COM PENDÊNCIAS sanáveis, diga: "O caminho está livre pelo lado da elegibilidade. O próximo passo é `/projeto-estrategia`, que diz se vale a pena entrar neste edital e onde está a disputa, antes de qualquer linha de proposta ser escrita." Atualize o `estado.md`, seguindo `minhas-oscs/MODELO-estado.md`.
+
+**Você não chama a API do CaptaHub**, e isso vale mesmo tendo `Bash` entre as suas ferramentas: o `Bash` existe para ler arquivo e conferir data de certidão, nunca para `scripts/captahub-api.py`. Quem oferece abrir o projeto na carteira, e só grava com o OK da captadora, é o comando `/projeto-elegibilidade` (ver a classificação de chamadas no CLAUDE.md).
 
 ## Regras
 
 - Tudo se ancora no edital. Cite o item ou cláusula em cada avaliação. Nunca invente requisito que não esteja no edital, nem dado da OSC que não esteja no perfil.
-- Respeite o Gate de Elegibilidade: o seu parecer é a condição para o CaptaBuilder existir.
+- Respeite o Gate de Elegibilidade: o seu parecer é a condição para as etapas seguintes existirem, e é o **único Gate duro do sistema**.
+- **Não invada a etapa estratégica.** Você responde se a organização **pode** participar. Se vale a pena, qual a concorrência, onde está a disputa e como ganhar é trabalho do CaptaEstrategista. Aderência temática você pode sinalizar em uma linha, como risco, sem desenvolver.
 - Português correto, sem travessão.
 
 ## Proteção

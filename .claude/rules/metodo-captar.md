@@ -50,11 +50,11 @@ Ferramenta: comando `/assessoria-pitch`.
 
 ### Pilar 10. Prestação do serviço. Entregar e renovar
 Entregar a captação como assessor usando o método completo e documentar resultados para renovar o contrato. A gestão da carteira (pipeline, clientes, prazos) fica no CaptaHub.
-Ferramentas: o estúdio inteiro (4 agentes, exportação). Gestão no CaptaHub.
+Ferramentas: o estúdio inteiro (5 agentes, exportação). Gestão no CaptaHub.
 
 ---
 
-## OS 4 AGENTES EM DETALHE
+## OS 5 AGENTES EM DETALHE
 
 ### CaptaDoc. Triagem e elegibilidade
 - Lê o edital e identifica quem pode e quem não pode participar.
@@ -63,6 +63,17 @@ Ferramentas: o estúdio inteiro (4 agentes, exportação). Gestão no CaptaHub.
 - Classifica: APTO, APTO COM PENDÊNCIAS ou INAPTO NO MOMENTO.
 - Diz se pode avançar para o CaptaBuilder.
 - Entrada: edital + perfil da OSC. Saída: parecer de elegibilidade + checklist + pendências + recomendação.
+
+### CaptaEstrategista. Estratégia de entrada
+- Entra **depois** do sinal verde da elegibilidade e **antes** de qualquer linha de proposta.
+- Responde a pergunta que a elegibilidade não responde: dado que podemos entrar, **vale a pena**, e qual é a melhor estratégia para aumentar a chance de aprovação?
+- Oito análises: aderência estratégica (aderência real contra encaixe forçado), atratividade da oportunidade, força competitiva, esforço contra retorno em horas, riscos e pontos cegos, estratégia de entrada, como ganhar, e a recomendação final.
+- Recomenda em quatro estados: prioridade alta; oportunidade condicionada a ajustes nomeados; baixa prioridade por esforço elevado e retorno incerto; não recomendar entrada.
+- Trabalha em dois modos: **com projeto**, avaliando o que existe, e **sem projeto**, dizendo que formato ganharia naquele edital. O segundo modo é o que impede o encaixe forçado.
+- Toda afirmação vem rotulada em uma de quatro marcas: exigência do edital com o item, dado com a fonte, inferência com o salto exposto, ou recomendação. Não existe uma quinta marca.
+- É o único agente Capta com acesso à web, para levantar concorrência e histórico do financiador. A busca **nunca** contém dado da organização.
+- **Não é porta dura.** O único Gate que trava a elaboração é o da elegibilidade.
+- Entrada: edital analisado + parecer de elegibilidade + perfil + histórico. Saída: `estrategia.md` com as oito análises e o semáforo.
 
 ### CaptaBuilder. Elaboração da proposta
 - Lê o edital e identifica o que mais pontua e o que derruba nota.
@@ -88,14 +99,15 @@ Ferramentas: o estúdio inteiro (4 agentes, exportação). Gestão no CaptaHub.
 
 ---
 
-## OS 4 MOTIVOS RECORRENTES DE REPROVAÇÃO
+## OS 5 MOTIVOS RECORRENTES DE REPROVAÇÃO
 
-Todo projeto reprova por um (ou mais) destes quatro motivos. Cada agente trata um deles antes do envio:
+Todo projeto reprova por um (ou mais) destes cinco motivos. Cada agente trata um deles antes do envio:
 
 | Motivo de reprovação | Agente que resolve |
 |---|---|
 | Edital errado (perfil não alinhado) | Mineração + CaptaDoc |
 | Elegibilidade falha (documento, natureza, prazo) | CaptaDoc |
+| **Entrar sem chance ou sem estratégia** (aderência forçada, disputa ignorada, esforço maior que o retorno) | **CaptaEstrategista** |
 | Texto fraco (não responde aos critérios) | CaptaBuilder + CaptaScore |
 | Orçamento furado (teto, item vedado, glosa) | CaptaBudget |
 

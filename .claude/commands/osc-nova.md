@@ -40,13 +40,19 @@ Após o OK:
 3. Grave o slug em `minhas-oscs/.ativa`.
 4. Informe o caminho absoluto do `perfil-osc.md`.
 
-## Passo 3.1. Subir para o CaptaHub (sincronização automática)
+## Passo 3.1. Subir para o CaptaHub (classe B, oferece e espera o OK)
 
-Se o CaptaHub estiver conectado, suba a OSC para a carteira (sentido AMC IA para o CaptaHub, ver a regra de sincronização no CLAUDE.md):
-1. Cheque que ela ainda não existe na carteira (`python3 scripts/captahub-api.py clientes`, compare por nome) para não duplicar.
-2. Crie o cliente: `python3 scripts/captahub-api.py cliente-criar --nome "{nome}" --uf {uf} --municipio "{municipio}" --areas-tematicas "{areas}" ...` com os campos coletados (`status_documental` como JSON completo, se houver).
-3. Grave o `id` retornado no `perfil-osc.md` na linha `ID CaptaHub: {id}`.
-4. Confirme em uma linha: "Sincronizado com o CaptaHub: OSC criada na carteira." Se a API falhar, avise que a sincronização ficou pendente e siga.
+A finalidade deste comando é cadastrar a OSC **localmente** e torná-la ativa. Criar o cliente na carteira é um segundo efeito, e escrita em sistema externo não se desfaz daqui. Por isso a criação **não sai sozinha** (ver a classificação de chamadas no CLAUDE.md).
+
+Se o CaptaHub estiver conectado:
+
+1. **Cheque que ela ainda não existe na carteira** (`python3 scripts/captahub-api.py clientes`, compare por nome). **Esta leitura é classe A e roda sem perguntar**, porque é ela que impede duplicar o que a captadora mandou criar.
+2. **Ofereça em uma linha, dizendo o que a checagem encontrou**, e espere o OK. Se não existir lá: "A OSC ainda não está na carteira do CaptaHub. Quer que eu crie agora?" Se já existir: diga isso, não crie nada, e ofereça apenas gravar o id no perfil.
+3. **Com o OK**, crie o cliente: `python3 scripts/captahub-api.py cliente-criar --nome "{nome}" --uf {uf} --municipio "{municipio}" --areas-tematicas "{areas}" ...` com os campos coletados (`status_documental` como JSON completo, se houver).
+4. Grave o `id` retornado no `perfil-osc.md` na linha `ID CaptaHub: {id}`.
+5. Confirme em uma linha: "Sincronizado com o CaptaHub: OSC criada na carteira." Se a API falhar, avise que a sincronização ficou pendente e siga.
+
+**Sem o OK, não grave nada e siga normalmente.** O perfil local fica sinalizado como "fora do CaptaHub" até ela decidir subir, e `/captahub-sincronizar` resolve isso depois, a qualquer momento.
 
 ## Passo 4. Próximo passo
 

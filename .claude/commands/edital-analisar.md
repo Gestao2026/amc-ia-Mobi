@@ -44,7 +44,13 @@ Regras de preenchimento, todas do modelo:
 
 Crie ou atualize a pasta `minhas-oscs/{ativa}/projetos/{edital-slug}/` e salve `edital.md` com os 11 blocos. Crie também um `estado.md` marcando a etapa "edital analisado". Informe o caminho.
 
-**Na tela, mostre apenas os blocos 1 e 2**, o semáforo e a ficha do edital. É o que decide se vale a pena entrar. O resto fica no arquivo. Só gere Word e PDF se o captador pedir, com `/edital-dossie`.
+**A análise de edital não tem teto de tamanho.** Ela é documento técnico, e a profundidade acompanha a complexidade do edital.
+
+Abra pelo **semáforo e pela ficha**, que é o resumo executivo e serve para decidir em dez segundos se vale a pena entrar. **Isso não substitui nem limita a análise:** o restante dos blocos vem na sequência, na mesma resposta.
+
+A prioridade é **completude, precisão e utilidade estratégica**. Em tudo o que entregar, deixe rotulado o que é **exigência do edital**, o que é **risco**, o que é **critério de avaliação** e o que é **recomendação sua**, e diga como cada coisa impacta a elaboração de um projeto competitivo.
+
+Só gere Word e PDF se o captador pedir, com `/edital-dossie`.
 
 ## Passo 5. Próximo passo
 
