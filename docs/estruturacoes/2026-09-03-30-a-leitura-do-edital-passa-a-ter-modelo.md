@@ -96,6 +96,20 @@ Os arquivos gerados no teste (a pasta do edital da Embratur dentro de `minhas-os
 - Os casos R1, R2 e R4 da bateria ficaram com critério mais frouxo do que este modelo cobra. Precisam ser apertados antes do baseline.
 - O `edital.md` do FSA/BRDE, feito em 31/08 no formato antigo, não foi convertido para os 11 blocos.
 
+## 9.1. CORREÇÃO, na tarde do mesmo dia
+
+**A regra de mostrar "apenas os blocos 1 e 2 na tela", descrita no passo 2 acima, foi revogada pela captadora em 03/09/2026**, poucas horas depois de ser instalada.
+
+Ela leu 20 respostas sem etiqueta, num teste cego, e escolheu as mais longas em três de quatro casos. Palavras dela: *"editais são documentos técnicos e a profundidade deve ser proporcional à complexidade e à necessidade do edital. Pode haver um semáforo ou resumo executivo no início, mas isso não deve substituir nem limitar a análise completa."*
+
+O que vale agora:
+
+- **A análise de edital não tem teto de tamanho.** O semáforo abre, não limita.
+- **Prioridade: completude, precisão e utilidade estratégica**, antes de brevidade.
+- **Rotulagem obrigatória em quatro faixas:** exigência do edital, risco, critério de avaliação e recomendação de quem analisa. Misturar recomendação com exigência é erro grave.
+
+A origem do erro foi minha: deduzi que uma preferência dela sobre conversa curta valia também para análise técnica, e apertei o critério da bateria com base nessa dedução. Registro em `melhoria-amc-ia/AVALIACAO.md`, decisões 8 a 10, e na memória `analise-de-edital-nao-tem-teto`.
+
 ## 10. Regras que passam a valer
 
 - **Toda leitura de edital abre o `MODELO-edital.md` antes da primeira linha** e segue os 11 blocos na ordem.
