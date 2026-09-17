@@ -1,6 +1,8 @@
 # Alertas do Google. Nova lista (05/09/2026)
 
-Conta: editais.mobilizando@gmail.com. Substitui os 56 alertas excluídos em 04/09/2026.
+Conta: **editais.mobilizando@gmail.com**. Estes alertas de editais públicos **já estão cadastrados lá**, criados em 05/09/2026, e começaram a disparar no mesmo dia. Confirmado em 07/09/2026 pelos e-mails do Alerta do Google que chegaram nessa caixa em 05 e 06/09. Substitui os 56 alertas excluídos em 04/09/2026.
+
+> **Não recadastrar na gestao.mobilizando.** As duas listas ficam em contas diferentes: os editais públicos aqui, na editais.mobilizando; os 43 de estudo de mercado e patrocínio empresarial na gestao.mobilizando. Cadastrar de novo cria duplicata e dobra o e-mail diário.
 
 Regra da captadora: sem aspas, sem AND, sem inglês, sem acento. Só palavras soltas, sem acento. O Google trata "público" e "publico" como a mesma palavra, então tirar o acento não reduz nada e mantém o termo limpo. No Alerta do Google o AND vira uma palavra a mais que a página precisa conter, e as aspas obrigam a sequência exata; os dois reduzem o que chega.
 
@@ -82,3 +84,20 @@ edital Vitoria Espirito Santo projetos sociais
 - "Qualificação profissional" é o termo que os editais usam; "capacitação profissional" aparece mais em institutos privados. A lista tem um de cada.
 - Penas pecuniárias e prestação pecuniária são os editais das varas de execução penal do TJMG que repassam recursos a OSCs. É a porta mais direta para projetos com privados de liberdade em Minas.
 - Total: 43 alertas. Depois de 30 dias, excluir os que não dispararam nenhuma vez.
+
+## Conferência de 07/09/2026
+
+Oito destes alertas dispararam e-mail na editais.mobilizando em 05 e 06/09/2026, o que prova que a lista foi cadastrada lá:
+
+edital chamamento publico Minas Gerais assistencia social
+edital Minas Gerais cultura sociedade civil
+edital Minas Gerais meio ambiente sociedade civil
+edital chamamento publico organizacoes sociedade civil assistencia social
+edital cultura organizacoes sociedade civil fomento
+edital inclusao produtiva sociedade civil
+edital chamamento publico estado do Para sociedade civil
+edital Manaus projetos sociais
+
+Os outros 35 não puderam ser confirmados um a um: o e-mail só chega quando o alerta encontra resultado, e a conta editais.mobilizando não está aberta em nenhum navegador desta máquina. Para conferir a lista inteira, entrar nela em google.com/alerts.
+
+Os e-mails desses alertas estavam todos na Lixeira da editais.mobilizando, não lidos.

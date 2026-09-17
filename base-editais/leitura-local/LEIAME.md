@@ -19,7 +19,7 @@ Cada ficha tem uma seção **"O que checar na OSC para compatibilidade"**. É po
 2. **Território.** É o corte que mais elimina. Vários editais têm lista fechada de municípios: CBMM (Araxá), Essencis (7 cidades), Energisa (Anexo 1), EDP (Anexo I), Minasligas (14 municípios), Floresta Viva (C4 e C5 do Recaatingar), Rouanet nas Favelas (8 localidades), PNAB BH (Belo Horizonte), ISPN (MA, TO, MT), Banco do Nordeste (Nordeste, Norte do ES e Norte de MG).
 3. **Tempo de existência.** Impactarte e MDA exigem 3 anos; IBAMA exige 3 anos e 2 projetos concluídos; Floresta Viva e ISPN exigem 2 anos; PNAB bianual exige 5 anos.
 4. **Projeto já aprovado em lei de incentivo.** Metade dos editais privados só recebe projeto aprovado e com captação vigente. Sem PRONAC ativo ou equivalente, esses canais estão fechados.
-5. **Documentação e conformidade.** Certidões federais, FGTS, CEIS, CEPIM, CNEP, CADIN e ausência de agente público na diretoria aparecem como eliminatórios em Usiminas, Rumo, Banco do Nordeste e IBAMA.
+5. **Documentação e conformidade.** Certidões federais, FGTS, CEIS, CEPIM, CNEP e CADIN aparecem como eliminatórios em Usiminas, Rumo, Banco do Nordeste e IBAMA. Atenção à Usiminas: agente público na diretoria ou como pessoa de contato **não é corte automático**, é Sinal de Alerta que aciona o Departamento de Integridade e trava o processo até parecer favorável.
 
 ## Os cortes menos óbvios (que costumam derrubar boa proposta)
 
@@ -32,6 +32,7 @@ Cada ficha tem uma seção **"O que checar na OSC para compatibilidade"**. É po
 - **PNAB BH, linha continuada**, exclui iniciativa com vínculo com poder público, fundação, instituto de empresa ou Sistema S.
 - **MDA** exige três cláusulas específicas no estatuto (finalidade pública, destinação do patrimônio na dissolução e escrituração contábil) e habilitação prévia no Transferegov.
 - **Minasligas** veda pagamento de comissionamento de captação.
+- **Usiminas** veda pagamento de assessoria ou consultoria com o recurso, e exige cadastro prévio aprovado **antes** de a ação começar. Também impõe responsabilidade solidária ao dirigente que assina e devolução do valor corrigido mesmo em caso fortuito ou força maior.
 - **BRDE** exige pelo menos uma roteirista mulher cis ou trans no núcleo.
 
 ## Prazos mais próximos (a partir de 20/08/2026)

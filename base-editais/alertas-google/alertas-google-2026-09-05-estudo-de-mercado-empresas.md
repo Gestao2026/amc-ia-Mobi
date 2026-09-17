@@ -1,6 +1,6 @@
 # Alertas do Google. Estudo de mercado e patrocínio empresarial (05/09/2026)
 
-Conta: editais.mobilizando@gmail.com. Complementa a nova lista de 05/09/2026, que cobre os editais públicos por área e território. Esta lista cobre o lado que a outra não cobre: as empresas, as leis de incentivo e os recursos internacionais.
+Conta: gestao.mobilizando@gmail.com. **Cadastrados e conferidos em 05/09/2026**: os 43 alertas, os 35 fixos dos blocos 1 a 4 e os 8 do bloco 5 por empresa. Conferência item a item na página: todos com região Brasil, idioma português, uma vez por dia, fontes automáticas, somente os melhores resultados. Sem duplicata e sem sobra. Complementa a nova lista de 05/09/2026, que cobre os editais públicos por área e território. Esta lista cobre o lado que a outra não cobre: as empresas, as leis de incentivo e os recursos internacionais.
 
 ## De onde vem esta lista
 
@@ -96,5 +96,6 @@ MRV instituto edital projetos sociais
 - "Vale" sozinha traz o verbo valer. Por isso o alerta da Vale leva "Minas Gerais" junto.
 - ESG ficou de fora por ser sigla em inglês, seguindo a regra. Se quiser testar, o termo seria "ESG investimento social empresa projeto", e ele traz muita notícia de bolsa.
 - "Fundo da infância e adolescência" e "fundo do idoso" são as duas destinações de imposto de renda que qualquer empresa do lucro real pode fazer. São a porta de entrada mais fácil para projetos de assistência social, e as listas anteriores não as cobriam.
-- Total: 35 alertas fixos mais os de empresa-alvo. Depois de 30 dias, excluir os que não dispararam nenhuma vez.
+- Total: 43 alertas no ar (35 fixos e 8 por empresa). Depois de 30 dias, excluir os que não dispararam nenhuma vez.
+- Os 35 fixos foram criados a partir de google.com e os 8 por empresa a partir de google.com.br. A diferença é só o domínio de origem da busca; a região gravada é Brasil nos 43, e o resultado é o mesmo.
 - As transcrições dos dois áudios da pasta 14 - MÉTODO DEARO foram salvas ao lado dos arquivos de áudio, com o mesmo nome e o sufixo "transcricao".
