@@ -59,3 +59,9 @@ minhas-oscs/.ativa
 minhas-oscs/.ativa.bak*
 scratch_*.txt
 *.bak-20*
+
+# Entregas de marketing (material comercial, textos para cliente). Ficam fora do
+# Git por decisao da captadora em 18/09/2026: o repositorio e publico. So as
+# .gitkeep, que seguram a estrutura das pastas, sao versionadas
+marketing/entregas/*/*
+!marketing/entregas/*/.gitkeep
