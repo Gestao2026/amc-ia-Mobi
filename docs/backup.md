@@ -19,8 +19,10 @@ C:\Users\rosep\Backups\
 
 ## Como funciona
 
-A tarefa do Windows **"AMC IA - Backup diario para o Google Drive"** roda todo dia
-às **12h30** e executa `scripts/backup-diario.bat`.
+O backup roda **só quando a captadora manda**, executando `scripts/backup-diario.bat`
+(ver a regra NADA RODA SOZINHO, no `CLAUDE.md`). A tarefa do Windows **"AMC IA - Backup
+diario para o Google Drive"**, que rodava todo dia às 12h30, está **desabilitada**
+desde 01/09/2026 e não deve ser religada sem ela pedir.
 
 | O que é copiado | Para onde |
 |---|---|
