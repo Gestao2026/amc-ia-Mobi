@@ -29,6 +29,9 @@ A tarefa do Windows **"AMC IA - Backup diario para o Google Drive"** roda todo d
 | `base-editais/` | `C:\Users\rosep\Backups\amc-ia-mobi\base-editais\` |
 | `parcerias/` | `C:\Users\rosep\Backups\amc-ia-mobi\parcerias\` |
 | `docs/` | `C:\Users\rosep\Backups\amc-ia-mobi\docs\` |
+| `.claude/`, com a memória do Claude Code dentro | `C:\Users\rosep\Backups\amc-ia-mobi\.claude\` |
+| `scripts/` | `C:\Users\rosep\Backups\amc-ia-mobi\scripts\` |
+| arquivos soltos da raiz, menos o `.env` | `C:\Users\rosep\Backups\amc-ia-mobi\_raiz\` |
 | `Área de Trabalho\Credenciais AMC IA\` | `C:\Users\rosep\Backups\credenciais\` |
 
 ## As credenciais, e por que elas param no disco
@@ -50,14 +53,16 @@ a pasta como está, é um cofre de senhas ou um arquivo criptografado.
 ## A segunda camada, na nuvem
 
 O mesmo script mantém uma cópia de `minhas-oscs`, `marketing` e `base-editais` em
-`G:\Meu Drive\AMC-IA-Backup`. Só essas três. A pasta de credenciais fica de fora
-de propósito, conforme a seção acima.
+`G:\Meu Drive\AMC-IA-Backup`. Desde 17/09/2026, a mesma pasta recebe também
+`docs`, `parcerias`, `.claude` (com a memória do Claude Code dentro), `scripts`,
+os arquivos soltos da raiz (menos o `.env`) e o `historico-git.bundle`. A pasta
+de credenciais fica de fora de propósito, conforme a seção acima.
 
 O motivo: **um backup no mesmo disco do original não protege contra falha do
 disco.** Se o C: morrer, a cópia local morre junto. A camada na nuvem cobre isso.
 
-Para desligar, comentar as três últimas linhas de robocopy em
-`scripts/backup-diario.bat`.
+Para desligar, comentar as linhas de robocopy com destino `G:\Meu Drive\AMC-IA-Backup`
+em `scripts/backup-diario.bat`.
 
 ## A regra mais importante
 
@@ -68,10 +73,36 @@ exclusões apaga junto com o erro.
 A contrapartida é que arquivos apagados de propósito continuam ocupando espaço.
 Com 262 GB livres e 1,56 GB de uso, isso não é problema por muitos anos.
 
+## A memória do Claude Code mora dentro do projeto
+
+Desde 17/09/2026, a pedido da captadora. O aplicativo guarda a memória deste
+projeto em `C:\Users\rosep\.claude\projects\C--amc-ia-Mobi\memory`, caminho
+que ele mesmo define e que nenhuma configuração muda. Esse caminho ficava fora
+de todo backup: se o disco falhasse, as memórias se perdiam.
+
+Os arquivos foram **movidos** para `C:\amc-ia-Mobi\.claude\memoria`, conferidos
+por hash (80 de 80 idênticos), e o caminho antigo virou uma **junção** que aponta
+para lá. É um arquivo só, visto de duas portas: o aplicativo continua gravando
+pelo caminho de sempre e o conteúdo cai dentro do projeto. Como o `.claude/` está
+no backup, a memória entra junto.
+
+Cuidados:
+
+- **`.claude/memoria/` está no `.gitignore` e nunca pode sair de lá.** As memórias
+  citam cliente, CNPJ e onde ficam as senhas, e o repositório é público.
+- **Nunca rodar `git clean -fdx`** nesta pasta: ele apaga arquivo ignorado, e a
+  memória é arquivo ignorado.
+- O backup da memória vai **para o disco local e para o Google Drive**, por decisão
+  da captadora em 17/09/2026. Na nuvem ela fica em `G:\Meu Drive\AMC-IA-Backup\.claude\memoria`,
+  com o mesmo cuidado de `minhas-oscs`: pasta privada, nunca compartilhada por link.
+- Se `C:\amc-ia-Mobi` mudar de lugar, a junção quebra. Para refazer, no PowerShell:
+  `New-Item -ItemType Junction -Path "C:\Users\rosep\.claude\projects\C--amc-ia-Mobi\memory" -Target "C:\amc-ia-Mobi\.claude\memoria"`
+- Para desfazer: apagar só a junção (não o conteúdo) e mover os arquivos de volta.
+
 ## O que NÃO é copiado, e por quê
 
 - **O arquivo `.env`**, que guarda o token do CaptaHub. Segredo não vai para backup. Ao restaurar em outra máquina, reconectar com `/captahub-conectar`.
-- **O código do sistema** (instruções, comandos, scripts), que já está no GitHub.
+- **O código do sistema** até 17/09/2026. Desde então `.claude/`, `scripts/` e os arquivos da raiz entram no backup, no disco e na nuvem, porque o GitHub guarda o que foi publicado e não o que está só no disco.
 - **Para a nuvem**, nada da pasta de credenciais. Ver a seção sobre credenciais.
 
 > A pasta `_credenciais-nao-sincronizar/` deixou de existir em 21/08/2026. Todo o

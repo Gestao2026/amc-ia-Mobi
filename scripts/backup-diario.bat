@@ -24,6 +24,28 @@ robocopy "C:\amc-ia-Mobi\base-editais" "%BASE%\amc-ia-mobi\base-editais" /E /R:1
 robocopy "C:\amc-ia-Mobi\parcerias"    "%BASE%\amc-ia-mobi\parcerias"    /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\docs"         "%BASE%\amc-ia-mobi\docs"         /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 
+rem     AMPLIADO em 17/09/2026, a pedido da captadora. Ate aqui o backup copiava
+rem     so as cinco pastas acima e deixava de fora o cerebro do sistema: as
+rem     regras, os cinco agentes e os comandos. Se o disco falhasse, era isso
+rem     que se perdia. O .env NUNCA entra (/XF .env).
+robocopy "C:\amc-ia-Mobi\.claude" "%BASE%\amc-ia-mobi\.claude" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi\scripts" "%BASE%\amc-ia-mobi\scripts" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+rem     Sem /E de proposito: copia so os arquivos soltos da raiz (CLAUDE.md,
+rem     README.md, COMO-USAR.md, .gitignore, .env.example), nenhuma subpasta.
+robocopy "C:\amc-ia-Mobi" "%BASE%\amc-ia-mobi\_raiz" /XF .env /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+
+rem --- 1b. Historico do Git (a memoria do porque cada regra existe) ------------
+rem     Um arquivo unico com todos os commits e todas as branches. E melhor do
+rem     que copiar a pasta .git inteira, que sao milhares de arquivinhos que o
+rem     Google Drive sincroniza mal.
+rem     Para restaurar: git clone historico-git.bundle pasta-nova
+where git >nul 2>&1
+if %errorlevel%==0 (
+  git -C "C:\amc-ia-Mobi" bundle create "%BASE%\amc-ia-mobi\historico-git.bundle" --all >> "%LOG%" 2>&1
+) else (
+  echo Git nao encontrado no PATH, o historico nao foi empacotado >> "%LOG%"
+)
+
 rem --- 2. Pasta _82 (Drive do mentor -> disco local) --------------------------
 rem     Sentido inverso do backup acima. A origem e a nuvem, o destino e o disco.
 rem     Protege contra o dono revogar o acesso ou apagar algo. A captadora e
@@ -83,6 +105,14 @@ rem     As credenciais do bloco 3 NAO entram aqui, de proposito.
 robocopy "C:\amc-ia-Mobi\minhas-oscs"  "G:\Meu Drive\AMC-IA-Backup\minhas-oscs"  /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\marketing"    "G:\Meu Drive\AMC-IA-Backup\marketing"    /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\base-editais" "G:\Meu Drive\AMC-IA-Backup\base-editais" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi\docs" "G:\Meu Drive\AMC-IA-Backup\docs" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi\parcerias" "G:\Meu Drive\AMC-IA-Backup\parcerias" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+rem     AMPLIADO em 17/09/2026: a nuvem passa a receber tambem o cerebro do
+rem     sistema e o historico, na mesma pasta AMC-IA-Backup. O .env fica fora.
+robocopy "C:\amc-ia-Mobi\.claude" "G:\Meu Drive\AMC-IA-Backup\.claude" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi\scripts" "G:\Meu Drive\AMC-IA-Backup\scripts" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi" "G:\Meu Drive\AMC-IA-Backup\_raiz" /XF .env /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "%BASE%\amc-ia-mobi" "G:\Meu Drive\AMC-IA-Backup" historico-git.bundle /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 
 rem     Segunda camada do backup da Area de Trabalho da _82. Incluida em
 rem     28/08/2026, a pedido da captadora (pendencia 7). A origem AQUI e o

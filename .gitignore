@@ -17,6 +17,11 @@ captador/entregas/
 .claude/agents-memory/*.md
 !.claude/agents-memory/README.md
 
+# Memória do Claude Code deste projeto. Mora aqui por junção desde 17/09/2026
+# (o caminho do aplicativo aponta para esta pasta). Cita cliente, CNPJ e onde
+# ficam as senhas: nunca versionar, o repositório é público
+.claude/memoria/
+
 # Painel: pipelines gerados por OSC (a Sala dos Agentes e o status inicial sao versionados)
 painel/pipeline-*.html
 
