@@ -43,6 +43,10 @@ amc-ia-mobiv2/
 # Base de marketing consolidada (777 arquivos, 1,1 GB). Fica fora do Git por decisao da captadora
 mobilizando mkt - pasta 09/
 
+# Portal do Cliente: pasta unica compartilhada com o Projeto do claude.ai. Fica fora
+# do Git por decisao da captadora em 19/09/2026 (trata de clientes, contas e banco)
+portal do cliente - pasta 10/
+
 # Gauntlet Loop: os casos de teste sao construidos sobre clientes reais
 melhoria-amc-ia/
 

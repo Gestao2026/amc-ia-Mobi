@@ -39,6 +39,8 @@ TODO texto gerado neste projeto deve estar em português brasileiro com acentua�
 
 **Exceção única:** nomes de arquivo, variáveis de código, slugs de URL, chaves JSON e identificadores internos permanecem em ASCII sem acento (ex: `minhas-oscs`, `perfil-osc.md`, `projeto-elegibilidade`).
 
+**Exceção aberta pela captadora em 18/09/2026, só para o texto queimado na tela dos reels.** O gancho que aparece escrito dentro do vídeo segue o método de reels da Mentoria AMC e vai **sem acento de propósito** (só "é" fica), para não parecer anúncio. Vale apenas para esse texto na tela. A legenda do reel, o roteiro, os documentos e todo o resto continuam com acentuação completa. Referência: `mobilizando mkt - pasta 09/02_CONTEUDO_REF_Metodo_Reels_do_Captador_Mentoria_AMC.md`.
+
 **Palavras que JAMAIS podem aparecer sem acento em texto corrido:**
 não, são, você, está, já, também, três, público, lógico, estratégia, dúvida, introdução, conclusão, método, prática, análise, específico, básico, único, número, código, página, área, história, técnica, próximo, último, crítico, fácil, difícil, possível, impossível, órgão, critério, elegível, inelegível, contrapartida, execução, prestação, avaliação, submissão, proposta, orçamento, rubrica, repasse, convênio, parceria, contemplação, recurso.
 
@@ -364,6 +366,71 @@ Três razões, e a primeira é a que manda:
 **Padrão de nome, em ASCII sem acento:** `AAAA-MM-DD-{cliente-ou-tema}-varredura-web.md`. Quando a entrega for um quadro de vários clientes, `AAAA-MM-DD-quadro-de-editais.docx`.
 
 O arquivo de mineração de cada cliente continua em `minhas-oscs/{slug}/`, e **aponta para o arquivo em `_transversal/`** em vez de guardar uma cópia.
+
+---
+
+## REGISTRO AUTOMÁTICO EM PASTAS E MEMÓRIA (REGRA GLOBAL)
+
+> Decisão da captadora em 18/09/2026: "tudo que façamos aqui salve automaticamente nessas pastas". Vale para toda conversa, sem ela precisar pedir.
+
+**Todo trabalho feito numa conversa termina registrado no lugar certo, na mesma conversa, sem esperar pedido.** Resultado aprovado, decisão tomada e aprendizado não podem existir só no histórico da conversa, porque a conversa seguinte não o enxerga.
+
+### As três camadas, e o que vai em cada uma
+
+| Camada | Onde | O que entra |
+|---|---|---|
+| **Contexto da frente** | o `00_INDICE` (ou o `perfil-osc.md`) dentro da pasta da frente | Decisão, estado atual, inventário e pendências daquele assunto. É a camada que o chat do claude.ai também lê |
+| **Memória** | `.claude/memoria/` (junção com a memória do Claude Code), índice `MEMORY.md` em seções por assunto | Regra de trabalho, preferência dela, armadilha técnica, fato que vale para várias frentes. Uma anotação por fato, na seção certa do índice |
+| **Regras do sistema** | este `CLAUDE.md` e `.claude/rules/` | Só regra permanente, e só quando ela decide |
+
+### As frentes e seus arquivos de contexto
+
+| Frente | Pasta | Arquivo de contexto |
+|---|---|---|
+| Marketing e posicionamento | `mobilizando mkt - pasta 09/` | `00_INDICE_Estrutura_do_Projeto.md` |
+| Editais | `minhas-oscs/_transversal/` | `00_INDICE_Editais.md` |
+| Automações, rotinas e conectores | `docs/` | `00_INDICE_Automacoes.md` (repositório público: sem e-mail, endereço de página nem token) |
+| Portal do Cliente | `portal do cliente - pasta 10/` (fora do Git desde 19/09/2026) | `00_INDICE_Portal.md` |
+| Cada cliente | `minhas-oscs/{slug}/` | `perfil-osc.md` e, por projeto, `estado.md` |
+
+### Como aplicar
+
+1. **Ao terminar cada entrega ou decisão**, antes de responder que acabou: salvar o arquivo na pasta da frente, com o padrão de nome dela; registrar a decisão na tabela de Decisões do `00_INDICE` da frente, com data; e, se for aprendizado geral, gravar ou atualizar a anotação da memória e a linha dela na seção certa do `MEMORY.md`.
+2. **Dizer em uma linha onde gravou.** Ex.: "Registrado: decisão no 00_INDICE do Marketing e anotação na memória, seção Editais".
+3. **Rascunho não aprovado não entra como versão vigente.** Fica marcado como rascunho ou espera o "aprovado" dela.
+4. **Assunto sem frente definida:** perguntar em uma linha onde guardar, ou propor a frente nova com o seu `00_INDICE`.
+5. **Ler antes de escrever.** Antes de gravar num `00_INDICE`, reler o arquivo: o chat do claude.ai também o edita, e uma versão não pode apagar a outra.
+6. Quando ela disser "anota isso", aplicar na hora, pelo mesmo critério.
+
+### Marketing: convivência com o chat do claude.ai (decisão de 18/09/2026)
+
+O chat do projeto "Mobilizando, Marketing & Posicionamento" e o Claude Code trabalham na mesma pasta 09 e no mesmo `00_INDICE`. A mesma regra está escrita nas Instruções do projeto e na seção 3 do índice. **Ela nunca precisa pedir para ler nem para atualizar: é obrigação de quem vai trabalhar.**
+
+> **PRINCÍPIO GERAL (decisão da captadora em 18/09/2026): conversa e memória são o rascunho de cada lado; a pasta 09 é o que os dois compartilham.**
+>
+> - **Antes de propor mudança ou alteração**, ler e analisar a pasta 09 (índice, decisões e documentos do assunto).
+> - **Toda mudança feita é gravada na pasta 09, da forma combinada** (arquivo vivo, linha no Histórico, decisão na seção 6), para que o outro lado continue tendo acesso.
+> - **Nada fora do contexto ou do combinado.** Não propor nem executar o que ela não pediu. Se o pedido contrariar uma decisão registrada no índice, apontar a decisão e esperar o OK dela antes de agir.
+> - **O que ficou só na conversa ou na memória não vale como combinado** até estar gravado na pasta 09.
+
+1. **Antes de propor, responder ou produzir qualquer coisa de marketing, conteúdo, comercial ou posicionamento**, sem esperar pedido: ler o `mobilizando mkt - pasta 09/00_INDICE_Estrutura_do_Projeto.md` inteiro, listar a raiz e as pastas `02_CONTEUDO_`, e abrir os documentos do assunto em questão. Nunca partir da memória da conversa nem de cópia antiga.
+2. **Não refazer o que já existe.** Se a pasta ou o índice já têm a pauta, o texto ou a decisão, partir dele e dizer em uma linha qual arquivo foi usado.
+3. **Arquivo vivo (decisão dela de 18/09/2026: "não quero o monte de versões").** Documento de trabalho não tem número de versão: cada mudança atualiza o mesmo arquivo e ganha **uma linha** no Histórico do próprio documento (data, o que mudou, "(Claude Code)"). O índice tem um único PDF com o mesmo nome, refeito por cima. Número de versão e `_HISTORICO` só para material que sai para fora (portfólio, carteira, proposta).
+4. **Ao terminar:** gravar na pasta 09 com o padrão de nome e registrar a decisão na seção 6 do índice.
+5. **A pasta 09 é a fonte da verdade.** Não existe cópia dentro do projeto do claude.ai desde 18/09/2026. Em divergência com a memória, vale a pasta 09.
+
+### Portal do Cliente: convivência com o chat do claude.ai (decisão de 19/09/2026)
+
+O chat do projeto "Portal do Cliente" e o Claude Code trabalham na mesma pasta, `portal do cliente - pasta 10/`, e no mesmo `00_INDICE_Portal.md`. **É a mesma regra do Marketing, com o mesmo princípio geral**, trocando a pasta 09 pela pasta 10. Está escrita também nas Instruções do projeto e na seção 3 do índice. Ela nunca precisa pedir para ler nem para atualizar.
+
+1. **Antes de propor, responder ou produzir qualquer coisa do Portal**, sem esperar pedido: ler o `00_INDICE_Portal.md` inteiro, listar a pasta 10 e abrir o Mapa Operacional (decisões e seção 22 de pendências) e os documentos do assunto. Nunca partir da memória da conversa, de `docs/` nem da cópia antiga da Área de Trabalho.
+2. **Hierarquia:** Como trabalhamos juntos > Mapa Operacional > Arquitetura > documentos dos pacotes.
+3. **Arquivo vivo**, como no Marketing. Decisão de produto vai para o Mapa, com o próximo número; decisão de organização vai para a seção 6 do índice.
+4. **Arquivo novo:** `portal-clientes-{assunto}.md`; script de banco em `portal-clientes-sql-direto/AAAA-MM-DD-{assunto}.sql`.
+5. **Quem publica é ela.** O chat e o Claude Code escrevem a mensagem ao Lovable e o script de banco; mandar ao Lovable, rodar SQL no banco e publicar continua sendo dela.
+6. **A pasta 10 é a fonte da verdade** e fica fora do Git. Os `docs/portal-clientes-*` saíram do repositório em 19/09/2026; texto antigo que cita esse caminho se refere à pasta 10.
+
+**Isto não é automação de fundo** e não fere NADA RODA SOZINHO: é escrita no disco local, feita dentro do trabalho que ela pediu, na mesma conversa. Não existe gancho, horário nem gatilho. Não vale para sistema externo: gravar no CaptaHub, no Drive da `_82`, no Canva ou no Metricool continua pedindo o OK dela, conforme as regras próprias.
 
 ---
 
