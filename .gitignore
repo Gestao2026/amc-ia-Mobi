@@ -3,6 +3,7 @@
 
 # Dados das OSCs (cada captador gera os seus)
 minhas-oscs/*/
+minhas-oscs/.ativa
 !minhas-oscs/MODELO-perfil-osc.md
 # OSC de exemplo (fictícia, versionada como demonstração)
 !minhas-oscs/exemplo-instituto-semente/
