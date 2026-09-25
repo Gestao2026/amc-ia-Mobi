@@ -1,7 +1,7 @@
 {
   "fonte": "Leitura integral dos arquivos da pasta local 02 - Editais Abertos (Desktop do captador). Nao vem do CaptaHub.",
   "data_leitura": "2026-08-20",
-  "total": 36,
+  "total": 37,
   "campos": [
     "slug",
     "nome",
@@ -631,6 +631,23 @@
       "leis_aceitas": ["PNAB, Lei 14.399/2022"],
       "areas": ["circulacao", "difusao", "criacao e producao", "formacao", "memoria e preservacao", "acoes continuadas"],
       "ficha": "fichas/pnab-ciclo-2-bh-fomento-04-2026.md"
+    },
+    {
+      "slug": "sceic-fsa-10-2026-longa-coproducao",
+      "nome": "Edital SCEIC FSA 10/2026. Producao de Longa-Metragem e Coproducao Internacional",
+      "financiador": "Fundo Setorial do Audiovisual, SCEIC-SP, ANCINE e BRDE",
+      "tipo": "chamamento publico, investimento retornavel",
+      "categoria": "fundo publico setorial",
+      "escopo": "Estadual",
+      "uf_ou_territorio": "SP",
+      "prazo": "15/09/2026 a 03/11/2026",
+      "valor_teto": 4000000,
+      "natureza_juridica_aceita": ["produtora brasileira independente registrada na ANCINE, com matriz e administracao em SP"],
+      "tempo_minimo_existencia": "2 anos de matriz e administracao em SP",
+      "exige_projeto_aprovado_em_lei": "nao",
+      "leis_aceitas": [],
+      "areas": ["audiovisual"],
+      "ficha": "fichas/sceic-fsa-10-2026-longa-coproducao.md"
     }
   ]
 }

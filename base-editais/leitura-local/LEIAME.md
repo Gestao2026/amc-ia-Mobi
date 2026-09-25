@@ -4,6 +4,8 @@
 
 Esta pasta NÃO substitui o cache do CaptaHub (`base-editais/editais-abertos.json`). É a leitura da carteira local de editais que o captador já garimpou, organizada para permitir, na etapa seguinte, o cruzamento com o perfil de cada OSC.
 
+> Acréscimo em 25/09/2026: Edital SCEIC FSA nº 10/2026 (longa-metragem e coprodução internacional, SP), lido a partir do PDF enviado pela captadora. O índice passa a ter 37 editais.
+
 ## Arquivos
 
 | Arquivo | Uso |
