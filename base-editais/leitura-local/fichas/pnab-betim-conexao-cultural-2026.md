@@ -110,6 +110,13 @@ Regras: nota zero em qualquer critério obrigatório desclassifica. Nota final m
 
 Divergência: o desempate cita "culturas urbanas" (critério de relevância para as culturas urbanas e tempo de atuação nas culturas urbanas), termo que não existe neste edital. Parece resto de outro edital. Confirmar com a Secretaria.
 
+## Anexos 2, 3, 3.1 e 7. Campos dos formulários (lidos em 25/09/2026)
+
+- **Anexo 2 (Formulário de Inscrição):** dados da pessoa física proponente; nome do grupo, número de integrantes e anos de atuação do grupo no segmento; comunidade tradicional; gênero; orientação sexual; raça, cor ou etnia; deficiência; escolaridade; renda; anos de experiência; se acessou Noemi Gontijo, PNAB ou Lei Paulo Gustavo nos últimos 5 anos; cotas; nome e valor do projeto; nº de pessoas remuneradas; principal etapa do ciclo cultural (uma); principal pauta temática (uma); consentimento LGPD; assinatura. Raça e gênero são perguntados **da proponente**, o que reforça que a pontuação complementar é da pessoa representante.
+- **Anexo 3 (Plano de Trabalho):** 1 mini currículo do grupo; 2 resumo; 3 objetivos; 4 metas; 5 perfil do público; 6 acessibilidade (caixas arquitetônica, comunicacional e atitudinal); 7 como a acessibilidade será implementada; 8 estratégia de divulgação; 9 equipe (nome, função, CPF/CNPJ, mini currículo); 10 cronograma (atividade, etapa, descrição, início, fim); 11 outras fontes de recurso; 12 documentos complementares; nome e assinatura. **Não há campo próprio para locais**: entram no resumo, nas metas e no cronograma.
+- **Anexo 3.1 (Planilha Orçamentária):** colunas descrição, justificativa, unidade, valor unitário, quantidade, valor total (fórmula) e referência de preço (opcional). 21 linhas e **nenhuma linha de total** no modelo.
+- **Anexo 7 (Declaração de Representação):** nome do grupo, nome da proponente e 5 linhas de integrante (nome, CPF, assinatura), local e data. O modelo é **exclusivo para grupo ou coletivo**: resolve a dúvida do item 4.1 h, pessoa física individual não entrega.
+
 ## Prazos de recurso
 
 - Seleção: 3 dias úteis após a publicação do resultado preliminar, pelo Anexo 11, presencial na Secretaria.
@@ -121,7 +128,7 @@ Divergência: o desempate cita "culturas urbanas" (critério de relevância para
 
 1. **Arquivo é uma minuta.** O nome do arquivo diz "minuta ... v2 final". Confirmar no Órgão Oficial do Município se esta é a versão publicada.
 2. **Anexos ausentes.** Os anexos 1 (segmentos, vagas e cota PcD), 2, 3, 3.1, 4 (critérios e pesos) e 7 a 13 não vieram no arquivo. Sem o Anexo 4 não é possível avaliar a nota nem os pesos das pontuações complementares. Baixar no site da Prefeitura ou pedir por e-mail.
-3. **Declaração de Representação (Anexo 7) para pessoa física individual.** O item 2.5 a vincula só a grupo ou coletivo, mas o item 4.1 h a lista sem condição, e o 4.4 desclassifica por falta de qualquer documento. Confirmar com a Secretaria; na dúvida, verificar se o modelo do Anexo 7 admite uso individual.
+3. **[RESOLVIDO pelo modelo do Anexo 7: só grupo ou coletivo entrega.] Declaração de Representação (Anexo 7) para pessoa física individual.** O item 2.5 a vincula só a grupo ou coletivo, mas o item 4.1 h a lista sem condição, e o 4.4 desclassifica por falta de qualquer documento. Confirmar com a Secretaria; na dúvida, verificar se o modelo do Anexo 7 admite uso individual.
 4. **Etiqueta do envelope (Anexo 13).** Consta na lista de anexos, mas não na lista de documentos do item 4.1. Como a entrega exige envelope "devidamente identificado", usar a etiqueta.
 5. **Numeração pulada.** O item 4.1 passa de "d" para "f"; não há item "e". Pode ter sido suprimido um documento. Confirmar na versão publicada.
 6. **Data de publicação não consta.** Os prazos de 1 ano de residência e 2 anos de atuação contam da data de publicação, que o texto não informa. Localizar no Órgão Oficial.
