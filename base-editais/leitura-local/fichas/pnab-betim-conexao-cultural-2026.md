@@ -1,6 +1,6 @@
 # Betim. Edital de Chamamento Público nº 8/2026. Conexão Cultural (PNAB)
 
-> Leitura feita em 25/09/2026 sobre o arquivo `minuta_Betim_conexão_cultural_v2_final.pdf` (13 páginas), enviado pela captadora. Análise do edital isolado, **sem cruzamento com nenhuma OSC**. Os anexos (1 a 13) não vieram junto com o arquivo.
+> Leitura feita em 25/09/2026 sobre o arquivo `minuta_Betim_conexão_cultural_v2_final.pdf` (13 páginas), enviado pela captadora. Análise do edital isolado, **sem cruzamento com nenhuma OSC**. Os anexos 1 e 4 foram recebidos e lidos depois; os demais não vieram junto com o arquivo.
 
 | Campo | Conteúdo |
 |---|---|
@@ -87,6 +87,28 @@ Entrega presencial na Secretaria Municipal de Cultura, Rua Pará de Minas, 640, 
 - Cota para PcD sobre o total de vagas (quantidade no Anexo 1). Cotista concorre também na ampla concorrência; vaga PcD não preenchida volta para a ampla concorrência.
 - Pontuação complementar: mulher, LGBTQIAPN+, pessoa negra, indígena e povos de terreiro (este último no segmento próprio). Os pesos estão no Anexo 4.
 - Orçamento pode ser **glosado** pela comissão (item incompatível com o mercado ou incoerente com o projeto). Cabe recurso.
+
+## Anexo 1. Segmentos e vagas (lido em 25/09/2026)
+
+Segmentos: Artes Cênicas, Artes Circenses, Artes Visuais, Artesanato, Audiovisual, Capoeira, Cultura Popular, Dança, Estudos Pesquisas e Cursos, Festivais, Fotografia, Livro Leitura e Literatura, Memória Museus e Patrimônio, Música, Povos e Comunidades de Terreiro/Matriz Africana, Povos e Comunidades Tradicionais.
+
+Vagas: 30 de ampla concorrência e 2 de cota PcD, total de 32. O Anexo 1 diz "até R$ 30.000,00" por projeto; o corpo do edital diz que cada projeto "receberá" R$ 30.000,00.
+
+## Anexo 4. Critérios de seleção (lido em 25/09/2026)
+
+| Critério | O que avalia | Máximo |
+|---|---|---|
+| A | Tempo comprovado de atuação no segmento, em Betim: 2 a 4 anos = 5; 5 a 7 anos = 10; 8 anos ou mais = 15 | 15 |
+| B | Relevância para o segmento e para Betim: fortalecimento, valorização e **difusão**, identidades, territórios e comunidades | 20 |
+| C | Qualidade: clareza e coerência entre objetivos, justificativa, metodologia, etapas e resultados | 15 |
+| D | Portfólio e experiência do proponente ou do grupo no segmento | 20 |
+| E | Viabilidade: cronograma, orçamento e capacidade de realização | 10 |
+| | **Total obrigatório** | **80** |
+| Complementar | Pessoa negra 4, mulher 4, LGBTQIAPN+ 4, indígena 4, terreiro/matriz africana 4 (só no segmento próprio), cumulativos | 20 |
+
+Regras: nota zero em qualquer critério obrigatório desclassifica. Nota final mínima de 50 pontos para ser apto. Nota final é a média das notas dos membros da comissão.
+
+Divergência: o desempate cita "culturas urbanas" (critério de relevância para as culturas urbanas e tempo de atuação nas culturas urbanas), termo que não existe neste edital. Parece resto de outro edital. Confirmar com a Secretaria.
 
 ## Prazos de recurso
 
