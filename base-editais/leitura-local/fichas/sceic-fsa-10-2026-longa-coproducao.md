@@ -194,4 +194,15 @@ Este edital não atende OSC como associação ou fundação. Só serve para prod
 ## Arquivos deste edital (nesta pasta)
 - `sceic-fsa-10-2026-longa-coproducao-edital.pdf`: edital original, sem os anexos.
 - `sceic-fsa-10-2026-longa-coproducao-checklist.pdf`: checklist resumido.
-- `sceic-fsa-10-2026-longa-coproducao-dossie.docx` e `.pdf`: Dossiê do Edital, versão 1 (25/09/2026), feita sem os Anexos I a IX. Atualizar quando os anexos chegarem.
+- `sceic-fsa-10-2026-longa-coproducao-anexo-I.pdf`, `-anexo-II.pdf` e `-anexo-V.pdf`: anexos recebidos em 25/09/2026.
+- `sceic-fsa-10-2026-longa-coproducao-dossie.docx` e `.pdf`: Dossiê do Edital, versão 2 (25/09/2026), com os Anexos I, II e V. Faltam os Anexos III, IV, VI, VII, VIII e IX.
+
+## O que os Anexos I, II e V acrescentam
+- **Aprovação na ANCINE:** para contratar, o projeto precisa estar aprovado para captação. Se não estiver, a produtora tem 30 dias corridos depois do resultado final para pedir (Anexo V, 5.1 e 5.3). Os procedimentos de contratação têm 120 dias corridos, sem prorrogação (5.4).
+- **Parceiro de mercado obrigatório:** filme para cinema precisa de distribuidora registrada na ANCINE, com contrato de distribuição, ou declaração de distribuição própria. Obra para TV ou streaming precisa de contrato de licenciamento com canal de TV, com licença mínima de 15% dos itens financiáveis e de pelo menos R$ 15.000,00 (Anexo V, 4.2 a 4.4 e 11).
+- **Outras condições de contratação:** obra sem CPB até o resultado, nenhum direito cedido de graça, nenhuma seleção em outra chamada do FSA que proíba aportes adicionais, e produtora e parceiros em dia com ANCINE, FSA, CEIS, cadastro de improbidade e CADIN federal (Anexo V, 5.8 e 7.1).
+- **Prazo de execução:** 24 meses a partir da primeira liberação; 36 meses para longa de animação (Anexo V, 8.2).
+- **Despesas aceitas:** da aprovação para captação no DOU até 180 dias depois da conclusão ou do desembolso (Anexo V, 9.2).
+- **Retorno ao FSA:** metade da participação do FSA nos itens financiáveis, aplicada sobre a receita líquida da produtora, por 7 anos depois da primeira exibição. Em coprodução internacional, só sobre a parte brasileira (Anexo V, 10).
+- **Política afirmativa:** o Anexo I é preenchido no sistema. Na habilitação vão documento com foto de todas as pessoas listadas, RANI para pessoa indígena e laudo médico para pessoa com deficiência, em PDF. O Anexo II tem um campo opcional de autodeclaração e só vale com assinatura Gov.br ou certificado digital.
+- **Lista de cidades (Anexo III):** não recebida. O item 2.1 p indica que a relação de municípios fica disponível no próprio sistema de inscrição.
