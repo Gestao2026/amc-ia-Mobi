@@ -1,7 +1,7 @@
 {
   "fonte": "Leitura integral dos arquivos da pasta local 02 - Editais Abertos (Desktop do captador). Nao vem do CaptaHub.",
   "data_leitura": "2026-08-20",
-  "total": 36,
+  "total": 37,
   "campos": [
     "slug",
     "nome",
@@ -631,6 +631,23 @@
       "leis_aceitas": ["PNAB, Lei 14.399/2022"],
       "areas": ["circulacao", "difusao", "criacao e producao", "formacao", "memoria e preservacao", "acoes continuadas"],
       "ficha": "fichas/pnab-ciclo-2-bh-fomento-04-2026.md"
+    },
+    {
+      "slug": "pnab-betim-conexao-cultural-2026",
+      "nome": "Betim. Chamamento Publico 8/2026. Conexao Cultural (PNAB)",
+      "financiador": "Prefeitura de Betim, Secretaria Municipal de Cultura (recursos PNAB)",
+      "tipo": "edital de chamamento publico",
+      "categoria": "poder publico municipal",
+      "escopo": "Municipal",
+      "uf_ou_territorio": "Betim/MG",
+      "prazo": "2026-09-30",
+      "valor_teto": 30000,
+      "natureza_juridica_aceita": ["pessoa fisica", "grupo ou coletivo (com ou sem CNPJ) por representante pessoa fisica"],
+      "tempo_minimo_existencia": "2 anos de atuacao em Betim no segmento; proponente residente em Betim ha 1 ano",
+      "exige_projeto_aprovado_em_lei": "nao",
+      "leis_aceitas": ["PNAB, Lei 14.399/2022"],
+      "areas": ["criacao e producao", "formacao", "difusao"],
+      "ficha": "fichas/pnab-betim-conexao-cultural-2026.md"
     }
   ]
 }
