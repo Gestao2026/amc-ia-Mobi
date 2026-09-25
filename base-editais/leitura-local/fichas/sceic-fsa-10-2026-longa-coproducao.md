@@ -171,7 +171,7 @@ Descumprir a política afirmativa, o bônus da Film Commission ou a divulgação
 |---|---|
 | Corte da prestação de contas CultSP | 15/09/2026 (já passou) |
 | Abertura das inscrições | 15/09/2026 |
-| Último dia para mandar dúvidas (72 horas antes do fim) | 31/10/2026 |
+| Último dia para mandar dúvidas (72 horas antes do último dia) | 30/10/2026 (leitura mais exigente) |
 | Fim das inscrições | 03/11/2026, às 23:59:59 |
 | Análise da seleção | cerca de 30 dias depois do envio dos projetos à comissão |
 | Recursos (seleção, pitching, habilitação) | 3 dias úteis após cada publicação, só pelo sistema, sem documento novo |
@@ -190,3 +190,8 @@ Este edital não atende OSC como associação ou fundação. Só serve para prod
 - Contrato de coprodução precisa estar **assinado** na inscrição, e não em negociação.
 - A secretaria não responde dúvidas sobre como elaborar o projeto.
 - O edital não diz como enviar os documentos de habilitação da coprodutora estrangeira. Verificar no Anexo V.
+
+## Arquivos deste edital (nesta pasta)
+- `sceic-fsa-10-2026-longa-coproducao-edital.pdf`: edital original, sem os anexos.
+- `sceic-fsa-10-2026-longa-coproducao-checklist.pdf`: checklist resumido.
+- `sceic-fsa-10-2026-longa-coproducao-dossie.docx` e `.pdf`: Dossiê do Edital, versão 1 (25/09/2026), feita sem os Anexos I a IX. Atualizar quando os anexos chegarem.
