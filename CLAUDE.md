@@ -39,7 +39,9 @@ TODO texto gerado neste projeto deve estar em português brasileiro com acentua�
 
 **Exceção única:** nomes de arquivo, variáveis de código, slugs de URL, chaves JSON e identificadores internos permanecem em ASCII sem acento (ex: `minhas-oscs`, `perfil-osc.md`, `projeto-elegibilidade`).
 
-**Exceção aberta pela captadora em 18/09/2026, só para o texto queimado na tela dos reels.** O gancho que aparece escrito dentro do vídeo segue o método de reels da Mentoria AMC e vai **sem acento de propósito** (só "é" fica), para não parecer anúncio. Vale apenas para esse texto na tela. A legenda do reel, o roteiro, os documentos e todo o resto continuam com acentuação completa. Referência: `mobilizando mkt - pasta 09/02_CONTEUDO_REF_Metodo_Reels_do_Captador_Mentoria_AMC.md`.
+**Exceção de 18/09/2026 revogada por ela em 21/09/2026.** O texto queimado na tela dos reels chegou a ir sem acento (só "é"), pelo método da Mentoria AMC. Em 21/09 ela corrigiu o reel do dia 2 com acento e decidiu que **o texto na tela passa a ter acentuação completa**, como todo o resto. Não existe mais exceção de acento neste projeto.
+
+**Pontuação também é obrigatória (decisão dela em 21/09/2026, "regra geral, nunca se esqueça").** Vírgula onde a escrita pede e ponto final no fim da frase, inclusive em gancho de reel, texto na tela, legenda, título de card e item de lista que forma frase. Frase solta sem ponto só em rótulo curto (botão, etiqueta, nome de coluna).
 
 **Palavras que JAMAIS podem aparecer sem acento em texto corrido:**
 não, são, você, está, já, também, três, público, lógico, estratégia, dúvida, introdução, conclusão, método, prática, análise, específico, básico, único, número, código, página, área, história, técnica, próximo, último, crítico, fácil, difícil, possível, impossível, órgão, critério, elegível, inelegível, contrapartida, execução, prestação, avaliação, submissão, proposta, orçamento, rubrica, repasse, convênio, parceria, contemplação, recurso.
@@ -430,6 +432,20 @@ O chat do projeto "Portal do Cliente" e o Claude Code trabalham na mesma pasta, 
 5. **Quem publica é ela.** O chat e o Claude Code escrevem a mensagem ao Lovable e o script de banco; mandar ao Lovable, rodar SQL no banco e publicar continua sendo dela.
 6. **A pasta 10 é a fonte da verdade** e fica fora do Git. Os `docs/portal-clientes-*` saíram do repositório em 19/09/2026; texto antigo que cita esse caminho se refere à pasta 10.
 
+### Passagem de turno automática nas duas frentes (decisão de 19/09/2026)
+
+> Pedido da captadora: "vamos fazer automático e você avisa a pasta de Projeto das mudanças contextualizando onde paramos. Faça isso nas duas pastas de projetos [...] precisamos fechar todos os riscos."
+
+Vale para o Marketing (pasta 09) e para o Portal do Cliente (pasta 10). Cada `00_INDICE` tem uma **seção 0, "Onde paramos"**, com dois blocos: o do chat do claude.ai e o do Claude Code.
+
+1. **Ao começar**, antes de qualquer outra coisa da frente, ler os dois blocos da seção 0, além do resto da leitura obrigatória.
+2. **Ao fim de toda resposta que mexeu na frente**, sem ela pedir: reler o índice e reescrever **só o bloco do Claude Code**, com data, o que foi feito, o que foi decidido, o estado agora, o próximo passo proposto e o que espera a Rosepaula. O bloco não acumula: o que passou vai para o Histórico do índice, em uma linha.
+3. **Nunca escrever no bloco do chat.** Se o bloco do chat estiver desatualizado em relação à pasta, apontar isso no bloco do Claude Code, sem mexer no dele.
+4. No Marketing, refazer o PDF do índice depois de alterar (regra de arquivo vivo).
+5. Dizer em uma linha, na resposta, que a passagem foi gravada.
+
+"Automático" aqui quer dizer **sem ela precisar pedir**, feito por quem trabalhou, na mesma conversa. **Não é gancho nem tarefa agendada** (ver NADA RODA SOZINHO): um gancho não escreve contexto e a regra global proíbe criá-lo sem ela pedir com todas as letras.
+
 **Isto não é automação de fundo** e não fere NADA RODA SOZINHO: é escrita no disco local, feita dentro do trabalho que ela pediu, na mesma conversa. Não existe gancho, horário nem gatilho. Não vale para sistema externo: gravar no CaptaHub, no Drive da `_82`, no Canva ou no Metricool continua pedindo o OK dela, conforme as regras próprias.
 
 ---
@@ -465,8 +481,20 @@ CaptaBuilder      → elabora a proposta completa, bloco a bloco
      ↓
 CaptaBudget       → monta o orçamento técnico por rubrica
      ↓
+(Anexos)          → declarações e checklist de anexos da submissão
+     ↓
 CaptaScore        → nota por critério, chance de aprovação e o que melhorar
+     ↓
+(Revisor)         → pente-fino final: PRONTO PARA SUBMETER ou AJUSTAR ANTES
 ```
+
+**Estações de apoio e coordenação.** Os cinco Capta são o núcleo da linha. Em volta deles trabalham:
+
+- `captador-anexos` (`/projeto-anexos`): entre o CaptaBudget e o CaptaScore, gera as declarações que o sistema consegue produzir com o perfil da OSC e monta o checklist de anexos, pedindo à captadora o que só ela pode fornecer.
+- `revisor-proposta` (`/projeto-revisar`): depois do CaptaScore, confere completude, coerência entre proposta, orçamento e edital, formulário oficial e português.
+- `captador-chefe` (`/projeto-completo`): consultor sênior que conduz a linha inteira, faz a triagem entre os editais minerados, valida cada estação com visão técnica e jurídica (MROSC, leis de incentivo, prestação de contas) e emite o parecer final antes da submissão. **Não é porta dura:** alerta e pede a confirmação da captadora.
+- `orquestrador-captacao`: diagnostica em que etapa o projeto está e aponta o próximo comando. Não executa as etapas.
+- `captador-contrato` (`/contrato`): fora da linha de montagem. Minuta o contrato de assessoria com a OSC e analisa o termo de fomento ou de colaboração quando o projeto é aprovado. Toda minuta exige revisão de advogado antes de assinar.
 
 Os cinco tratam, em ordem, os cinco motivos recorrentes de reprovação: edital errado, elegibilidade falha, **entrar sem chance ou sem estratégia**, texto fraco, orçamento furado. A proposta chega à banca com as cinco causas já endereçadas.
 
@@ -508,9 +536,11 @@ aderência ao edital, capacidade técnica, potencial de impacto, coerência meto
 - `/projeto-estrategia`. CaptaEstrategista. Depois do sinal verde, diz se vale a pena entrar e qual é a estratégia: aderência, atratividade, força competitiva, esforço contra retorno, riscos, como ganhar e uma recomendação em quatro estados.
 - `/projeto-escrever`. CaptaBuilder. Entrevista por blocos e escreve a proposta completa.
 - `/projeto-orcamento`. CaptaBudget. Monta o orçamento técnico por rubrica com memória de cálculo.
+- `/projeto-anexos`. Mapeia os anexos do edital, gera as declarações e monta o checklist de habilitação da submissão.
 - `/projeto-avaliar`. CaptaScore. Nota por critério, chance de aprovação e reescrita dos campos críticos.
 - `/projeto-revisar`. Checklist final pré-submissão (documentos, coerência, prazo).
 - `/projeto-exportar`. Gerar a entrega final em Word, PDF e planilha, pronta para submeter.
+- `/projeto-completo`. Captador-chefe. Conduz a linha de montagem inteira, da escolha do edital à entrega final, validando cada estação.
 
 **Posicionamento do captador (Fase 2. POSICIONAR):**
 - `/captador-perfil`. Cadastrar o captador e a marca da assessoria. Base da Fase 2.
@@ -528,13 +558,14 @@ aderência ao edital, capacidade técnica, potencial de impacto, coerência meto
 **Apoio e venda:**
 - `/sala-agentes`. Abrir a Sala dos Agentes, o escritório ao vivo onde os agentes andam e trabalham conforme o sistema executa.
 - `/assessoria-pitch`. Playbook de venda do contrato anual de assessoria.
+- `/contrato`. Minutar o contrato de assessoria com a OSC ou analisar o termo de fomento ou de colaboração do financiador.
 - `/configurar`. Conexões e integrações do projeto.
 
 > A gestão da carteira (pipeline de projetos, clientes, prazos, status) NÃO fica aqui. Ela vive no CaptaHub. Se o captador pedir pipeline ou CRM, oriente que isso é no CaptaHub. A AMC IA é o estúdio que produz o projeto.
 
 **Agentes especialistas (tarefas completas):**
-- `captador-doc`, `captador-estrategista`, `captador-builder`, `captador-budget`, `captador-score`, `minerador-editais`, `minerador-web`, `revisor-proposta`, `orquestrador-captacao`, `posicionador-captador`.
-- `captador-estrategista` é o único agente Capta com acesso à web, para levantar concorrência e histórico do financiador. **A busca nunca contém nome da organização, CNPJ, dirigente ou endereço:** ela é sobre o edital e o financiador, jamais sobre quem se inscreve.
+- `captador-doc`, `captador-estrategista`, `captador-builder`, `captador-budget`, `captador-anexos`, `captador-score`, `revisor-proposta`, `captador-chefe`, `orquestrador-captacao`, `captador-contrato`, `minerador-editais`, `minerador-web`, `posicionador-captador`. São 13, os mesmos da pasta `.claude/agents/`.
+- Dois agentes Capta têm acesso à web, cada um para uma finalidade: o `captador-estrategista`, para levantar concorrência e histórico do financiador, e o `captador-budget`, para a cotação de preços (3 fontes por item relevante). **A busca nunca contém nome da organização, CNPJ, dirigente ou endereço:** ela é sobre o edital, o financiador, o item e o fornecedor, jamais sobre quem se inscreve.
 - `minerador-web` é o complemento de varredura web: entra quando o CaptaHub não traz edital alinhado ao perfil, busca editais abertos na web (com confirmação de prazo na fonte) e devolve candidatos marcados como ainda fora do CaptaHub.
 
 ---

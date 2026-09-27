@@ -71,7 +71,7 @@ Ferramentas: o estúdio inteiro (5 agentes, exportação). Gestão no CaptaHub.
 - Recomenda em quatro estados: prioridade alta; oportunidade condicionada a ajustes nomeados; baixa prioridade por esforço elevado e retorno incerto; não recomendar entrada.
 - Trabalha em dois modos: **com projeto**, avaliando o que existe, e **sem projeto**, dizendo que formato ganharia naquele edital. O segundo modo é o que impede o encaixe forçado.
 - Toda afirmação vem rotulada em uma de quatro marcas: exigência do edital com o item, dado com a fonte, inferência com o salto exposto, ou recomendação. Não existe uma quinta marca.
-- É o único agente Capta com acesso à web, para levantar concorrência e histórico do financiador. A busca **nunca** contém dado da organização.
+- Tem acesso à web para levantar concorrência e histórico do financiador. Não é o único agente Capta com web: o CaptaBudget também tem, para a cotação de preços. Nos dois, a busca **nunca** contém dado da organização.
 - **Não é porta dura.** O único Gate que trava a elaboração é o da elegibilidade.
 - Entrada: edital analisado + parecer de elegibilidade + perfil + histórico. Saída: `estrategia.md` com as oito análises e o semáforo.
 
