@@ -89,3 +89,4 @@ Inventário completo do dia do desligamento: [automacoes-desligadas.md](automaco
 | 16/09/2026 | Radar de Mercado volta a gravar PDFs no computador, em `RADARES DO DIA` | ATUAL, troca de caminho pendente no aplicativo |
 | 18/09/2026 | Criado este índice como contexto único da frente de automações | ATUAL |
 | 21/09/2026 | Todo alerta lido vai para a lixeira. A 3a já cumpre; a 3c só lê as últimas 48h e deixa alerta de mercado antigo na caixa | ATUAL, conserto da 3c pendente no aplicativo |
+| 07/10/2026 | Leitura semanal das métricas de negócio vira a exceção 5: tarefa `metricas-semanal-mobilizando`, segunda-feira por volta das 10h, só leitura nas fontes, painel privado atualizado | ATUAL |

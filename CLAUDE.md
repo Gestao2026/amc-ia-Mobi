@@ -138,7 +138,7 @@ Não apagar, não mover para a Lixeira, não "aposentar", não substituir por at
 
 **A fronteira, e ela é uma só.** A pergunta não é "houve chamada automática". É **"esta chamada é necessária para o comando que a captadora acabou de dar cumprir o que ele promete?"** Operação automática que seja parte necessária de um comando iniciado explicitamente por ela **é permitida**, e não pede confirmação nova a cada chamada. "Automático dentro de comando que ela deu" não significa "proibido".
 
-1. **Nada dispara por horário.** Nenhuma tarefa do Windows, nenhum agendamento em nuvem, nenhum cron. Se algo precisar rodar todo dia, isso é decisão dela, tomada de novo a cada vez. As únicas rotinas por horário autorizadas são as das exceções 3 e 4, abaixo.
+1. **Nada dispara por horário.** Nenhuma tarefa do Windows, nenhum agendamento em nuvem, nenhum cron. Se algo precisar rodar todo dia, isso é decisão dela, tomada de novo a cada vez. As únicas rotinas por horário autorizadas são as das exceções 3, 4 e 5, abaixo.
 2. **Nada dispara por gatilho.** Nenhum gancho (hook) roda ao salvar arquivo, ao terminar comando ou ao abrir conversa.
 3. **Nada é puxado nem enviado fora de um comando dela.** A carteira do CaptaHub, os editais, o pipeline e a cópia de segurança nunca se movem por iniciativa do sistema. Dentro de um comando que ela deu, movem-se conforme o item 5.
 4. **Ao abrir a conversa, leia apenas o disco local.** Nenhuma chamada de API na abertura. **Única exceção, pedida por ela em 13/09/2026:** ler a página `Resumo da manhã` para mostrá-la na primeira resposta (ver REGRA DE ABERTURA DE SESSÃO). É só leitura, e só dessa página. O CaptaHub continua fora da abertura.
@@ -152,7 +152,7 @@ Não apagar, não mover para a Lixeira, não "aposentar", não substituir por at
 
 ### As exceções, autorizadas a ficar ligadas para sempre
 
-> As duas primeiras foram decididas pela captadora em 01/09/2026, com as duas na mesa. A terceira foi decidida por ela em 13/09/2026, e a quarta em 15/09/2026. **Nenhuma delas pode ser parada, desligada, pausada ou removida até ela pedir.** A regra acima não as alcança.
+> As duas primeiras foram decididas pela captadora em 01/09/2026, com as duas na mesa. A terceira foi decidida por ela em 13/09/2026, a quarta em 15/09/2026 e a quinta em 07/10/2026. **Nenhuma delas pode ser parada, desligada, pausada ou removida até ela pedir.** A regra acima não as alcança.
 
 1. **Google Drive e OneDrive.** São programas da máquina dela, não automações deste projeto. Ficam rodando sempre. Não sugerir desligar, não encerrar processo, não desabilitar tarefa de inicialização, nem "só para testar". Desligar o Google Drive derruba a unidade `G:` e com ela o acesso à pasta `_82` e a vários caminhos deste projeto.
 2. **Os conectores do Instagram e do LinkedIn.** Ficam de pé, no ar, com a ponte na HostGator e os dois serviços no Render. Eles não rodam sozinhos: são servidores parados que só acordam quando uma conversa chama, e por isso não ferem a regra. Não desativar serviço, não remover conector, não revogar token.
@@ -170,6 +170,8 @@ Não apagar, não mover para a Lixeira, não "aposentar", não substituir por at
 
    Não desligar, não pausar, não editar o texto e não apagar nenhuma delas sem ela pedir. A exceção cobre estas rotinas e não abre porta para outras: nenhum comando, skill ou agente cria rotina nova por conta própria (item 6 da regra). Antes de propor qualquer leitura, painel ou relatório recorrente, confira se uma destas já faz o trabalho.
 4. **A cópia diária dos radares na Área de Trabalho.** Pedida por ela em 15/09/2026. É a única tarefa no agendador do aplicativo Claude (`radares-do-dia-area-de-trabalho`): roda **todo dia às 9h30**, depois das três rotinas da nuvem, e só com o aplicativo aberto; se ele estiver fechado, roda quando ela abrir. Baixa as quatro páginas publicadas (Resumo da manhã, Radar de Mercado e Patrocínio, radar-geral e radar-ppl), converte em PDF com o `scripts/radares-do-dia-pdf.ps1` e grava em `C:\Users\rosep\Desktop\RADARES DO DIA`, **substituindo os PDFs do dia anterior, sem histórico**, por escolha dela. O PDF novo só substitui o antigo quando sai certo. Não escreve em nenhum sistema externo e não mexe nas rotinas da nuvem: só copia o que elas já publicaram. Na mesma pasta ficam também os dois PDFs que a própria rotina do Radar de Mercado grava (`Radar-Mercado-Patrocinio.pdf` e `Resumo-Executivo-Mercado.pdf`), que são diferentes do `Radar de Mercado e Patrocínio.pdf` gerado por esta tarefa a partir da página. Os dois tipos ficam, por decisão dela em 16/09/2026. Não desligar, não pausar e não apagar sem ela pedir.
+
+5. **A leitura semanal das métricas de negócio.** Pedida por ela em 07/10/2026. Segunda tarefa do agendador do aplicativo Claude (`metricas-semanal-mobilizando`): roda **toda segunda-feira, perto das 10h**, e só com o aplicativo aberto; se ele estiver fechado, roda quando ela abrir. Executa `scripts/metricas-semanal.py`, que **só lê** o Checkpoint e o Controle de Submissão no Drive G e os projetos do CaptaHub, e grava apenas o histórico e o painel em `mobilizando mkt - pasta 09/04_NEGOCIOS_METRICAS/`. Depois republica o painel (página privada, endereço em `METRICAS_URL` no `.env`) no mesmo link. Não escreve em planilha, no CaptaHub nem em outro sistema externo. Não desligar, não pausar e não apagar sem ela pedir.
 
 Se alguma dessas peças precisar mesmo ser mexida, pare e pergunte antes.
 
@@ -393,6 +395,7 @@ O arquivo de mineração de cada cliente continua em `minhas-oscs/{slug}/`, e **
 | Editais | `minhas-oscs/_transversal/` | `00_INDICE_Editais.md` |
 | Automações, rotinas e conectores | `docs/` | `00_INDICE_Automacoes.md` (repositório público: sem e-mail, endereço de página nem token) |
 | Portal do Cliente | `portal do cliente - pasta 10/` (fora do Git desde 19/09/2026) | `00_INDICE_Portal.md` |
+| Parcerias empresariais (HubSocial NOA + Mobilizando) | `parcerias - pasta 11/` (fora do Git desde 02/10/2026) | `00_INDICE_Parcerias.md` |
 | Cada cliente | `minhas-oscs/{slug}/` | `perfil-osc.md` e, por projeto, `estado.md` |
 
 ### Como aplicar

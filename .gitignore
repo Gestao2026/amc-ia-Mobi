@@ -47,6 +47,10 @@ mobilizando mkt - pasta 09/
 # do Git por decisao da captadora em 19/09/2026 (trata de clientes, contas e banco)
 portal do cliente - pasta 10/
 
+# Parcerias: contrato, multas, valores e nomes de pessoas. Fica fora do Git por decisao da
+# captadora em 02/10/2026. A pasta parcerias/adapte/ (outra parceria) continua versionada
+parcerias - pasta 11/
+
 # Gauntlet Loop: os casos de teste sao construidos sobre clientes reais
 melhoria-amc-ia/
 
