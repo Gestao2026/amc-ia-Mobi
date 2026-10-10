@@ -17,6 +17,11 @@ captador/entregas/
 .claude/agents-memory/*.md
 !.claude/agents-memory/README.md
 
+# Memória do Claude Code deste projeto. Mora aqui por junção desde 17/09/2026
+# (o caminho do aplicativo aponta para esta pasta). Cita cliente, CNPJ e onde
+# ficam as senhas: nunca versionar, o repositório é público
+.claude/memoria/
+
 # Painel: pipelines gerados por OSC (a Sala dos Agentes e o status inicial sao versionados)
 painel/pipeline-*.html
 
@@ -28,3 +33,43 @@ node_modules/
 
 # Credenciais (certificados digitais, senhas). Nunca versionar nem sincronizar
 _credenciais-nao-sincronizar/
+
+# Relatorios detalhados das estruturacoes (citam nomes de arquivo e dados pessoais)
+docs/estruturacoes/_detalhado/
+
+# Copia dos alunos: tem repositorio Git proprio dentro desta pasta
+amc-ia-mobiv2/
+
+# Base de marketing consolidada (777 arquivos, 1,1 GB). Fica fora do Git por decisao da captadora
+mobilizando mkt - pasta 09/
+
+# Portal do Cliente: pasta unica compartilhada com o Projeto do claude.ai. Fica fora
+# do Git por decisao da captadora em 19/09/2026 (trata de clientes, contas e banco)
+portal do cliente - pasta 10/
+
+# Parcerias: contrato, multas, valores e nomes de pessoas. Fica fora do Git por decisao da
+# captadora em 02/10/2026. A pasta parcerias/adapte/ (outra parceria) continua versionada
+parcerias - pasta 11/
+
+# Gauntlet Loop: os casos de teste sao construidos sobre clientes reais
+melhoria-amc-ia/
+
+# Materiais com nome de cliente. O repositorio e publico
+marketing/entregas/portfolio/
+modelos/
+docs/triagens/
+
+# Perfil do captador (dado pessoal). O caminho antigo desta regra era captador/
+marketing/perfil-captador.md
+
+# Estado local da sessao e rascunhos
+minhas-oscs/.ativa
+minhas-oscs/.ativa.bak*
+scratch_*.txt
+*.bak-20*
+
+# Entregas de marketing (material comercial, textos para cliente). Ficam fora do
+# Git por decisao da captadora em 18/09/2026: o repositorio e publico. So as
+# .gitkeep, que seguram a estrutura das pastas, sao versionadas
+marketing/entregas/*/*
+!marketing/entregas/*/.gitkeep

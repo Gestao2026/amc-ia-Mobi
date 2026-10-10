@@ -11,6 +11,7 @@ set LOG=%BASE%\_historico-backup.log
 if not exist "%BASE%" mkdir "%BASE%"
 if not exist "%BASE%\amc-ia-mobi" mkdir "%BASE%\amc-ia-mobi"
 if not exist "%BASE%\pasta-82" mkdir "%BASE%\pasta-82"
+if not exist "%BASE%\meu-drive-82" mkdir "%BASE%\meu-drive-82"
 if not exist "%BASE%\credenciais" mkdir "%BASE%\credenciais"
 
 echo ---------------------------------------- >> "%LOG%"
@@ -22,6 +23,28 @@ robocopy "C:\amc-ia-Mobi\marketing"    "%BASE%\amc-ia-mobi\marketing"    /E /R:1
 robocopy "C:\amc-ia-Mobi\base-editais" "%BASE%\amc-ia-mobi\base-editais" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\parcerias"    "%BASE%\amc-ia-mobi\parcerias"    /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\docs"         "%BASE%\amc-ia-mobi\docs"         /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+
+rem     AMPLIADO em 17/09/2026, a pedido da captadora. Ate aqui o backup copiava
+rem     so as cinco pastas acima e deixava de fora o cerebro do sistema: as
+rem     regras, os cinco agentes e os comandos. Se o disco falhasse, era isso
+rem     que se perdia. O .env NUNCA entra (/XF .env).
+robocopy "C:\amc-ia-Mobi\.claude" "%BASE%\amc-ia-mobi\.claude" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi\scripts" "%BASE%\amc-ia-mobi\scripts" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+rem     Sem /E de proposito: copia so os arquivos soltos da raiz (CLAUDE.md,
+rem     README.md, COMO-USAR.md, .gitignore, .env.example), nenhuma subpasta.
+robocopy "C:\amc-ia-Mobi" "%BASE%\amc-ia-mobi\_raiz" /XF .env /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+
+rem --- 1b. Historico do Git (a memoria do porque cada regra existe) ------------
+rem     Um arquivo unico com todos os commits e todas as branches. E melhor do
+rem     que copiar a pasta .git inteira, que sao milhares de arquivinhos que o
+rem     Google Drive sincroniza mal.
+rem     Para restaurar: git clone historico-git.bundle pasta-nova
+where git >nul 2>&1
+if %errorlevel%==0 (
+  git -C "C:\amc-ia-Mobi" bundle create "%BASE%\amc-ia-mobi\historico-git.bundle" --all >> "%LOG%" 2>&1
+) else (
+  echo Git nao encontrado no PATH, o historico nao foi empacotado >> "%LOG%"
+)
 
 rem --- 2. Pasta _82 (Drive do mentor -> disco local) --------------------------
 rem     Sentido inverso do backup acima. A origem e a nuvem, o destino e o disco.
@@ -41,6 +64,23 @@ if exist "%P82%" (
   robocopy "%P82%" "%BASE%\pasta-82\atual" /E /R:1 /W:1 /NP /NFL /NDL /XF desktop.ini *.gdoc *.gsheet *.gslides /LOG+:"%LOG%"
 ) else (
   echo Pasta _82 do Drive indisponivel, backup dela foi pulado >> "%LOG%"
+)
+
+rem --- 2b. Pasta _82 do Meu Drive (nuvem -> disco local) ----------------------
+rem     FONTE DA VERDADE desde 01/09/2026. A captadora tirou a _82 da Area de
+rem     Trabalho e passou a trabalhar nesta copia, que fica no Google Drive dela,
+rem     nao no da mentora. Aqui ela e dona, nao apenas Editora.
+rem     Por que este bloco existe: Google Drive e sincronizacao, nao backup. Se
+rem     um arquivo for apagado ou corromper na maquina, a nuvem replica isso. Sem
+rem     esta linha, a pasta de trabalho principal nao teria nenhuma copia no
+rem     disco. Mesmas exclusoes do bloco 2, pelo mesmo motivo.
+rem     A primeira carga baixa a pasta inteira e demora; as seguintes copiam so
+rem     o que mudou.
+set MD82=G:\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues
+if exist "%MD82%" (
+  robocopy "%MD82%" "%BASE%\meu-drive-82\atual" /E /R:1 /W:1 /NP /NFL /NDL /XF desktop.ini *.gdoc *.gsheet *.gslides /LOG+:"%LOG%"
+) else (
+  echo Pasta _82 do Meu Drive indisponivel, backup dela foi pulado >> "%LOG%"
 )
 
 rem --- 3. Credenciais dos clientes (Area de Trabalho -> disco local, SO LOCAL) -
@@ -65,6 +105,41 @@ rem     As credenciais do bloco 3 NAO entram aqui, de proposito.
 robocopy "C:\amc-ia-Mobi\minhas-oscs"  "G:\Meu Drive\AMC-IA-Backup\minhas-oscs"  /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\marketing"    "G:\Meu Drive\AMC-IA-Backup\marketing"    /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
 robocopy "C:\amc-ia-Mobi\base-editais" "G:\Meu Drive\AMC-IA-Backup\base-editais" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi\docs" "G:\Meu Drive\AMC-IA-Backup\docs" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi\parcerias" "G:\Meu Drive\AMC-IA-Backup\parcerias" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+rem     AMPLIADO em 17/09/2026: a nuvem passa a receber tambem o cerebro do
+rem     sistema e o historico, na mesma pasta AMC-IA-Backup. O .env fica fora.
+robocopy "C:\amc-ia-Mobi\.claude" "G:\Meu Drive\AMC-IA-Backup\.claude" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi\scripts" "G:\Meu Drive\AMC-IA-Backup\scripts" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "C:\amc-ia-Mobi" "G:\Meu Drive\AMC-IA-Backup\_raiz" /XF .env /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+robocopy "%BASE%\amc-ia-mobi" "G:\Meu Drive\AMC-IA-Backup" historico-git.bundle /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+
+rem     Segunda camada do backup da Area de Trabalho da _82. Incluida em
+rem     28/08/2026, a pedido da captadora (pendencia 7). A origem AQUI e o
+rem     backup local (Backups\desktop-82\atual), nao a pasta viva da Area de
+rem     Trabalho direto, de proposito: evita criar um segundo processo lendo
+rem     C:\Users\rosep\Desktop\_82 - Rosepaula Aparecida Andrade Rodrigues,
+rem     que ficou isolada de automacao no registro 21. Sem essa camada, se o
+rem     disco C: falhar, a Area de Trabalho e o backup dela morrem juntos.
+rem     ATUALIZADO em 01/09/2026: a pasta viva da Area de Trabalho deixou de
+rem     existir. Esta copia congelou em 28/08 com 2.776 arquivos e virou registro
+rem     historico. Continua subindo porque backup nao apaga nada, e porque o
+rem     conteudo dela ja foi migrado para o Meu Drive, conferido por amostragem.
+robocopy "%BASE%\desktop-82\atual" "G:\Meu Drive\AMC-IA-Backup\desktop-82" /E /R:1 /W:1 /NP /NFL /NDL /LOG+:"%LOG%"
+
+rem --- 5. Pasta _82 da Area de Trabalho: NAO EXISTE MAIS desde 01/09/2026 -----
+rem     A captadora tirou a _82 da Area de Trabalho e passou a trabalhar na
+rem     copia do Meu Drive dela, que virou a fonte da verdade (bloco 2b).
+rem     A origem deste bloco deixou de existir. Nao religar.
+rem     O texto abaixo fica como historico do desligamento anterior, feito em
+rem     28/08/2026, a pedido
+rem     expresso da captadora. Nenhum script pode ler, atualizar, incluir ou
+rem     excluir nada dentro de C:\Users\rosep\Desktop\_82 - Rosepaula Aparecida
+rem     Andrade Rodrigues ate ela autorizar de novo. O bloco original so lia
+rem     essa pasta para copiar para o backup, nunca escrevia nela, mas foi
+rem     removido mesmo assim porque ela pediu para nao ter nenhum processo
+rem     tocando essa pasta enquanto organiza o conteudo a mao.
+rem     Para religar, devolver o bloco robocopy original (ver historico do Git).
 
 echo Backup concluido em %date% %time% >> "%LOG%"
 exit /b 0

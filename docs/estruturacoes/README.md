@@ -27,6 +27,19 @@
 | 15 | 2026-08-23 | [Consolidação dos editais entre a MOBI e a _82](2026-08-23-15-consolidacao-editais-mobi-vs-82.md) | `MOBI\03-EDITAIS` e `_82\04 - Controle de Submissão_` | Concluída. **3 pendências de decisão** |
 | 16 | 2026-08-23 | [Os 4 logos repetidos na pasta APLICAVEIS são intencionais](2026-08-23-16-duplicatas-de-logo-intencionais.md) | `OneDrive E-missão\Documentos\9. MOBILIZANDO MKT LOGO` | Concluída. Diagnóstico, nada foi excluído |
 | 17 | 2026-08-24 | [Consolidação do marketing numa pasta única](2026-08-24-17-consolidacao-do-marketing.md) | `MOBI\06-MARKETING` (extinta) e `Documentos\9. MOBILIZANDO MKT LOGO` | Concluída. **3 pendências de decisão** |
+| 18 | 2026-08-25 | [Painel no Airtable e auditoria documental da carteira](2026-08-25-18-painel-airtable-e-auditoria-da-carteira.md) | Base Airtable, CaptaHub e `CaptaDrive` no Drive | Concluída. **6 pendências de tela** |
+| 19 | 2026-08-26 | [Regras de fonte, tabela Captações, automações ligadas e a primeira carga do mapa](2026-08-26-19-regras-de-fonte-captacoes-e-carga-do-mapa.md) | Base Airtable e planilha mestra da `_82` | Concluída. **6 pendências com a captadora** |
+| 20 | 2026-08-26 | [Desligamento das sincronizações entre as cópias da _82](2026-08-26-20-desligamento-das-sincronizacoes-da-82.md) | `scripts/`. Nenhuma pasta de documento tocada | Concluída. **4 pendências com a captadora** |
+| 21 | 2026-08-28 | [Desligamento da automação na _82 da Área de Trabalho](2026-08-28-21-desligamento-da-automacao-na-82-da-area-de-trabalho.md) | `scripts/backup-diario.bat`. Nenhuma pasta de documento tocada | Concluída. **3 pendências com a captadora** |
+| 22 | 2026-08-28 | [Limpeza das cópias divergentes da _82 e exceção do Meu Drive local](2026-08-28-22-limpeza-das-copias-divergentes-e-excecao-do-meu-drive-local.md) | Drive, `Backups\pasta-82\atual`, `_credenciais-nao-sincronizar\`, `Meu Drive local` (excluída) | Concluída. **4 pendências com a captadora** |
+| 23 | 2026-08-28 | [Auditoria dos documentos de 27/08](2026-08-28-23-auditoria-dos-documentos-de-27-08.md) | 65 arquivos e 61 pastas com carimbo de 27/08 | Concluída. Somente leitura, nada foi alterado |
+| 24 | 2026-08-30 | [Desligamento do encaminhamento da editais para a gestao](2026-08-30-24-desligamento-do-encaminhamento-editais-para-gestao.md) | Gmail `editais.mobilizando` e `gestao.mobilizando` | Concluída |
+| 25 | 2026-08-31 | [Correção da contagem de propostas enviadas e a ponte com a planilha](2026-08-31-25-correcao-da-contagem-de-propostas-enviadas.md) | Base Airtable (Projetos, Editais, uma automação), `scripts/`, `docs/` | Concluída. **1 pendência com a captadora** |
+| 26 | 2026-08-31 | [Carga dos editais vivos no pipeline do CaptaHub](2026-08-31-26-carga-dos-editais-vivos-no-pipeline-do-captahub.md) | Pipeline do CaptaHub (3 projetos criados), `docs/` | Concluída. **2 pendências com a captadora** |
+| 27 | 2026-08-31 | [Desligamento do projeto MAPA e saída do Airtable](2026-08-31-27-desligamento-do-projeto-mapa-airtable.md) | `scripts/`, `scripts/desativados/`, `docs/`. Nenhuma pasta de documento tocada | Concluída. **1 ponta solta** |
+| 28 | 2026-09-01 | [Comparação byte a byte das duas pastas _82 na Área de Trabalho](2026-09-01-28-comparacao-byte-a-byte-das-duas-pastas-82.md) | As duas cópias da `_82` na Área de Trabalho | Concluída. Somente leitura. **37 conteúdos só na antiga, 95 só na nova** |
+| 29 | 2026-09-01 | [A _82 do Meu Drive vira a fonte da verdade](2026-09-01-29-a-82-do-meu-drive-vira-a-fonte-da-verdade.md) | `Meu Drive` da captadora, Área de Trabalho, `scripts/backup-diario.bat` | Concluída. **2 pendências** |
+| 30 | 2026-09-03 | [A leitura do edital passa a ter modelo](2026-09-03-30-a-leitura-do-edital-passa-a-ter-modelo.md) | `.claude/`, `minhas-oscs/MODELO-edital.md`, `CLAUDE.md` | Concluída. **5 pendências** |
 
 ## Como usar
 
@@ -83,10 +96,15 @@ Estas valem para o ambiente todo, não só para a pasta que as originou.
 - Enquanto a captadora estiver corrigindo a estrutura à mão, nada se cria, renomeia, move ou apaga na pasta em que ela está trabalhando, até ela avisar que terminou.
 
 **Sobre a pasta `_82`**
+- **A fonte da verdade da estrutura é a `_82` no Meu Drive da captadora**, desde 01/09/2026 (estruturação 29). É a única cópia de que ela é dona. A `_82` do Drive da mentora continua protegida e continua no backup, mas deixou de ser a referência.
+- **A Área de Trabalho não guarda mais estrutura documental.** As duas cópias que viviam lá deixaram de existir em 01/09/2026.
+- **Pasta que vive na nuvem precisa de cópia no disco.** Google Drive é sincronização, não backup: exclusão e corrupção sincronizam junto.
+- **Nenhuma sincronização de duas vias roda entre as cópias**, desde 26/08/2026. Sincronizador aditivo não sobrescreve, ele duplica, e duplicação em estrutura de pasta é mais cara de desfazer do que perda de arquivo.
+- **Antes de afirmar que um trabalho se desfez, conferir a data de alteração dos dois lados e identificar qual cópia está na tela.** Três pastas com o mesmo nome em três lugares fazem parecer que a estrutura voltou atrás sozinha.
 - **Nenhuma pasta chamada `_82 - Rosepaula Aparecida Andrade Rodrigues` se apaga**, nem no Google Drive nem na Área de Trabalho. Vale para a raiz e para qualquer subpasta, em qualquer nível, com ou sem conteúdo.
-- Inclui a pasta compartilhada no Drive (unidade `M:`), a cópia da Área de Trabalho, a cópia em `C:\Users\rosep\Meu Drive` e o backup em `C:\Users\rosep\Backups\pasta-82`.
+- Inclui a pasta no Meu Drive da captadora, a pasta compartilhada da mentora (unidade `M:`) e os backups em `Backups\pasta-82`, `Backups\meu-drive-82` e `Backups\desktop-82`.
 - Não apagar, não mover para a Lixeira, não "aposentar", não substituir por atalho, não deixar script tocar nelas. Se um plano de organização levar a remover qualquer uma, **o plano muda, não a pasta**.
-- A pasta do Drive não é da captadora. Ela é Editora, não dona.
+- A pasta da mentora não é da captadora. Nela, a captadora é Editora, não dona.
 
 **Sobre o que não cabe em nenhuma pasta**
 - **A máquina não usa a Lixeira. Nunca.** Nem para duplicata conferida, nem para lixo de sistema, nem para pasta inteira já consolidada em outro lugar. Excluir é decisão da captadora, tomada por ela, na hora que ela quiser.

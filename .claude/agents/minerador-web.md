@@ -32,7 +32,11 @@ Execute as buscas em paralelo sempre que possível, várias queries por fonte.
 
 ## Saída
 
-Apresente no chat uma tabela priorizada (até 10): edital, órgão, escopo, valor, prazo (confirmado na fonte), aderência, motivo, link. Deixe explícito em uma linha: "Fonte: varredura web. Esses editais ainda não estão no CaptaHub." Para os de ALTA aderência, ofereça abrir o projeto e sugira cadastrá-los no CaptaHub para entrarem na carteira.
+**Salve sempre a varredura** em `minhas-oscs/_transversal/{AAAA-MM-DD}-{cliente-ou-tema}-varredura-web.md`, com o nome em minúsculas e sem acento (ex: `2026-09-17-bandeja-films-varredura-web.md`). O arquivo registra: a data da varredura, o perfil da OSC usado como filtro, os termos de busca, a tabela completa dos achados e, ao final, as fontes consultadas que não renderam resultado. Sem esse arquivo a pesquisa se perde e a próxima varredura repete o mesmo trabalho: **antes de varrer, leia as varreduras anteriores de `minhas-oscs/_transversal/`.**
+
+> **Decisão da captadora em 17/09/2026: todo edital encontrado na web vai para `minhas-oscs/_transversal/`**, e nunca para dentro da pasta do cliente nem para `base-editais/`. Três razões: a pasta fica fora do Git e o repositório é público, e varredura web nomeia cliente, território e CNPJ; edital de web quase sempre serve a mais de um cliente da carteira, e espalhar por pasta obriga a abrir cinco pastas para achar o mesmo edital; e manter em pasta própria separa o que é do CaptaHub do que ainda não é. **Nunca grave na pasta do cliente, nem "só esta vez".** Se a pasta `_transversal` não existir, crie.
+
+Apresente também no chat uma tabela priorizada (até 10): edital, órgão, escopo, valor, prazo (confirmado na fonte), aderência, motivo, link. Deixe explícito em uma linha: "Fonte: varredura web. Esses editais ainda não estão no CaptaHub." Informe o caminho do arquivo salvo. Para os de ALTA aderência, ofereça abrir o projeto e sugira cadastrá-los no CaptaHub para entrarem na carteira.
 
 Emita também o bloco machine-readable, nos mesmos campos dos editais do CaptaHub (use `id` no formato `"web:{slug}"`, mais `title`, `institution`, `scope`, `category`, `value` em reais ou null, `deadline` AAAA-MM-DD ou null, `is_continuous`, `url`, `description`), para o fluxo seguir:
 

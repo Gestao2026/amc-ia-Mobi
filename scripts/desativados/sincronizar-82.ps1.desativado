@@ -1,0 +1,344 @@
+# ---------------------------------------------------------------------------
+# Sincronizacao aditiva de duas vias da pasta _82.
+#
+#   Lado A: _82 no Google Drive da mentora (a viva)
+#   Lado B: _82 na Area de Trabalho (a copia local)
+#
+# ADITIVA quer dizer: so acrescenta. Nunca apaga, nem arquivo, nem pasta, nem
+# pasta vazia. Nao existe nenhuma opcao de espelhamento ou de exclusao neste
+# script, e ha uma auditoria no comeco que se recusa a rodar caso alguem
+# introduza uma no futuro.
+#
+# O que ele faz, nesta ordem:
+#   1. Monta as duas unidades virtuais, para o caminho caber em 260 caracteres.
+#   2. Indexa os dois lados (caminho relativo, tamanho, data).
+#   3. Decide o que fazer com cada arquivo e cada pasta.
+#   4. Guarda a versao anterior de todo arquivo que for sobrescrito.
+#   5. Copia, nos dois sentidos.
+#   6. Grava relatorio CSV e resumo no log.
+#
+# SEM o parametro -Executar ele apenas SIMULA. Nada e tocado.
+#
+#   .\sincronizar-82.ps1                          simula e mostra o relatorio
+#   .\sincronizar-82.ps1 -Somente "06 - Clientes" simula so essa subpasta
+#   .\sincronizar-82.ps1 -Executar                executa de verdade
+#
+# Regras do projeto que este script obedece, ver CLAUDE.md:
+#   - pasta vazia nao se apaga, e por isso ela e criada do outro lado tambem
+#   - nenhuma pasta _82 se apaga
+#   - a maquina nao manda nada para a Lixeira
+# ---------------------------------------------------------------------------
+
+[CmdletBinding()]
+param(
+    [switch] $Executar,
+    # Limita a operacao a uma subpasta, por exemplo "06 - Clientes".
+    [string] $Somente = ""
+)
+
+$ErrorActionPreference = 'Stop'
+
+# --- DESATIVADO EM 26/08/2026, POR DECISAO DA CAPTADORA ----------------------
+#
+# Este script sincronizava a _82 do Drive com a _82 da Area de Trabalho nos dois
+# sentidos. Ele esta DESLIGADO e nao deve voltar a rodar sem decisao explicita.
+#
+# O motivo, com todas as letras:
+#
+#   Em 25/08/2026 a captadora corrigiu a mao as 21 pastas de cliente da
+#   `06 - Clientes` NO DRIVE. A copia da Area de Trabalho ficou como estava
+#   antes da correcao: numero repetido (dois 08, dois 09, dois 11, dois 12),
+#   faltando do 14 ao 21, com `12 - Adapte_Clientes` e `18 - Outros Modelos`.
+#
+#   Como este script e ADITIVO e nunca apaga, rodar com -Executar levaria os
+#   nomes antigos da Area de Trabalho para dentro do Drive. A `06 - Clientes`
+#   ficaria com as duas versoes lado a lado, a certa e a antiga, e o trabalho
+#   de correcao se perderia no meio da duplicacao.
+#
+#   O jeito seguro de alinhar as duas e sentido unico, do Drive para a Area de
+#   Trabalho. Nunca o contrario, e nunca nos dois sentidos ao mesmo tempo.
+#
+# Para religar: apagar este bloco, renomear o arquivo de volta para
+# `scripts/sincronizar-82.ps1` e rodar PRIMEIRO sem -Executar, lendo o
+# relatorio linha por linha.
+
+throw @'
+Este script esta DESATIVADO desde 26/08/2026, por decisao da captadora.
+
+Ele sincroniza a _82 nos dois sentidos e nunca apaga. No estado atual das
+pastas, rodar aqui duplicaria a `06 - Clientes` do Drive, misturando a
+estrutura corrigida em 25/08 com os nomes antigos da Area de Trabalho.
+
+Nada foi executado. Leia o cabecalho deste arquivo antes de religar.
+'@
+
+# --- Os dois lados -----------------------------------------------------------
+
+$DRIVE_REAL = 'G:\.shortcut-targets-by-id\1YxXksuP6SHlVKA4bT5gaC0WG4Wy4OXej\_82 - Rosepaula Aparecida Andrade Rodrigues'
+$DESK_REAL  = 'C:\Users\rosep\Desktop\_82 - Rosepaula Aparecida Andrade Rodrigues'
+
+$LETRA_DRIVE = 'M:'   # ja usada pelo projeto, aponta para a pasta do Drive
+$LETRA_DESK  = 'N:'   # temporaria, so enquanto este script roda
+
+$BASE      = 'C:\Users\rosep\Backups\pasta-82'
+$LOG       = 'C:\Users\rosep\Backups\_historico-backup.log'
+$CARIMBO   = Get-Date -Format 'yyyy-MM-dd-HHmm'
+$VERSOES   = Join-Path $BASE ('_versoes-substituidas\' + $CARIMBO)
+$RELATORIO = Join-Path $BASE ('_sincronizacao\' + $CARIMBO + '-relatorio.csv')
+
+# Arquivos que nunca entram na comparacao.
+#   desktop.ini             o Drive recria sozinho na maquina, nao existe na nuvem
+#   .gdoc .gsheet .gslides  ponteiros para arquivos do Google, sem conteudo proprio
+#   ~$...                   bloqueio do Office, existe so com o documento aberto
+$IGNORAR_NOME   = @('desktop.ini')
+$IGNORAR_EXT    = @('.gdoc', '.gsheet', '.gslides', '.gform', '.gdraw', '.tmp')
+$IGNORAR_INICIO = @('~$')
+
+# Diferenca de horario abaixo da qual dois arquivos sao considerados iguais.
+# Sistemas de arquivo diferentes arredondam o relogio de formas diferentes.
+$TOLERANCIA_SEGUNDOS = 3
+
+# --- Auditoria de seguranca --------------------------------------------------
+# Le o proprio arquivo e recusa a rodar se encontrar uma opcao destrutiva.
+# Os termos sao montados em pedacos justamente para nao aparecerem literais
+# aqui dentro. Se alguem editar o script no futuro e colar um espelhamento,
+# este bloco derruba a execucao antes de qualquer coisa ser tocada.
+
+$proibidas = @(
+    ('/' + 'MIR'),
+    ('/' + 'PURGE'),
+    ('/' + 'MOVE'),
+    ('Remove' + '-Item'),
+    ('Clear' + '-Content'),
+    ('Recycle' + 'Bin')
+)
+$fonte = Get-Content -LiteralPath $PSCommandPath -Raw
+foreach ($p in $proibidas) {
+    if ($fonte -match [regex]::Escape($p)) {
+        throw "AUDITORIA: o termo destrutivo '$p' aparece no script. Nada foi executado."
+    }
+}
+
+# --- Ferramentas -------------------------------------------------------------
+
+function Anota($msg) {
+    $linha = "{0:yyyy-MM-dd HH:mm:ss}  sincronizacao _82  {1}" -f (Get-Date), $msg
+    Write-Host $linha
+    try { Add-Content -LiteralPath $LOG -Value $linha -Encoding UTF8 } catch {}
+}
+
+function MontaUnidade($letra, $alvo) {
+    if (Test-Path -LiteralPath ($letra + '\')) { return $false }   # ja existia
+    if (-not (Test-Path -LiteralPath $alvo)) {
+        throw "Pasta nao encontrada, nada foi feito: $alvo"
+    }
+    & subst $letra $alvo | Out-Null
+    if (-not (Test-Path -LiteralPath ($letra + '\'))) {
+        throw "Falhou ao montar $letra em $alvo"
+    }
+    return $true   # fui eu que montei, entao desmonto no fim
+}
+
+function Ignorado($arquivo) {
+    if ($IGNORAR_NOME -contains $arquivo.Name) { return $true }
+    if ($IGNORAR_EXT -contains $arquivo.Extension.ToLower()) { return $true }
+    foreach ($p in $IGNORAR_INICIO) { if ($arquivo.Name.StartsWith($p)) { return $true } }
+    return $false
+}
+
+# As raizes chegam sempre com a barra no fim, para o Substring bater certo.
+function IndexaArquivos($raiz) {
+    $mapa = @{}
+    Get-ChildItem -LiteralPath $raiz -Recurse -File -Force -ErrorAction SilentlyContinue |
+        ForEach-Object {
+            if (Ignorado $_) { return }
+            $rel = $_.FullName.Substring($raiz.Length)
+            $mapa[$rel] = [pscustomobject]@{
+                Rel      = $rel
+                Tamanho  = $_.Length
+                Data     = $_.LastWriteTimeUtc
+                Completo = $_.FullName
+            }
+        }
+    return $mapa
+}
+
+function IndexaPastas($raiz) {
+    $conjunto = New-Object 'System.Collections.Generic.HashSet[string]'
+    Get-ChildItem -LiteralPath $raiz -Recurse -Directory -Force -ErrorAction SilentlyContinue |
+        ForEach-Object {
+            [void] $conjunto.Add($_.FullName.Substring($raiz.Length))
+        }
+    return $conjunto
+}
+
+# Copia UM arquivo com robocopy, que lida com caminho longo sozinho.
+# Nenhuma opcao aqui apaga coisa alguma.
+function CopiaArquivo($origemCompleto, $destinoCompleto) {
+    $dirOrigem  = Split-Path -Parent $origemCompleto
+    $dirDestino = Split-Path -Parent $destinoCompleto
+    $nome       = Split-Path -Leaf   $origemCompleto
+    & robocopy $dirOrigem $dirDestino $nome /NJH /NJS /NP /NDL /NFL /R:1 /W:1 | Out-Null
+    # robocopy devolve 0 a 7 para sucesso. 8 ou mais e falha de verdade.
+    if ($LASTEXITCODE -ge 8) { throw "robocopy falhou (codigo $LASTEXITCODE) em $nome" }
+}
+
+# --- Comeco ------------------------------------------------------------------
+
+Anota ('iniciada em modo ' + $(if ($Executar) { 'EXECUCAO' } else { 'SIMULACAO' }))
+
+$montei = @()
+try {
+    if (MontaUnidade $LETRA_DRIVE $DRIVE_REAL) { $montei += $LETRA_DRIVE }
+    if (MontaUnidade $LETRA_DESK  $DESK_REAL)  { $montei += $LETRA_DESK  }
+
+    $A = $LETRA_DRIVE + '\'   # Drive
+    $B = $LETRA_DESK  + '\'   # Area de Trabalho
+    if ($Somente) {
+        $A = (Join-Path $A $Somente) + '\'
+        $B = (Join-Path $B $Somente) + '\'
+        if (-not (Test-Path -LiteralPath $A)) { throw "Nao existe no Drive: $Somente" }
+        if (-not (Test-Path -LiteralPath $B)) { throw "Nao existe na Area de Trabalho: $Somente" }
+    }
+
+    Anota 'indexando os dois lados'
+    $arqA = IndexaArquivos $A
+    $arqB = IndexaArquivos $B
+    $dirA = IndexaPastas   $A
+    $dirB = IndexaPastas   $B
+    Anota ('Drive: {0} arquivos, {1} pastas | Area de Trabalho: {2} arquivos, {3} pastas' -f `
+           $arqA.Count, $dirA.Count, $arqB.Count, $dirB.Count)
+
+    # --- Decisao -------------------------------------------------------------
+
+    $acoes = New-Object System.Collections.ArrayList
+
+    # 1. Pastas que faltam de um lado. Inclui pasta vazia, de proposito.
+    foreach ($d in $dirA) {
+        if (-not $dirB.Contains($d)) {
+            [void]$acoes.Add([pscustomobject]@{ Tipo='PASTA'; Sentido='Drive -> Area de Trabalho'; Rel=$d; Motivo='pasta nao existe do outro lado'; Bytes=0 })
+        }
+    }
+    foreach ($d in $dirB) {
+        if (-not $dirA.Contains($d)) {
+            [void]$acoes.Add([pscustomobject]@{ Tipo='PASTA'; Sentido='Area de Trabalho -> Drive'; Rel=$d; Motivo='pasta nao existe do outro lado'; Bytes=0 })
+        }
+    }
+
+    # 2. Arquivos.
+    foreach ($rel in $arqA.Keys) {
+        $a = $arqA[$rel]
+        if (-not $arqB.ContainsKey($rel)) {
+            [void]$acoes.Add([pscustomobject]@{ Tipo='NOVO'; Sentido='Drive -> Area de Trabalho'; Rel=$rel; Motivo='so existe no Drive'; Bytes=$a.Tamanho })
+            continue
+        }
+        $b = $arqB[$rel]
+        $dif = ($a.Data - $b.Data).TotalSeconds
+        if ([Math]::Abs($dif) -le $TOLERANCIA_SEGUNDOS) {
+            if ($a.Tamanho -ne $b.Tamanho) {
+                # Mesma data e tamanho diferente. Nao da para dizer qual vale.
+                [void]$acoes.Add([pscustomobject]@{ Tipo='CONFLITO'; Sentido='nenhum'; Rel=$rel; Motivo='mesma data, tamanhos diferentes, decisao sua'; Bytes=$a.Tamanho })
+            }
+            continue
+        }
+        if ($dif -gt 0) {
+            [void]$acoes.Add([pscustomobject]@{ Tipo='SOBRESCREVE'; Sentido='Drive -> Area de Trabalho'; Rel=$rel; Motivo='versao do Drive e mais nova'; Bytes=$a.Tamanho })
+        } else {
+            [void]$acoes.Add([pscustomobject]@{ Tipo='SOBRESCREVE'; Sentido='Area de Trabalho -> Drive'; Rel=$rel; Motivo='versao da Area de Trabalho e mais nova'; Bytes=$b.Tamanho })
+        }
+    }
+    foreach ($rel in $arqB.Keys) {
+        if (-not $arqA.ContainsKey($rel)) {
+            $b = $arqB[$rel]
+            [void]$acoes.Add([pscustomobject]@{ Tipo='NOVO'; Sentido='Area de Trabalho -> Drive'; Rel=$rel; Motivo='so existe na Area de Trabalho'; Bytes=$b.Tamanho })
+        }
+    }
+
+    # --- Relatorio -----------------------------------------------------------
+
+    Write-Host ''
+    Write-Host '================ O QUE SERIA FEITO ================'
+    foreach ($g in ($acoes | Group-Object Tipo | Sort-Object Name)) {
+        $mb = [math]::Round((($g.Group | Measure-Object Bytes -Sum).Sum)/1MB, 1)
+        Write-Host ('{0,-12} {1,5} itens {2,9} MB' -f $g.Name, $g.Count, $mb)
+    }
+    Write-Host ''
+    foreach ($s in ($acoes | Where-Object { $_.Sentido -ne 'nenhum' } | Group-Object Sentido)) {
+        Write-Host ('{0,-28} {1} itens' -f $s.Name, $s.Count)
+    }
+    $conflitos = @($acoes | Where-Object { $_.Tipo -eq 'CONFLITO' })
+    if ($conflitos.Count -gt 0) {
+        Write-Host ''
+        Write-Host ('ATENCAO: {0} conflitos. Nenhum deles sera tocado.' -f $conflitos.Count)
+        foreach ($c in ($conflitos | Select-Object -First 20)) { Write-Host ('   ' + $c.Rel) }
+    }
+
+    $null = New-Item -ItemType Directory -Force -Path (Split-Path -Parent $RELATORIO)
+    $acoes | Sort-Object Tipo, Rel | Export-Csv -LiteralPath $RELATORIO -NoTypeInformation -Encoding UTF8
+    Write-Host ''
+    Anota "relatorio gravado em $RELATORIO"
+
+    if (-not $Executar) {
+        Write-Host ''
+        Write-Host 'SIMULACAO. Nada foi copiado, nada foi criado, nada foi alterado.'
+        Write-Host 'Para executar de verdade, acrescente o parametro -Executar'
+        Anota 'simulacao concluida, nenhuma alteracao feita'
+        return
+    }
+
+    # --- Execucao ------------------------------------------------------------
+
+    Anota 'executando'
+
+    # 1. Pastas primeiro, para o destino existir antes do arquivo chegar.
+    $criadas = 0
+    foreach ($a in @($acoes | Where-Object { $_.Tipo -eq 'PASTA' })) {
+        $destino = if ($a.Sentido -like 'Drive*') { Join-Path $B $a.Rel } else { Join-Path $A $a.Rel }
+        if (-not (Test-Path -LiteralPath $destino)) {
+            $null = New-Item -ItemType Directory -Force -Path $destino
+            $criadas++
+        }
+    }
+    Anota "$criadas pastas criadas, incluindo as vazias"
+
+    # 2. Guarda a versao anterior de tudo que for sobrescrito.
+    $guardadas = 0
+    foreach ($a in @($acoes | Where-Object { $_.Tipo -eq 'SOBRESCREVE' })) {
+        $lado   = if ($a.Sentido -like 'Drive*') { 'area-de-trabalho' } else { 'drive' }
+        $atual  = if ($a.Sentido -like 'Drive*') { Join-Path $B $a.Rel } else { Join-Path $A $a.Rel }
+        $guarda = Join-Path (Join-Path $VERSOES $lado) $a.Rel
+        $null = New-Item -ItemType Directory -Force -Path (Split-Path -Parent $guarda)
+        CopiaArquivo $atual $guarda
+        $guardadas++
+    }
+    Anota "$guardadas versoes anteriores guardadas em $VERSOES"
+
+    # 3. Copia.
+    $copiados = 0
+    $falhas = New-Object System.Collections.ArrayList
+    foreach ($a in @($acoes | Where-Object { $_.Tipo -eq 'NOVO' -or $_.Tipo -eq 'SOBRESCREVE' })) {
+        if ($a.Sentido -like 'Drive*') { $de = Join-Path $A $a.Rel; $para = Join-Path $B $a.Rel }
+        else                           { $de = Join-Path $B $a.Rel; $para = Join-Path $A $a.Rel }
+        try { CopiaArquivo $de $para; $copiados++ }
+        catch { [void]$falhas.Add(('{0} :: {1}' -f $a.Rel, $_)) }
+    }
+    Anota "$copiados arquivos copiados, $($falhas.Count) falhas"
+    foreach ($f in $falhas) { Write-Host ('   FALHA: ' + $f) }
+
+    # 4. Conferencia final: nenhum lado pode ter ficado com menos arquivos.
+    $depoisA = (IndexaArquivos $A).Count
+    $depoisB = (IndexaArquivos $B).Count
+    Anota ('conferencia: Drive {0} -> {1} arquivos | Area de Trabalho {2} -> {3} arquivos' -f `
+           $arqA.Count, $depoisA, $arqB.Count, $depoisB)
+    if ($depoisA -lt $arqA.Count -or $depoisB -lt $arqB.Count) {
+        Anota 'ALERTA: algum lado ficou com menos arquivos do que comecou. Conferir agora.'
+    }
+}
+finally {
+    # A M: fica montada, e do projeto. So a N: temporaria e desfeita.
+    foreach ($l in $montei) {
+        if ($l -eq $LETRA_DESK) { & subst $l /D | Out-Null }
+    }
+}
+
+Anota 'encerrada'

@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0}</style>
+</head>
+<body>
+<title>POP da Captação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root {
+    --ground: #F3F6F6;
+    --surface: #FFFFFF;
+    --ink: #12262E;
+    --ink-soft: #4B6068;
+    --rule: #CCDADD;
+    --rule-strong: #9FB6BC;
+    --primary: #0F3A4D;
+    --accent: #0E7490;
+    --accent-soft: #E0EFF2;
+    --decide: #9A4C0A;
+    --decide-soft: #FBEDDC;
+    --stop: #B42318;
+    --stop-soft: #FCE8E6;
+    --sem-verde: #2E9D5B;
+    --sem-amarelo: #D9A406;
+    --sem-laranja: #E07B1A;
+    --sem-vermelho: #C73A2E;
+    --f-display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+    --f-body: "Public Sans", "Segoe UI", Roboto, Arial, sans-serif;
+    --f-mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0B171C;
+      --surface: #10222A;
+      --ink: #E1EBED;
+      --ink-soft: #9BB0B6;
+      --rule: #23404A;
+      --rule-strong: #3A5E69;
+      --primary: #D3E9EE;
+      --accent: #4FC1D9;
+      --accent-soft: #123640;
+      --decide: #F2AA5E;
+      --decide-soft: #372611;
+      --stop: #FF8B7C;
+      --stop-soft: #3A1714;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0B171C;
+    --surface: #10222A;
+    --ink: #E1EBED;
+    --ink-soft: #9BB0B6;
+    --rule: #23404A;
+    --rule-strong: #3A5E69;
+    --primary: #D3E9EE;
+    --accent: #4FC1D9;
+    --accent-soft: #123640;
+    --decide: #F2AA5E;
+    --decide-soft: #372611;
+    --stop: #FF8B7C;
+    --stop-soft: #3A1714;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .folha {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 40px 28px 64px;
+    display: grid;
+    gap: 44px;
+  }
+  h1, h2, h3 {
+    font-family: var(--f-display);
+    color: var(--primary);
+    text-wrap: balance;
+    margin: 0;
+  }
+  code, .cmd {
+    font-family: var(--f-mono);
+    font-size: 0.86em;
+  }
+  .rotulo {
+    font-family: var(--f-display);
+    font-stretch: 85%;
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* Cabeçalho do POP */
+  .topo { display: grid; gap: 22px; }
+  .topo-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .titulo { display: grid; gap: 6px; }
+  h1 {
+    font-size: clamp(34px, 5vw, 50px);
+    font-weight: 800;
+    font-stretch: 78%;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .lead {
+    max-width: 62ch;
+    color: var(--ink-soft);
+    font-size: 16px;
+    margin: 4px 0 0;
+  }
+  .imprimir {
+    font: 600 13px var(--f-body);
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--rule-strong);
+    border-radius: 4px;
+    padding: 7px 14px;
+    cursor: pointer;
+  }
+  .imprimir:hover { background: var(--accent-soft); }
+  .imprimir:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .ficha {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: 1px solid var(--rule-strong);
+    background: var(--surface);
+  }
+  .ficha > div {
+    padding: 10px 14px 12px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    gap: 2px;
+  }
+  .ficha > div:nth-child(3n) { border-right: none; }
+  .ficha > div:nth-last-child(-n+3) { border-bottom: none; }
+  .ficha .valor { font-weight: 600; }
+  .ficha .pendente { color: var(--decide); }
+
+  /* Regras */
+  .regras {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    border-top: 2px solid var(--primary);
+    padding-top: 18px;
+  }
+  .regra { display: grid; gap: 6px; align-content: start; }
+  .regra h3 { font-size: 18px; font-weight: 700; font-stretch: 88%; }
+  .regra p { margin: 0; color: var(--ink-soft); }
+
+  /* Seções */
+  .secao { display: grid; gap: 16px; }
+  .secao-cab { display: grid; gap: 4px; }
+  h2 { font-size: 26px; font-weight: 750; font-stretch: 82%; }
+  .secao-cab p { margin: 0; color: var(--ink-soft); max-width: 70ch; }
+
+  /* Procedimento */
+  .dia {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+  }
+  .dia-cab {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .dia-cab h3 { font-size: 20px; font-weight: 750; font-stretch: 85%; }
+  .dia-cab h3 .dia-n { color: var(--accent); margin-right: 8px; }
+  .dia-cab .soma { font-size: 13px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+  .grade {
+    display: grid;
+    grid-template-columns: 34px minmax(170px, 1.25fr) 1fr 1.1fr 1.1fr 92px;
+    column-gap: 16px;
+  }
+  .grade-cab {
+    padding: 8px 18px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--accent-soft);
+  }
+  .passo {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+  .passo:last-child { border-bottom: none; }
+  .num {
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-stretch: 80%;
+    font-size: 24px;
+    line-height: 1.1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .etapa { display: grid; gap: 3px; }
+  .etapa strong { font-size: 15.5px; }
+  .etapa .cmd { color: var(--accent); font-weight: 500; }
+  .celula { font-size: 14px; }
+  .celula .rotulo { display: none; }
+  .suave { color: var(--ink-soft); }
+  .decide { display: flex; gap: 8px; align-items: baseline; }
+  .decide::before {
+    content: "";
+    flex: 0 0 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--decide);
+    transform: translateY(-1px);
+  }
+  .decide.nada::before { background: var(--rule-strong); }
+  .tempo { font-size: 13.5px; font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+  .chip {
+    display: inline-block;
+    font: 700 10.5px var(--f-display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    width: fit-content;
+  }
+  .chip.trava { color: var(--stop); background: var(--stop-soft); }
+  .chip.portal { color: var(--decide); background: var(--decide-soft); }
+  .nota { font-size: 13px; color: var(--ink-soft); margin: 2px 0 0; }
+  .passo > .nota { grid-column: 2 / -1; }
+  .semaforo { display: inline-flex; gap: 3px; margin-left: 4px; vertical-align: middle; }
+  .semaforo i { width: 8px; height: 8px; border-radius: 50%; display: block; }
+  .semaforo i:nth-child(1) { background: var(--sem-verde); }
+  .semaforo i:nth-child(2) { background: var(--sem-amarelo); }
+  .semaforo i:nth-child(3) { background: var(--sem-laranja); }
+  .semaforo i:nth-child(4) { background: var(--sem-vermelho); }
+
+  .atalho {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+    padding: 18px 20px;
+    border: 1px dashed var(--rule-strong);
+  }
+  .atalho h3 { font-size: 19px; font-weight: 750; font-stretch: 85%; margin-bottom: 6px; }
+  .atalho p { margin: 0 0 6px; }
+  .atalho ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+
+  /* Tabelas simples */
+  .tabela-wrap { overflow-x: auto; border: 1px solid var(--rule); background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th {
+    text-align: left;
+    padding: 9px 16px;
+    background: var(--accent-soft);
+    border-bottom: 1px solid var(--rule);
+  }
+  th .rotulo { color: var(--primary); }
+  td { padding: 10px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td .cmd { color: var(--accent); white-space: nowrap; }
+
+  /* Financiador x interno */
+  .destino {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    border: 1px solid var(--rule);
+    background: var(--surface);
+  }
+  .destino > div { padding: 16px 20px; display: grid; gap: 10px; align-content: start; }
+  .destino > div + div { border-left: 1px solid var(--rule); }
+  .destino h3 { font-size: 18px; font-weight: 750; font-stretch: 85%; }
+  .destino ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+  .destino li { display: grid; gap: 1px; }
+  .destino li .cmd { color: var(--accent); }
+  .destino li span.suave { font-size: 13px; }
+  .destino .interno h3 { color: var(--decide); }
+
+  /* Registros */
+  .registros {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+    border-top: 1px solid var(--rule);
+  }
+  .registros div {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+  }
+  .registros .cmd { color: var(--primary); font-weight: 500; }
+  .caminho { font-family: var(--f-mono); font-size: 13px; color: var(--ink-soft); }
+
+  .rodape {
+    border-top: 2px solid var(--primary);
+    padding-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 860px) {
+    .folha { padding: 28px 18px 48px; gap: 36px; }
+    .ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ficha > div { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .ficha > div:nth-child(2n) { border-right: none; }
+    .ficha > div:nth-child(3n) { border-right: 1px solid var(--rule); }
+    .ficha > div:nth-child(2n) { border-right: none; }
+    .ficha > div:nth-last-child(-n+3) { border-bottom: 1px solid var(--rule); }
+    .ficha > div:nth-last-child(-n+2) { border-bottom: none; }
+    .regras, .atalho, .destino, .registros { grid-template-columns: 1fr; }
+    .destino > div + div { border-left: none; border-top: 1px solid var(--rule); }
+    .grade-cab { display: none; }
+    .grade { grid-template-columns: 34px minmax(0, 1fr); row-gap: 8px; }
+    .grade > .celula, .grade > .tempo, .passo > .nota, .grade > .etapa { grid-column: 2; }
+    .celula .rotulo { display: block; margin-bottom: 1px; }
+    .registros div { grid-template-columns: 1fr; gap: 2px; }
+  }
+
+  @media print {
+    /* O navegador monta a impressão com a largura do papel, o que ativa o
+       formato empilhado. Nele, TODA célula precisa ser posicionada do mesmo
+       jeito: se umas tiverem coluna fixa e outras forem posicionadas
+       automaticamente, o navegador põe duas no mesmo lugar e o texto sai
+       sobreposto. Foi o que aconteceu no item 10. */
+    @page { size: A4; margin: 14mm; }
+    body { background: #fff; color: #000; font-size: 10.5pt; }
+    /* Grade não quebra página direito: ao paginar, o navegador imprime um bloco
+       por cima do outro (o atalho caía sobre o item 10). Na impressão, tudo vira
+       fluxo simples, com margem no lugar do espaçamento da grade. */
+    .folha, .secao, .secao-cab, .topo, .titulo { display: block; padding: 0; max-width: none; }
+    .folha > * + * { margin-top: 22px; }
+    .secao > * + * { margin-top: 14px; }
+    .topo > * + * { margin-top: 14px; }
+    .dia + .dia, .dia + .atalho { margin-top: 14px; }
+    .imprimir { display: none; }
+    .grade { grid-template-columns: 30px minmax(0, 1fr); row-gap: 6px; }
+    .grade-cab { display: none; }
+    .grade > .etapa, .grade > .celula, .grade > .tempo, .passo > .nota { grid-column: 2; }
+    .celula .rotulo { display: block; margin-bottom: 1px; }
+    /* Nenhuma etapa se parte entre duas páginas */
+    .passo, .dia-cab, .regra, .atalho, .destino > div,
+    .registros div, .ficha > div, tr { break-inside: avoid; }
+    .dia { break-inside: auto; }
+    /* Cabeçalho nunca fica órfão no pé da página */
+    .grade-cab, .secao-cab, h2, h3 { break-after: avoid; }
+    .nota { break-before: avoid; }
+    .dia, .ficha, .tabela-wrap, .destino { background: #fff; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<main class="folha">
+
+  <header class="topo">
+    <div class="topo-linha">
+      <div class="titulo">
+        <span class="rotulo">Procedimento Operacional Padrão · AMC IA</span>
+        <h1>POP da Captação</h1>
+        <p class="lead">Todo edital passa pelas mesmas etapas, na mesma ordem. O sistema escreve e confere; a captadora decide. Cada projeto vira execução, não tentativa.</p>
+      </div>
+      <button class="imprimir" type="button" onclick="window.print()">Imprimir o POP</button>
+    </div>
+
+    <div class="ficha" aria-label="Identificação do procedimento">
+      <div><span class="rotulo">Código</span><span class="valor cmd">POP-CAP-01</span></div>
+      <div><span class="rotulo">Procedimento</span><span class="valor">Elaboração de projeto para edital</span></div>
+      <div><span class="rotulo">Revisão</span><span class="valor">00</span></div>
+      <div><span class="rotulo">Emissão</span><span class="valor">10/09/2026</span></div>
+      <div><span class="rotulo">Aplica-se a</span><span class="valor">Toda OSC da carteira, todo edital</span></div>
+      <div><span class="rotulo">Aprovação</span><span class="valor pendente">Pendente da captadora</span></div>
+    </div>
+  </header>
+
+  <section class="regras" aria-label="Regras que valem em todas as etapas">
+    <div class="regra">
+      <span class="rotulo">Regra 1</span>
+      <h3>Uma só trava</h3>
+      <p>Com INAPTO NO MOMENTO, a proposta não se escreve. Todo o resto alerta e espera a sua decisão.</p>
+    </div>
+    <div class="regra">
+      <span class="rotulo">Regra 2</span>
+      <h3>Nada roda sozinho</h3>
+      <p>Nenhuma etapa dispara por horário ou por gatilho. Tudo começa quando você chama o comando.</p>
+    </div>
+    <div class="regra">
+      <span class="rotulo">Regra 3</span>
+      <h3>CaptaHub só com o seu OK</h3>
+      <p>Toda gravação na carteira é oferecida em uma linha e espera o seu OK, uma de cada vez.</p>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="proc">
+    <div class="secao-cab">
+      <span class="rotulo">Procedimento</span>
+      <h2 id="proc">Do edital à submissão, em três dias</h2>
+      <p>O trabalho do sistema soma cerca de 30 a 45 minutos. O resto do tempo são as suas respostas, as suas decisões e os documentos que o cliente precisa mandar.</p>
+    </div>
+
+    <div class="dia">
+      <div class="dia-cab">
+        <h3><span class="dia-n">Dia 1</span>Decidir se entra</h3>
+        <span class="soma">cerca de 12 a 20 min de sistema</span>
+      </div>
+      <div class="grade grade-cab" aria-hidden="true">
+        <span class="rotulo">Nº</span><span class="rotulo">Etapa e comando</span><span class="rotulo">Precisa ter antes</span><span class="rotulo">O que sai</span><span class="rotulo">Você decide</span><span class="rotulo">Tempo</span>
+      </div>
+
+      <div class="grade passo">
+        <span class="num">1</span>
+        <div class="etapa"><strong>Analisar o edital</strong><span class="cmd">/edital-analisar</span></div>
+        <div class="celula"><span class="rotulo">Precisa ter antes</span>O edital e os anexos, em PDF, link ou texto</div>
+        <div class="celula"><span class="rotulo">O que sai</span><code>edital.md</code> nos 11 blocos, aberto pelo semáforo e pela ficha</div>
+        <div class="celula"><span class="rotulo">Você decide</span><span class="decide nada suave">Nada ainda</span></div>
+        <span class="tempo">4 a 8 min</span>
+      </div>
+
+      <div class="grade passo">
+        <span class="num">2</span>
+        <div class="etapa"><strong>Checar a elegibilidade</strong><span class="cmd">/projeto-elegibilidade</span><span class="chip trava">Trava</span></div>
+        <div class="celula"><span class="rotulo">Precisa ter antes</span><code>edital.md</code> e o perfil da OSC</div>
+        <div class="celula"><span class="rotulo">O que sai</span><code>elegibilidade.md</code>: APTO, APTO COM PENDÊNCIAS ou INAPTO</div>
+        <div class="celula"><span class="rotulo">Você decide</span><span class="decide">Se regulariza as pendências. INAPTO encerra este edital.</span></div>
+        <span class="tempo">cerca de 90 s</span>
+      </div>
+
+      <div class="grade passo">
+        <span class="num">3</span>
+        <div class="etapa"><strong>Decidir a estratégia</strong><span class="cmd">/projeto-estrategia</span></div>
+        <div class="celula"><span class="rotulo">Precisa ter antes</span>APTO ou APTO COM PENDÊNCIAS</div>
+        <div class="celula"><span class="rotulo">O que sai</span><code>estrategia.md</code>: oito análises e o semáforo<span class="semaforo" aria-label="verde, amarelo, laranja, vermelho"><i></i><i></i><i></i><i></i></span></div>
+        <div class="celula"><span class="rotulo">Você decide</span><span class="decide"><span><strong>Entrar ou não.</strong> Laranja e vermelho pedem a sua confirmação.</span></span></div>
+        <span class="tempo">3 a 6 min</span>
+      </div>
+
+      <div class="grade passo">
+        <span class="num">4</span>
+        <div class="etapa"><strong>Pedir os documentos</strong><span class="cmd">/projeto-anexos</span></div>
+        <div class="celula"><span class="rotulo">Precisa ter antes</span><code>elegibilidade.md</code></div>
+        <div class="celula"><span class="rotulo">O que sai</span><code>checklist-anexos.md</code> e as declarações em <code>documentos/</code></div>
+        <div class="celula"><span class="rotulo">Você decide</span><span class="decide">Cobrar do cliente assinaturas, certidões e o que só ele tem</span></div>
+        <span class="tempo">2 a 4 min</span>
+        <p class="nota celula">Rode já no dia 1: documento do cliente é o que mais demora. Rode de novo depois do orçamento se o edital exigir cotação formal anexada.</p>
+      </div>
+    </div>
+
+    <div class="dia">
+      <div class="dia-cab">
+        <h3><span class="dia-n">Dia 2</span>Construir o projeto</h3>
+        <span class="soma">cerca de 6 a 12 min de sistema, mais as suas respostas</span>
+      </div>
+      <div class="grade grade-cab" aria-hidden="true">
+        <span class="rotulo">Nº</span><span class="rotulo">Etapa e comando</span><span class="rotulo">Precisa ter antes</span><span class="rotulo">O que sai</span><span class="rotulo">Você decide</span><span class="rotulo">Tempo</span>
+      </div>
+
+      <div class="grade passo">
+        <span class="num">5</span>
+        <div class="etapa"><strong>Escrever a proposta</strong><span class="cmd">/projeto-escrever</span></div>
+        <div class="celula"><span class="rotulo">Precisa ter antes</span>A estratégia e o formulário oficial do edital, se houver</div>
+        <div class="celula"><span class="rotulo">O que sai</span><code>proposta.md</code>, bloco a bloco, ancorada no edital</div>
+        <div class="celula"><span class="rotulo">Você decide</span><span class="decide">Aprovar o texto ou pedir ajuste</span></div>
+        <span class="tempo">4 a 8 min</span>
+      </div>
+
+      <div class="grade passo">
+        <span class="num">6</span>
+        <div class="etapa"><strong>Montar o orçamento</strong><span class="cmd">/projeto-orcamento</span></div>
+        <div class="celula"><span class="rotulo">Precisa ter antes</span><code>proposta.md</code></div>
+        <div class="celula"><span class="rotulo">O que sai</span><code>orcamento.md</code> por rubrica e <code>cotacoes.md</code> com 3 fontes e a mediana</div>
+        <div class="celula"><span class="rotulo">Você decide</span><span class="decide">Aprovar os valores</span></div>
+        <span class="tempo">2 a 4 min, mais com cotação</span>
+      </div>
+    </div>
+
+    <div class="dia">
+      <div class="dia-cab">
+        <h3><span class="dia-n">Dia 3</span>Conferir e entregar</h3>
+        <span class="soma">cerca de 5 min de sistema</span>
+      </div>
+      <div class="grade grade-cab" aria-hidden="true">
+        <span class="rotulo">Nº</span><span class="rotulo">Etapa e comando</span><span class="rotulo">Precisa ter antes</span><span class="rotulo">O que sai</span><span class="rotulo">Você decide</span><span class="rotulo">Tempo</span>
+      </div>
+
+      <div class="grade passo">
+        <span class="num">7</span>
+        <div class="etapa"><strong>Avaliar com visão de banca</strong><span class="cmd">/projeto-avaliar</span></div>
+        <div class="celula"><span class="rotulo">Precisa ter antes</span>Proposta e orçamento</div>
+        <div class="celula"><span class="rotulo">O que sai</span><code>score.md</code>: nota na escala do edital e reescrita dos campos fracos</div>
+        <div class="celula"><span class="rotulo">Você decide</span><span class="decide">O que corrigir antes de enviar</span></div>
+        <span class="tempo">2 a 3 min</span>
+      </div>
+
+      <div class="grade passo">
+        <span class="num">8</span>
+        <div class="etapa"><strong>Revisar</strong><span class="cmd">/projeto-revisar</span></div>
+        <div class="celula"><span class="rotulo">Precisa ter antes</span>Tudo acima</div>
+        <div class="celula"><span class="rotulo">O que sai</span><code>revisao.md</code>: PRONTO PARA SUBMETER ou AJUSTAR ANTES</div>
+        <div class="celula"><span class="rotulo">Você decide</span><span class="decide">Submeter ou ajustar</span></div>
+        <span class="tempo">cerca de 60 s</span>
+      </div>
+
+      <div class="grade passo">
+        <span class="num">9</span>
+        <div class="etapa"><strong>Exportar</strong><span class="cmd">/projeto-exportar</span></div>
+        <div class="celula"><span class="rotulo">Precisa ter antes</span>O projeto revisado</div>
+        <div class="celula"><span class="rotulo">O que sai</span><code>entrega-final/</code> em Word, PDF e planilha</div>
+        <div class="celula"><span class="rotulo">Você decide</span><span class="decide">Quais arquivos anexar (ver abaixo)</span></div>
+        <span class="tempo">cerca de 30 s</span>
+      </div>
+
+      <div class="grade passo">
+        <span class="num">10</span>
+        <div class="etapa"><strong>Submeter e registrar</strong><span class="chip portal">No portal, por você</span></div>
+        <div class="celula"><span class="rotulo">Precisa ter antes</span>A entrega final e as declarações assinadas</div>
+        <div class="celula"><span class="rotulo">O que sai</span>O comprovante do portal</div>
+        <div class="celula"><span class="rotulo">Você decide</span><span class="decide">Atualizar o status na carteira do CaptaHub</span></div>
+        <span class="tempo">no seu ritmo</span>
+        <p class="nota celula">Guarde o comprovante na pasta do projeto: a data de submissão só existe nele.</p>
+      </div>
+    </div>
+
+    <div class="atalho">
+      <div>
+        <span class="rotulo">Atalho</span>
+        <h3><span class="cmd">/projeto-completo</span></h3>
+        <p>Roda as etapas 1 a 9 numa sessão só, com o chefe do CaptaSuite dando Aprovado, Aprovado com ressalvas ou Refazer entre elas. Se você ainda não escolheu o edital, ele minera e indica até 3 finalistas.</p>
+        <p class="suave">30 a 50 min, parando nas suas aprovações.</p>
+      </div>
+      <div>
+        <span class="rotulo">Quando usar</span>
+        <ul>
+          <li>Edital novo, que você quer fazer de ponta a ponta de uma vez.</li>
+          <li>Projeto importante, em que vale uma segunda leitura sênior em cada etapa.</li>
+        </ul>
+        <span class="rotulo" style="margin-top:10px;display:block">Quando não usar</span>
+        <ul>
+          <li>Quando você só quer uma etapa: chame o comando dela.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="gatilhos">
+    <div class="secao-cab">
+      <span class="rotulo">Fora da linha</span>
+      <h2 id="gatilhos">Quando acontece, chame</h2>
+      <p>Situações que não são etapa de um projeto, mas aparecem toda semana.</p>
+    </div>
+    <div class="tabela-wrap">
+      <table>
+        <thead>
+          <tr><th><span class="rotulo">Quando acontece</span></th><th><span class="rotulo">Chame</span></th><th><span class="rotulo">O que sai</span></th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Fechou um cliente novo</td><td><span class="cmd">/osc-nova</span> ou <span class="cmd">/osc-importar</span></td><td><code>perfil-osc.md</code>, a partir do Cartão CNPJ e do estatuto</td></tr>
+          <tr><td>Vai trocar de cliente</td><td><span class="cmd">/osc-trocar</span></td><td>A OSC ativa, com só o que muda a próxima ação</td></tr>
+          <tr><td>Vai formalizar a assessoria</td><td><span class="cmd">/contrato</span>, opção 1</td><td>Minuta do contrato, para o advogado revisar</td></tr>
+          <tr><td>Quer achar edital para uma OSC</td><td><span class="cmd">/edital-minerar</span></td><td>Lista priorizada; a varredura web fica salva na pasta da OSC</td></tr>
+          <tr><td>Precisa escolher entre vários editais</td><td>"chame o captador-chefe"</td><td>Até 3 finalistas e qual não disputar</td></tr>
+          <tr><td>Quer segunda opinião numa etapa</td><td>"chame o captador-chefe"</td><td>Veredito registrado no <code>parecer-chefe.md</code></td></tr>
+          <tr><td>Perdeu o fio de um projeto</td><td>"em que etapa está o projeto X?"</td><td>O ponto em que ele parou e o próximo passo</td></tr>
+          <tr><td>Projeto aprovado, chegou o termo</td><td><span class="cmd">/contrato</span>, opção 2</td><td>Mapa das cláusulas: atenção, padrão, a negociar</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="destino">
+    <div class="secao-cab">
+      <span class="rotulo">Na hora de anexar</span>
+      <h2 id="destino">O que vai para o financiador</h2>
+      <p>A exportação gera tudo. Os documentos de uso interno já saem com o aviso "não anexar na submissão" escrito neles.</p>
+    </div>
+    <div class="destino">
+      <div>
+        <h3>Pode anexar</h3>
+        <ul>
+          <li><span class="cmd">proposta.doc · proposta.pdf</span><span class="suave">No formulário oficial, quando o edital der um</span></li>
+          <li><span class="cmd">orcamento.xls · orcamento.pdf</span><span class="suave">Ou no modelo de planilha do órgão</span></li>
+          <li><span class="cmd">cotacoes.pdf · cotacoes.xls</span><span class="suave">Só quando o edital pedir pesquisa de preços</span></li>
+          <li><span class="cmd">declaracoes/</span><span class="suave">Depois de assinadas pelo representante legal</span></li>
+        </ul>
+      </div>
+      <div class="interno">
+        <h3>Fica com você e o cliente</h3>
+        <ul>
+          <li><span class="cmd">projeto-completo.pdf</span><span class="suave">Dossiê de trabalho, reúne peças internas</span></li>
+          <li><span class="cmd">parecer-chefe · revisao</span><span class="suave">Vereditos e pendências</span></li>
+          <li><span class="cmd">score · elegibilidade</span><span class="suave">Nota e parecer de elegibilidade</span></li>
+          <li><span class="cmd">checklist-anexos</span><span class="suave">Controle do que foi entregue</span></li>
+          <li><span class="cmd">estrategia.md</span><span class="suave">Nunca é exportado</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="registros">
+    <div class="secao-cab">
+      <span class="rotulo">Registros</span>
+      <h2 id="registros">Onde cada coisa fica</h2>
+      <p>Tudo na pasta do projeto: <span class="caminho">minhas-oscs/{osc}/projetos/{edital}/</span>. O <code>estado.md</code> diz em que ponto o projeto parou, e qualquer conversa nova retoma dali.</p>
+    </div>
+    <div class="registros">
+      <div><span class="cmd">edital.md</span><span>Leitura do edital, etapa 1</span></div>
+      <div><span class="cmd">elegibilidade.md</span><span>CaptaDoc, etapa 2</span></div>
+      <div><span class="cmd">estrategia.md</span><span>CaptaEstrategista, etapa 3</span></div>
+      <div><span class="cmd">checklist-anexos.md</span><span>Agente de anexos, etapa 4</span></div>
+      <div><span class="cmd">documentos/</span><span>Declarações, modelos e originais</span></div>
+      <div><span class="cmd">proposta.md</span><span>CaptaBuilder, etapa 5</span></div>
+      <div><span class="cmd">orcamento.md · cotacoes.md</span><span>CaptaBudget, etapa 6</span></div>
+      <div><span class="cmd">score.md</span><span>CaptaScore, etapa 7</span></div>
+      <div><span class="cmd">revisao.md</span><span>Revisor, etapa 8</span></div>
+      <div><span class="cmd">entrega-final/</span><span>Exportação, etapa 9</span></div>
+      <div><span class="cmd">parecer-chefe.md</span><span>Chefe, quando chamado</span></div>
+      <div><span class="cmd">estado.md</span><span>Todos, a cada etapa</span></div>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    <span>POP-CAP-01 · Revisão 00 · Emitido em 10/09/2026</span>
+    <span>Revisar quando uma etapa mudar ou um tempo sair da faixa.</span>
+  </footer>
+
+</main>
+
+</body>
+</html>

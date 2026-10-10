@@ -30,11 +30,31 @@
       "uf_ou_territorio": "area de influencia da Ambipar",
       "prazo": "continuo, 120 dias de antecedencia",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["OSC", "empresa", "poder publico", "ensino superior", "Sistema S"],
+      "natureza_juridica_aceita": [
+        "OSC",
+        "empresa",
+        "poder publico",
+        "ensino superior",
+        "Sistema S"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "somente na via incentivada",
-      "leis_aceitas": ["Rouanet", "Audiovisual", "leis estaduais de cultura", "Esporte federal e estadual", "FIA", "FUMCAD", "Fundo do Idoso", "PRONAS", "PRONON"],
-      "areas": ["socioambiental", "cultura", "esporte"],
+      "leis_aceitas": [
+        "Rouanet",
+        "Audiovisual",
+        "leis estaduais de cultura",
+        "Esporte federal e estadual",
+        "FIA",
+        "FUMCAD",
+        "Fundo do Idoso",
+        "PRONAS",
+        "PRONON"
+      ],
+      "areas": [
+        "socioambiental",
+        "cultura",
+        "esporte"
+      ],
       "ficha": "fichas/ambipar-patrocinio-doacao.md"
     },
     {
@@ -47,11 +67,17 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao informado"],
+      "natureza_juridica_aceita": [
+        "nao informado"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "nao",
       "leis_aceitas": [],
-      "areas": ["cultura", "esporte", "inovacao e negocios"],
+      "areas": [
+        "cultura",
+        "esporte",
+        "inovacao e negocios"
+      ],
       "ficha": "fichas/claro-plataforma-patrocinios.md"
     },
     {
@@ -64,11 +90,29 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao informado"],
+      "natureza_juridica_aceita": [
+        "nao informado"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "preferencialmente sim",
-      "leis_aceitas": ["Rouanet", "Esporte", "FIA", "Idoso", "PRONON", "PRONAS", "Profice", "Proesporte", "Proac", "PIE", "PIC"],
-      "areas": ["esporte", "cultura", "saude"],
+      "leis_aceitas": [
+        "Rouanet",
+        "Esporte",
+        "FIA",
+        "Idoso",
+        "PRONON",
+        "PRONAS",
+        "Profice",
+        "Proesporte",
+        "Proac",
+        "PIE",
+        "PIC"
+      ],
+      "areas": [
+        "esporte",
+        "cultura",
+        "saude"
+      ],
       "ficha": "fichas/havan-patrocinios.md"
     },
     {
@@ -81,11 +125,17 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "continuo",
       "valor_teto": 150000,
-      "natureza_juridica_aceita": ["associacao privada", "fundacao privada", "negocio de impacto social"],
+      "natureza_juridica_aceita": [
+        "associacao privada",
+        "fundacao privada",
+        "negocio de impacto social"
+      ],
       "tempo_minimo_existencia": "3 anos",
       "exige_projeto_aprovado_em_lei": "nao",
       "leis_aceitas": [],
-      "areas": ["qualquer area de impacto social"],
+      "areas": [
+        "qualquer area de impacto social"
+      ],
       "ficha": "fichas/impactarte-edital-continuo.md"
     },
     {
@@ -98,11 +148,18 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao informado"],
+      "natureza_juridica_aceita": [
+        "nao informado"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "nao informado",
       "leis_aceitas": [],
-      "areas": ["educacao", "esporte", "cultura", "sustentabilidade"],
+      "areas": [
+        "educacao",
+        "esporte",
+        "cultura",
+        "sustentabilidade"
+      ],
       "ficha": "fichas/santander-patrocinios.md"
     },
     {
@@ -115,11 +172,19 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "continuo, 90 dias de antecedencia",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao informado"],
+      "natureza_juridica_aceita": [
+        "nao informado"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "opcional, ha porta com e sem incentivo",
-      "leis_aceitas": ["nao especificadas"],
-      "areas": ["cultura", "ambiental", "esporte"],
+      "leis_aceitas": [
+        "nao especificadas"
+      ],
+      "areas": [
+        "cultura",
+        "ambiental",
+        "esporte"
+      ],
       "ficha": "fichas/stihl-patrocinio.md"
     },
     {
@@ -132,12 +197,38 @@
       "uf_ou_territorio": "unidades do grupo em seis estados",
       "prazo": "continuo, edital no segundo semestre",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["pessoa juridica sem fins lucrativos"],
+      "natureza_juridica_aceita": [
+        "pessoa juridica sem fins lucrativos (pre-requisito na porta de investimento social)",
+        "pessoa fisica sem fins lucrativos apenas em carater excepcional, com parecer do Instituto e aval do Departamento de Integridade",
+        "com fins lucrativos: nao vedado expressamente na porta incentivada, a confirmar com o Instituto"
+      ],
       "tempo_minimo_existencia": null,
-      "exige_projeto_aprovado_em_lei": "sim na porta incentivada",
-      "leis_aceitas": ["leis federais e estaduais de incentivo", "Fundo do Idoso", "Fundo da Infancia e Adolescencia"],
-      "areas": ["cultura", "esporte", "desenvolvimento e sustentabilidade regional"],
-      "ficha": "fichas/usiminas-investimento-social.md"
+      "exige_projeto_aprovado_em_lei": "sim na porta Investimento Direto (nao na porta chamada Incentivo Fiscal)",
+      "leis_aceitas": [
+        "leis federais e estaduais de incentivo",
+        "Fundo do Idoso",
+        "Fundo da Infancia e Adolescencia"
+      ],
+      "areas": [
+        "cultura",
+        "esporte",
+        "desenvolvimento e sustentabilidade regional"
+      ],
+      "ficha": "fichas/usiminas-investimento-social.md",
+      "portas": {
+        "Doacao": "bens, servicos ou recursos, ativa",
+        "Investimento Direto": "projetos ja aprovados em leis de incentivo e nos Fundos do Idoso e da Infancia, edital no 2o semestre, ativa",
+        "Incentivo Fiscal": "formacao e protagonismo territorial, estava em Aguarde em 27/10/2025"
+      },
+      "canal": "https://www.usiminas.com/pages/quer-enviar-seu-pedido-de-patrocinio-ou-doacao/",
+      "cortes_eliminatorios": [
+        "cadastro previo aprovado antes do inicio da acao",
+        "certidao ou documento vencido",
+        "colaborador do grupo ou parente ate 2o grau como socio ou dirigente da proponente",
+        "prestacao de contas em mora com o grupo"
+      ],
+      "veda_pagar_assessoria_ou_consultoria": true,
+      "revisado_em": "2026-09-01"
     },
     {
       "slug": "cbmm-2026",
@@ -149,11 +240,29 @@
       "uf_ou_territorio": "Araxa, MG",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["pessoa fisica", "PJ com fins lucrativos", "PJ sem fins lucrativos"],
+      "natureza_juridica_aceita": [
+        "pessoa fisica",
+        "PJ com fins lucrativos",
+        "PJ sem fins lucrativos"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "opcional, aceita recursos proprios",
-      "leis_aceitas": ["FIA", "Fundo do Idoso", "Esporte federal", "Rouanet", "PRONAS", "PRONON"],
-      "areas": ["educacao", "saude", "cultura", "esporte", "assistencia social", "desenvolvimento comunitario"],
+      "leis_aceitas": [
+        "FIA",
+        "Fundo do Idoso",
+        "Esporte federal",
+        "Rouanet",
+        "PRONAS",
+        "PRONON"
+      ],
+      "areas": [
+        "educacao",
+        "saude",
+        "cultura",
+        "esporte",
+        "assistencia social",
+        "desenvolvimento comunitario"
+      ],
       "ficha": "fichas/cbmm-2026.md"
     },
     {
@@ -166,11 +275,20 @@
       "uf_ou_territorio": "municipios do Anexo 1 em AC, ES, MT, MS, MG, PB, RJ, RO, SP, SE, TO",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["PJ de direito publico ou privado, com ou sem fins lucrativos", "pessoa fisica com atuacao cultural"],
+      "natureza_juridica_aceita": [
+        "PJ de direito publico ou privado, com ou sem fins lucrativos",
+        "pessoa fisica com atuacao cultural"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim",
-      "leis_aceitas": ["Rouanet art. 18", "Audiovisual art. 1-A", "leis estaduais de MG, RJ, SP, ES, PR, PB"],
-      "areas": ["cultura"],
+      "leis_aceitas": [
+        "Rouanet art. 18",
+        "Audiovisual art. 1-A",
+        "leis estaduais de MG, RJ, SP, ES, PR, PB"
+      ],
+      "areas": [
+        "cultura"
+      ],
       "ficha": "fichas/energisa-cultural.md"
     },
     {
@@ -183,11 +301,24 @@
       "uf_ou_territorio": "Alfenas, Betim, Conselheiro Lafaiete, Juiz de Fora, Montes Claros, Passos (MG) e Guapo (GO)",
       "prazo": "03/08/2026 a 11/09/2026",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["PJ de direito publico ou privado, com ou sem fins lucrativos", "MEI"],
+      "natureza_juridica_aceita": [
+        "PJ de direito publico ou privado, com ou sem fins lucrativos",
+        "MEI"
+      ],
       "tempo_minimo_existencia": "1 ano de experiencia na area",
       "exige_projeto_aprovado_em_lei": "sim, captacao vigente ate 31/12/2026",
-      "leis_aceitas": ["Rouanet", "Esporte federal", "Fundo Municipal da Crianca e Adolescente", "Fundo Municipal do Idoso"],
-      "areas": ["cultura", "esporte", "crianca e adolescente", "idoso"],
+      "leis_aceitas": [
+        "Rouanet",
+        "Esporte federal",
+        "Fundo Municipal da Crianca e Adolescente",
+        "Fundo Municipal do Idoso"
+      ],
+      "areas": [
+        "cultura",
+        "esporte",
+        "crianca e adolescente",
+        "idoso"
+      ],
       "ficha": "fichas/essencis-minas-2026.md"
     },
     {
@@ -200,11 +331,21 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "continuo, 150 dias de antecedencia na escolha direta",
       "valor_teto": 4300000,
-      "natureza_juridica_aceita": ["PJ de direito privado, com ou sem fins lucrativos, de natureza cultural"],
+      "natureza_juridica_aceita": [
+        "PJ de direito privado, com ou sem fins lucrativos, de natureza cultural"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "depende da modalidade",
-      "leis_aceitas": ["Rouanet", "Audiovisual"],
-      "areas": ["cultura", "esporte", "negocio, ciencia e tecnologia", "social e ambiental"],
+      "leis_aceitas": [
+        "Rouanet",
+        "Audiovisual"
+      ],
+      "areas": [
+        "cultura",
+        "esporte",
+        "negocio, ciencia e tecnologia",
+        "social e ambiental"
+      ],
       "ficha": "fichas/petrobras-patrocinios.md"
     },
     {
@@ -217,11 +358,19 @@
       "uf_ou_territorio": "DF, ES, RJ, SP",
       "prazo": "1 de marco a 31 de outubro",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao especificada, projeto aprovado em lei"],
+      "natureza_juridica_aceita": [
+        "nao especificada, projeto aprovado em lei"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim",
-      "leis_aceitas": ["Rouanet", "Lei de Incentivo ao Esporte"],
-      "areas": ["cultura", "esporte"],
+      "leis_aceitas": [
+        "Rouanet",
+        "Lei de Incentivo ao Esporte"
+      ],
+      "areas": [
+        "cultura",
+        "esporte"
+      ],
       "ficha": "fichas/shell-patrocinios-incentivados.md"
     },
     {
@@ -234,11 +383,26 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "15/05/2026 a 30/09/2026 (cultura, esporte, FIA, idoso) e ate 15/12/2026 (PRONAS e PRONON)",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao consta no material local"],
+      "natureza_juridica_aceita": [
+        "nao consta no material local"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim",
-      "leis_aceitas": ["Cultura", "Esporte", "FIA", "Idoso", "PRONAS", "PRONON"],
-      "areas": ["cultura", "esporte", "crianca e adolescente", "idoso", "saude"],
+      "leis_aceitas": [
+        "Cultura",
+        "Esporte",
+        "FIA",
+        "Idoso",
+        "PRONAS",
+        "PRONON"
+      ],
+      "areas": [
+        "cultura",
+        "esporte",
+        "crianca e adolescente",
+        "idoso",
+        "saude"
+      ],
       "ficha": "fichas/mapfre-2026.md"
     },
     {
@@ -251,11 +415,23 @@
       "uf_ou_territorio": "BA, AL, MG, PB, RN, RJ, CE, PA, RS, PR, ES, PI, SP, GO, SC, DF",
       "prazo": "ate 30/09/2026 ou enquanto houver recursos",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["PJ brasileira de direito publico ou privado, com ou sem fins lucrativos", "MEI", "ONG"],
+      "natureza_juridica_aceita": [
+        "PJ brasileira de direito publico ou privado, com ou sem fins lucrativos",
+        "MEI",
+        "ONG"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim, em lei estadual",
-      "leis_aceitas": ["leis estaduais de cultura e de esporte (ICMS)"],
-      "areas": ["cultura", "esporte", "gastronomia", "audiovisual", "literatura"],
+      "leis_aceitas": [
+        "leis estaduais de cultura e de esporte (ICMS)"
+      ],
+      "areas": [
+        "cultura",
+        "esporte",
+        "gastronomia",
+        "audiovisual",
+        "literatura"
+      ],
       "ficha": "fichas/ambev-brasilidades-2026.md"
     },
     {
@@ -268,11 +444,28 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao especificada"],
+      "natureza_juridica_aceita": [
+        "nao especificada"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim, com publicacao no Diario Oficial",
-      "leis_aceitas": ["Rouanet", "Esporte", "FIA", "Fundo Nacional do Idoso", "PRONON", "PRONAS"],
-      "areas": ["educacao", "saude", "assistencia social", "esporte", "cultura", "idoso", "deficiencia"],
+      "leis_aceitas": [
+        "Rouanet",
+        "Esporte",
+        "FIA",
+        "Fundo Nacional do Idoso",
+        "PRONON",
+        "PRONAS"
+      ],
+      "areas": [
+        "educacao",
+        "saude",
+        "assistencia social",
+        "esporte",
+        "cultura",
+        "idoso",
+        "deficiencia"
+      ],
       "ficha": "fichas/bb-brasilseg-socioculturais.md"
     },
     {
@@ -285,11 +478,28 @@
       "uf_ou_territorio": "MG (Buritizeiro, Grao Mogol, Ibiai, Joao Pinheiro, Padre Carvalho, Pirapora, RMBH, Rubelita, Tres Marias, Ponto Chique, Jequitai, Sao Joao da Lagoa) e BA (Simoes Filho, RM Salvador)",
       "prazo": "maio a setembro de 2026",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["OSC sem fins lucrativos"],
+      "natureza_juridica_aceita": [
+        "OSC sem fins lucrativos"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim",
-      "leis_aceitas": ["FIA", "Rouanet", "Esporte federal", "Fundo Municipal de Cultura", "Fundo Municipal do Idoso", "Audiovisual", "PRONON", "PRONAS"],
-      "areas": ["cultura", "esporte", "crianca e adolescente", "idoso", "saude"],
+      "leis_aceitas": [
+        "FIA",
+        "Rouanet",
+        "Esporte federal",
+        "Fundo Municipal de Cultura",
+        "Fundo Municipal do Idoso",
+        "Audiovisual",
+        "PRONON",
+        "PRONAS"
+      ],
+      "areas": [
+        "cultura",
+        "esporte",
+        "crianca e adolescente",
+        "idoso",
+        "saude"
+      ],
       "ficha": "fichas/minasligas-2026-2027.md"
     },
     {
@@ -302,11 +512,27 @@
       "uf_ou_territorio": "Araxa e Perdizes, MG",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao especificada"],
+      "natureza_juridica_aceita": [
+        "nao especificada"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim",
-      "leis_aceitas": ["Esporte", "Cultura", "Fundo do Idoso", "Fundo da Crianca e do Adolescente", "PRONON", "PRONAS"],
-      "areas": ["esporte", "cultura", "crianca e adolescente", "idoso", "saude", "seguranca alimentar"],
+      "leis_aceitas": [
+        "Esporte",
+        "Cultura",
+        "Fundo do Idoso",
+        "Fundo da Crianca e do Adolescente",
+        "PRONON",
+        "PRONAS"
+      ],
+      "areas": [
+        "esporte",
+        "cultura",
+        "crianca e adolescente",
+        "idoso",
+        "saude",
+        "seguranca alimentar"
+      ],
       "ficha": "fichas/bem-brasil-incentivo.md"
     },
     {
@@ -319,11 +545,28 @@
       "uf_ou_territorio": "Brasil, sede em Hortolandia SP",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao especificada"],
+      "natureza_juridica_aceita": [
+        "nao especificada"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim, com publicacao no DOU",
-      "leis_aceitas": ["PROAC/SP", "PIE/SP", "Rouanet", "Audiovisual", "Esporte federal", "PRONAS", "PRONON", "FUMCAD/COMDECA", "Lei do Idoso"],
-      "areas": ["social", "esporte", "cultura", "ambiental"],
+      "leis_aceitas": [
+        "PROAC/SP",
+        "PIE/SP",
+        "Rouanet",
+        "Audiovisual",
+        "Esporte federal",
+        "PRONAS",
+        "PRONON",
+        "FUMCAD/COMDECA",
+        "Lei do Idoso"
+      ],
+      "areas": [
+        "social",
+        "esporte",
+        "cultura",
+        "ambiental"
+      ],
       "ficha": "fichas/ems-patrocinios.md"
     },
     {
@@ -336,11 +579,21 @@
       "uf_ou_territorio": "comunidades no entorno das operacoes ferroviarias",
       "prazo": "sem prazo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["entidades idoneas, sem restricao em CEIS, CEPIM, CNJ e TCU"],
+      "natureza_juridica_aceita": [
+        "entidades idoneas, sem restricao em CEIS, CEPIM, CNJ e TCU"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "nao obrigatorio",
-      "leis_aceitas": ["Rouanet (8.313/91)", "Lei de Incentivo ao Esporte (11.438/2006)"],
-      "areas": ["filantropia", "cultura", "esporte", "educacao"],
+      "leis_aceitas": [
+        "Rouanet (8.313/91)",
+        "Lei de Incentivo ao Esporte (11.438/2006)"
+      ],
+      "areas": [
+        "filantropia",
+        "cultura",
+        "esporte",
+        "educacao"
+      ],
       "ficha": "fichas/rumo-doacoes-patrocinios.md"
     },
     {
@@ -353,11 +606,26 @@
       "uf_ou_territorio": "SP, RJ, PB, PI, PE, PR, RS",
       "prazo": "continuo, 150 dias de antecedencia",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["PJ com fins lucrativos", "PJ sem fins lucrativos"],
+      "natureza_juridica_aceita": [
+        "PJ com fins lucrativos",
+        "PJ sem fins lucrativos"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim na porta incentivada, ha porta sem incentivo",
-      "leis_aceitas": ["Rouanet", "leis estaduais de cultura de SP, RJ, PB, PI, PE, PR, RS", "Esporte", "Crianca e Adolescente", "Idoso"],
-      "areas": ["musica", "artes cenicas", "artes visuais", "instituicoes culturais", "social pelo Instituto"],
+      "leis_aceitas": [
+        "Rouanet",
+        "leis estaduais de cultura de SP, RJ, PB, PI, PE, PR, RS",
+        "Esporte",
+        "Crianca e Adolescente",
+        "Idoso"
+      ],
+      "areas": [
+        "musica",
+        "artes cenicas",
+        "artes visuais",
+        "instituicoes culturais",
+        "social pelo Instituto"
+      ],
       "ficha": "fichas/renner-cultural.md"
     },
     {
@@ -370,11 +638,27 @@
       "uf_ou_territorio": "RS, SP, GO",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao especificada"],
+      "natureza_juridica_aceita": [
+        "nao especificada"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "opcional, aceita recursos proprios",
-      "leis_aceitas": ["FIA", "Fundo do Idoso", "Lei de Incentivo a Reciclagem", "Lei Estadual de Cultura", "Lei Estadual do Esporte", "Esporte federal", "Rouanet", "PRONAS", "PRONON"],
-      "areas": ["combate a fome", "desenvolvimento comunitario", "educacao"],
+      "leis_aceitas": [
+        "FIA",
+        "Fundo do Idoso",
+        "Lei de Incentivo a Reciclagem",
+        "Lei Estadual de Cultura",
+        "Lei Estadual do Esporte",
+        "Esporte federal",
+        "Rouanet",
+        "PRONAS",
+        "PRONON"
+      ],
+      "areas": [
+        "combate a fome",
+        "desenvolvimento comunitario",
+        "educacao"
+      ],
       "ficha": "fichas/john-deere-banco-projetos.md"
     },
     {
@@ -387,11 +671,25 @@
       "uf_ou_territorio": "BA, ES, GO, MA, MG, PB, PR, PI, RN, RS, SC, SP, TO",
       "prazo": "15/07/2026 a 31/08/2026",
       "valor_teto": 12000000,
-      "natureza_juridica_aceita": ["organizacoes socioambientais, culturais e esportivas com projeto habilitado"],
+      "natureza_juridica_aceita": [
+        "organizacoes socioambientais, culturais e esportivas com projeto habilitado"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim, com DOU ou declaracao do Conselho",
-      "leis_aceitas": ["Esporte federal", "ECA (FIA)", "Estatuto do Idoso", "PRONON", "PRONAS", "Lei de Incentivo a Reciclagem"],
-      "areas": ["social", "esporte", "saude", "reciclagem"],
+      "leis_aceitas": [
+        "Esporte federal",
+        "ECA (FIA)",
+        "Estatuto do Idoso",
+        "PRONON",
+        "PRONAS",
+        "Lei de Incentivo a Reciclagem"
+      ],
+      "areas": [
+        "social",
+        "esporte",
+        "saude",
+        "reciclagem"
+      ],
       "ficha": "fichas/edp-projetos-incentivados-2026.md"
     },
     {
@@ -404,11 +702,17 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao informada"],
+      "natureza_juridica_aceita": [
+        "nao informada"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim, com captacao vigente",
-      "leis_aceitas": ["lei federal, estadual e municipal de incentivo a cultura"],
-      "areas": ["cultura"],
+      "leis_aceitas": [
+        "lei federal, estadual e municipal de incentivo a cultura"
+      ],
+      "areas": [
+        "cultura"
+      ],
       "ficha": "fichas/bip-cultura-prosas.md"
     },
     {
@@ -421,11 +725,17 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "continuo",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["nao informada"],
+      "natureza_juridica_aceita": [
+        "nao informada"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim, com captacao vigente",
-      "leis_aceitas": ["lei federal, estadual e municipal de incentivo ao esporte"],
-      "areas": ["esporte"],
+      "leis_aceitas": [
+        "lei federal, estadual e municipal de incentivo ao esporte"
+      ],
+      "areas": [
+        "esporte"
+      ],
       "ficha": "fichas/bip-esporte-prosas.md"
     },
     {
@@ -438,11 +748,22 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "envio ate o ultimo dia util de outubro",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["instituicoes, vedada pessoa fisica"],
+      "natureza_juridica_aceita": [
+        "instituicoes, vedada pessoa fisica"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "sim",
-      "leis_aceitas": ["ECA (FEDCA e FUMCAD)", "Estatuto do Idoso", "PRONON", "PRONAS"],
-      "areas": ["educacao", "trabalho e renda", "qualidade de vida"],
+      "leis_aceitas": [
+        "ECA (FEDCA e FUMCAD)",
+        "Estatuto do Idoso",
+        "PRONON",
+        "PRONAS"
+      ],
+      "areas": [
+        "educacao",
+        "trabalho e renda",
+        "qualidade de vida"
+      ],
       "ficha": "fichas/brasilprev-doacoes.md"
     },
     {
@@ -455,11 +776,25 @@
       "uf_ou_territorio": "Nordeste, Norte do ES e Norte de MG",
       "prazo": "21/08/2025 a 30/10/2027, em cinco etapas",
       "valor_teto": 2000000,
-      "natureza_juridica_aceita": ["empreendimento de catadores", "instituicao de ensino e pesquisa", "condominio edilicio", "OSCIP", "OSC", "orgao publico", "micro e pequena empresa"],
+      "natureza_juridica_aceita": [
+        "empreendimento de catadores",
+        "instituicao de ensino e pesquisa",
+        "condominio edilicio",
+        "OSCIP",
+        "OSC",
+        "orgao publico",
+        "micro e pequena empresa"
+      ],
       "tempo_minimo_existencia": "12 meses de CNPJ, 6 meses para catadores",
       "exige_projeto_aprovado_em_lei": "sim, autorizacao de captacao do MMA",
-      "leis_aceitas": ["Lei de Incentivo a Reciclagem 14.260/2021"],
-      "areas": ["reciclagem", "economia circular", "geracao de renda"],
+      "leis_aceitas": [
+        "Lei de Incentivo a Reciclagem 14.260/2021"
+      ],
+      "areas": [
+        "reciclagem",
+        "economia circular",
+        "geracao de renda"
+      ],
       "ficha": "fichas/banco-nordeste-favorecicle.md"
     },
     {
@@ -472,11 +807,22 @@
       "uf_ou_territorio": "AL, BA, CE, MG, PB, PI, PE, RN, SE",
       "prazo": "ciclo 1 de 10/06/2026 a 10/08/2026, ciclo 2 de 15/10/2026 a 14/12/2026",
       "valor_teto": 55200000,
-      "natureza_juridica_aceita": ["PJ de direito privado sem fins lucrativos", "associacao civil", "fundacao privada", "cooperativa", "PJ de direito publico federal e estadual"],
+      "natureza_juridica_aceita": [
+        "PJ de direito privado sem fins lucrativos",
+        "associacao civil",
+        "fundacao privada",
+        "cooperativa",
+        "PJ de direito publico federal e estadual"
+      ],
       "tempo_minimo_existencia": "2 anos",
       "exige_projeto_aprovado_em_lei": "nao",
       "leis_aceitas": [],
-      "areas": ["restauracao ecologica", "agroflorestal", "sociobiodiversidade", "conservacao"],
+      "areas": [
+        "restauracao ecologica",
+        "agroflorestal",
+        "sociobiodiversidade",
+        "conservacao"
+      ],
       "ficha": "fichas/floresta-viva-recaatingar-2026.md"
     },
     {
@@ -489,11 +835,15 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "06/07/2026 a 04/09/2026",
       "valor_teto": 600000,
-      "natureza_juridica_aceita": ["produtora brasileira independente registrada na ANCINE"],
+      "natureza_juridica_aceita": [
+        "produtora brasileira independente registrada na ANCINE"
+      ],
       "tempo_minimo_existencia": "3 anos de sede na regiao para inducao regional",
       "exige_projeto_aprovado_em_lei": "nao",
       "leis_aceitas": [],
-      "areas": ["audiovisual"],
+      "areas": [
+        "audiovisual"
+      ],
       "ficha": "fichas/brde-fsa-nucleos-criativos-2026.md"
     },
     {
@@ -506,11 +856,20 @@
       "uf_ou_territorio": "MA, TO, MT",
       "prazo": "26/06/2026 a 31/08/2026",
       "valor_teto": 150000,
-      "natureza_juridica_aceita": ["associacao sem fins lucrativos", "sindicato rural da agricultura familiar", "cooperativa da agricultura familiar"],
+      "natureza_juridica_aceita": [
+        "associacao sem fins lucrativos",
+        "sindicato rural da agricultura familiar",
+        "cooperativa da agricultura familiar"
+      ],
       "tempo_minimo_existencia": "2 anos",
       "exige_projeto_aprovado_em_lei": "nao",
       "leis_aceitas": [],
-      "areas": ["governanca territorial", "sociobiodiversidade", "alimentacao escolar", "clima"],
+      "areas": [
+        "governanca territorial",
+        "sociobiodiversidade",
+        "alimentacao escolar",
+        "clima"
+      ],
       "ficha": "fichas/ispn-fundo-ecos-49-taipas.md"
     },
     {
@@ -523,11 +882,21 @@
       "uf_ou_territorio": "Brasil e 25 mercados estrategicos",
       "prazo": "02/01/2026 a 03/10/2026, com 60 dias de antecedencia",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["somente pessoa juridica"],
+      "natureza_juridica_aceita": [
+        "somente pessoa juridica"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "nao",
       "leis_aceitas": [],
-      "areas": ["turismo", "cultura e economia criativa", "gastronomia", "natureza", "diversidade", "audiovisual", "ESG"],
+      "areas": [
+        "turismo",
+        "cultura e economia criativa",
+        "gastronomia",
+        "natureza",
+        "diversidade",
+        "audiovisual",
+        "ESG"
+      ],
       "ficha": "fichas/embratur-patrocinio-2026.md"
     },
     {
@@ -540,11 +909,21 @@
       "uf_ou_territorio": "Brasil",
       "prazo": "conforme orientacoes do Consulado",
       "valor_teto": 90000,
-      "natureza_juridica_aceita": ["organizacoes sem fins lucrativos", "governos locais", "entidades de atendimento basico em educacao e saude"],
+      "natureza_juridica_aceita": [
+        "organizacoes sem fins lucrativos",
+        "governos locais",
+        "entidades de atendimento basico em educacao e saude"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "nao",
       "leis_aceitas": [],
-      "areas": ["desenvolvimento comunitario", "educacao", "saude", "assistencia social", "meio ambiente"],
+      "areas": [
+        "desenvolvimento comunitario",
+        "educacao",
+        "saude",
+        "assistencia social",
+        "meio ambiente"
+      ],
       "ficha": "fichas/apc-japao-2026.md"
     },
     {
@@ -557,11 +936,17 @@
       "uf_ou_territorio": "Brasil, India, Mexico, Indonesia, Filipinas",
       "prazo": "fluxo aberto",
       "valor_teto": 1000000,
-      "natureza_juridica_aceita": ["organizacoes com receita anual entre US$ 1 mi e US$ 5 mi"],
+      "natureza_juridica_aceita": [
+        "organizacoes com receita anual entre US$ 1 mi e US$ 5 mi"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "nao",
       "leis_aceitas": [],
-      "areas": ["empregabilidade", "empreendedorismo", "geracao de emprego"],
+      "areas": [
+        "empregabilidade",
+        "empreendedorismo",
+        "geracao de emprego"
+      ],
       "ficha": "fichas/wadhwani-charitable-foundation.md"
     },
     {
@@ -574,11 +959,22 @@
       "uf_ou_territorio": "Cerrado, Caatinga, Amazonia, Mata Atlantica, Pantanal, Pampa",
       "prazo": "30/06/2026 a 09/08/2026",
       "valor_teto": 500000,
-      "natureza_juridica_aceita": ["associacao ou fundacao sem fins lucrativos", "cooperativa da Lei 9.867/1999", "organizacao religiosa com projeto de interesse publico"],
+      "natureza_juridica_aceita": [
+        "associacao ou fundacao sem fins lucrativos",
+        "cooperativa da Lei 9.867/1999",
+        "organizacao religiosa com projeto de interesse publico"
+      ],
       "tempo_minimo_existencia": "3 anos de CNPJ e 1 ano de experiencia no objeto",
       "exige_projeto_aprovado_em_lei": "nao",
-      "leis_aceitas": ["Lei 13.019/2014 (MROSC)"],
-      "areas": ["agricultura familiar", "agroecologia", "sociobiodiversidade", "plantas medicinais"],
+      "leis_aceitas": [
+        "Lei 13.019/2014 (MROSC)"
+      ],
+      "areas": [
+        "agricultura familiar",
+        "agroecologia",
+        "sociobiodiversidade",
+        "plantas medicinais"
+      ],
       "ficha": "fichas/mda-sfdt-02-2026-sociobiodiversidade.md"
     },
     {
@@ -591,11 +987,18 @@
       "uf_ou_territorio": "Caatinga, Cerrado, Mata Atlantica, Pampa, Pantanal",
       "prazo": "vigencia de 36 meses da publicacao, com ciclos",
       "valor_teto": null,
-      "natureza_juridica_aceita": ["instituicao privada sem fins lucrativos", "sociedade cooperativa", "administracao publica direta e indireta"],
+      "natureza_juridica_aceita": [
+        "instituicao privada sem fins lucrativos",
+        "sociedade cooperativa",
+        "administracao publica direta e indireta"
+      ],
       "tempo_minimo_existencia": "3 anos e 2 projetos de mesma natureza concluidos",
       "exige_projeto_aprovado_em_lei": "nao",
       "leis_aceitas": [],
-      "areas": ["recuperacao da vegetacao nativa", "educacao ambiental"],
+      "areas": [
+        "recuperacao da vegetacao nativa",
+        "educacao ambiental"
+      ],
       "ficha": "fichas/ibama-reverdear-22-2026.md"
     },
     {
@@ -608,11 +1011,23 @@
       "uf_ou_territorio": "Belem PA, Belo Horizonte MG, Distrito Federal, Recife PE, Rio de Janeiro RJ, Sao Luis MA, Sao Paulo SP, Vitoria ES",
       "prazo": "15/08/2026 a 13/10/2026",
       "valor_teto": 200000,
-      "natureza_juridica_aceita": ["qualquer pessoa juridica, com ou sem fins lucrativos, com CNAE cultural e sede nas localidades"],
+      "natureza_juridica_aceita": [
+        "qualquer pessoa juridica, com ou sem fins lucrativos, com CNAE cultural e sede nas localidades"
+      ],
       "tempo_minimo_existencia": null,
       "exige_projeto_aprovado_em_lei": "nao, a proposta e inscrita no Salic neste edital",
-      "leis_aceitas": ["Rouanet art. 18 (Lei 8.313/1991)"],
-      "areas": ["artes cenicas", "artes visuais", "audiovisual", "humanidades", "musica", "patrimonio cultural", "museus e memoria"],
+      "leis_aceitas": [
+        "Rouanet art. 18 (Lei 8.313/1991)"
+      ],
+      "areas": [
+        "artes cenicas",
+        "artes visuais",
+        "audiovisual",
+        "humanidades",
+        "musica",
+        "patrimonio cultural",
+        "museus e memoria"
+      ],
       "ficha": "fichas/rouanet-nas-favelas-2-minc-6-2026.md"
     },
     {
@@ -625,11 +1040,25 @@
       "uf_ou_territorio": "Belo Horizonte, MG",
       "prazo": "14/08/2026 a 31/08/2026 as 17h",
       "valor_teto": 100000,
-      "natureza_juridica_aceita": ["pessoa fisica", "MEI", "PJ com ou sem fins lucrativos", "coletivo sem CNPJ (apenas no anual)"],
+      "natureza_juridica_aceita": [
+        "pessoa fisica",
+        "MEI",
+        "PJ com ou sem fins lucrativos",
+        "coletivo sem CNPJ (apenas no anual)"
+      ],
       "tempo_minimo_existencia": "5 anos para o fomento bianual",
       "exige_projeto_aprovado_em_lei": "nao",
-      "leis_aceitas": ["PNAB, Lei 14.399/2022"],
-      "areas": ["circulacao", "difusao", "criacao e producao", "formacao", "memoria e preservacao", "acoes continuadas"],
+      "leis_aceitas": [
+        "PNAB, Lei 14.399/2022"
+      ],
+      "areas": [
+        "circulacao",
+        "difusao",
+        "criacao e producao",
+        "formacao",
+        "memoria e preservacao",
+        "acoes continuadas"
+      ],
       "ficha": "fichas/pnab-ciclo-2-bh-fomento-04-2026.md"
     }
   ]

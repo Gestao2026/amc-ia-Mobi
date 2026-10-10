@@ -1,0 +1,192 @@
+{
+  "baseId": "appKWLTFSCcWucXfQ",
+  "baseNome": "MAPA CLIENTES | EDITAIS E PROJETOS",
+  "lidoEm": "2026-09-02",
+  "observacao": "Configuracao lida pela API antes de qualquer alteracao. Os ids de tabela (tbl), campo (fld), opcao (sel) e visao (viw) sao os reais da base e bastam para remontar cada automacao.",
+  "automacoes": [
+    {
+      "id": "wfl6zwt91LcXqlOCL",
+      "nome": "Alerta diário de prazo e marcos",
+      "descricao": "Todo dia às 8h (horário de Brasília) manda três blocos: marcos intermediários do calendário do edital nos próximos 30 dias, editais Interessa com prazo final nos próximos 30 dias, e projetos do pipeline ainda não submetidos com prazo nos próximos 30 dias. Atualizado em 24/08/2026 para o campo Status novo, de 27 opções.",
+      "gatilho": {
+        "tipo": "cron diário",
+        "hora": "08:00",
+        "fuso": "America/Sao_Paulo",
+        "inicio": "2026-08-24T11:00:00.000Z"
+      },
+      "passos": [
+        {
+          "chave": "wacswLsvqw7woLSxL",
+          "tipo": "findRecords",
+          "descricao": "Editais Interessa com marco intermediário nos próximos 30 dias e prazo ainda aberto.",
+          "tabela": "tbl3uBAYg70FBwLoN",
+          "filtros": "and: fldvNxF1LccJ5Fj8r = selRu55pm1ygIfn4t; fld4flkoHLEGPHco0 isEmpty; fldFisn3Cy3KD5V7g isWithin próximos 30 dias"
+        },
+        {
+          "chave": "waca4Yv2HLRq6A2J7",
+          "tipo": "findRecords",
+          "descricao": "Editais marcados como Interessa com prazo final nos próximos 30 dias.",
+          "tabela": "tbl3uBAYg70FBwLoN",
+          "filtros": "and: fldvNxF1LccJ5Fj8r = selRu55pm1ygIfn4t; fldpoVjvyoucdIK7R isWithin próximos 30 dias"
+        },
+        {
+          "chave": "wacKwiLsiMel0Z856",
+          "tipo": "findRecords",
+          "descricao": "Projetos do pipeline ainda não submetidos com prazo nos próximos 30 dias.",
+          "tabela": "tbl3gUoVzDCKEzuEC",
+          "filtros": "and: fldJuZqCdYZtFZiCu isEmpty; fldmegl8EaXfGvaOI isWithin próximos 30 dias"
+        },
+        {
+          "chave": "wacN4Ypjt3pEl2JiT",
+          "tipo": "sendEmail",
+          "destinatario": "gestao.mobilizando@gmail.com",
+          "assunto": "Prazos e marcos dos próximos 30 dias",
+          "camposPorBloco": {
+            "1_marcos": ["fldEceFV4Tl7freud", "fld9l3od1ICZDqvdb", "fldpoVjvyoucdIK7R", "fldSHnMbAgwm9cxlD", "fldtdHq32mBtoUnf0"],
+            "2_prazo_final": ["fldEceFV4Tl7freud", "fldpoVjvyoucdIK7R", "fldSHnMbAgwm9cxlD", "fldSkJxLLhwJWFRRK", "fldtdHq32mBtoUnf0"],
+            "3_pipeline": ["fldSa8cmaS1sNih7Q", "fldCCXR6rpxoK0TbF", "fldBx1pugR9S5J6rf", "fldmegl8EaXfGvaOI", "fldjmuBiLhBbdJGd8"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "wflKCLfZFDexKukV2",
+      "nome": "Alerta de data do resultado",
+      "descricao": "Todo dia às 8h (horário de Brasília) avisa quais projetos submetidos têm resultado previsto para os próximos 7 dias e quais já passaram da data sem resposta.",
+      "gatilho": {
+        "tipo": "cron diário",
+        "hora": "08:00",
+        "fuso": "America/Sao_Paulo",
+        "inicio": "2026-08-24T11:00:00.000Z"
+      },
+      "passos": [
+        {
+          "chave": "wacOIxAbx4rzGVLjv",
+          "tipo": "findRecords",
+          "descricao": "Projetos aguardando resultado com data prevista nos próximos 7 dias.",
+          "tabela": "tbl3gUoVzDCKEzuEC",
+          "filtros": "and: fldC9pscIb6tNPOPn = seluQNktPggZp5bAf; fldIIBDyZzGN0jW98 isWithin próximos 7 dias"
+        },
+        {
+          "chave": "wacobnnrTsBpWD5qW",
+          "tipo": "findRecords",
+          "descricao": "Projetos cuja data de resultado já passou e continuam sem resposta.",
+          "tabela": "tbl3gUoVzDCKEzuEC",
+          "filtros": "and: fldC9pscIb6tNPOPn = seluQNktPggZp5bAf; fldIIBDyZzGN0jW98 < hoje"
+        },
+        {
+          "chave": "wacs9MBpsI23HQyob",
+          "tipo": "sendEmail",
+          "destinatario": "gestao.mobilizando@gmail.com",
+          "assunto": "Resultados de editais a caminho",
+          "camposPorBloco": {
+            "1_proximos_7_dias": ["fldSa8cmaS1sNih7Q", "fldCCXR6rpxoK0TbF", "fldorrhyd9w6Vqs4G", "fldIIBDyZzGN0jW98", "fldnlw4hB3sBFIrGQ", "fldm82SCCRH3Wswm3"],
+            "2_passou_da_data": ["fldSa8cmaS1sNih7Q", "fldCCXR6rpxoK0TbF", "fldorrhyd9w6Vqs4G", "fldIIBDyZzGN0jW98", "fldnlw4hB3sBFIrGQ"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "wflOkvdUnZvNoVTiA",
+      "nome": "Relatório de fim de semana",
+      "descricao": "Todo sábado às 9h (horário de Brasília) manda a análise geral: pipeline inteiro, projetos aguardando resultado e editais que interessam com prazo nos próximos 30 dias.",
+      "gatilho": {
+        "tipo": "cron semanal",
+        "diaDaSemana": "sábado",
+        "hora": "09:00 local (12:00 UTC)",
+        "inicio": "2026-08-29T12:00:00.000Z"
+      },
+      "passos": [
+        {
+          "chave": "wacvxdvNzSe1E66dW",
+          "tipo": "findRecords",
+          "descricao": "Todo o pipeline de projetos.",
+          "tabela": "tbl3gUoVzDCKEzuEC",
+          "visao": "viwfMq7MgHFxYkD01"
+        },
+        {
+          "chave": "wacb48eWoXFO2fZSP",
+          "tipo": "findRecords",
+          "descricao": "Projetos já submetidos que aguardam resultado.",
+          "tabela": "tbl3gUoVzDCKEzuEC",
+          "filtros": "and: fldC9pscIb6tNPOPn = seluQNktPggZp5bAf; fldJuZqCdYZtFZiCu isNotEmpty"
+        },
+        {
+          "chave": "wacRSLXMHEq7jXjvC",
+          "tipo": "findRecords",
+          "descricao": "Editais que interessam com prazo nos próximos 30 dias.",
+          "tabela": "tbl3uBAYg70FBwLoN",
+          "filtros": "and: fldvNxF1LccJ5Fj8r = selRu55pm1ygIfn4t; fldpoVjvyoucdIK7R isWithin próximos 30 dias"
+        },
+        {
+          "chave": "wacQdHebT6BaqZuPY",
+          "tipo": "sendEmail",
+          "destinatario": "gestao.mobilizando@gmail.com",
+          "assunto": "Relatório da semana. Editais e pipeline",
+          "camposPorBloco": {
+            "pipeline": ["fldSa8cmaS1sNih7Q", "fldCCXR6rpxoK0TbF", "fldBx1pugR9S5J6rf", "fldB0UKaMMjHGYRJu", "fld8adZJcxfOORmW1", "fldjmuBiLhBbdJGd8", "fld9qwbY2hjqixD6S", "fldm82SCCRH3Wswm3"],
+            "aguardando_resultado": ["fldSa8cmaS1sNih7Q", "fldCCXR6rpxoK0TbF", "fldJuZqCdYZtFZiCu", "fldIIBDyZzGN0jW98", "fldnlw4hB3sBFIrGQ", "fldpZqxYa2i6DP0x7"],
+            "editais_prazo_30_dias": ["fldEceFV4Tl7freud", "fldkrHdxb0q8D5mJq", "fldSkJxLLhwJWFRRK", "fldpoVjvyoucdIK7R", "fldSHnMbAgwm9cxlD"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "wflZSfKETO8pnmaqz",
+      "nome": "Consulta semanal de resultado",
+      "descricao": "Toda segunda às 9h (horário de Brasília), lista os projetos já submetidos que continuam aguardando e que não têm nenhuma data de retorno prevista, nem no projeto nem no edital. Regra da captadora: sem data de resultado, a consulta é ativa e semanal (mudou de quinzenal para semanal em 26/08/2026).",
+      "gatilho": {
+        "tipo": "cron semanal",
+        "diaDaSemana": "segunda",
+        "hora": "09:00 local (12:00 UTC)",
+        "inicio": "2026-08-31T12:00:00.000Z"
+      },
+      "passos": [
+        {
+          "chave": "wacAw58XVlHI2QmaX",
+          "tipo": "findRecords",
+          "descricao": "Projetos submetidos, aguardando resultado, sem nenhuma data de retorno prevista.",
+          "tabela": "tbl3gUoVzDCKEzuEC",
+          "filtros": "and: fldC9pscIb6tNPOPn = seluQNktPggZp5bAf; fldJuZqCdYZtFZiCu isNotEmpty; fldIIBDyZzGN0jW98 isEmpty; fldql0AocYGNrcYQ4 isEmpty"
+        },
+        {
+          "chave": "wacsAn4Hwms2LfHvn",
+          "tipo": "sendEmail",
+          "destinatario": "gestao.mobilizando@gmail.com",
+          "assunto": "Consulta semanal. Projetos sem data de retorno",
+          "campos": ["fldSa8cmaS1sNih7Q", "fldCCXR6rpxoK0TbF", "fldorrhyd9w6Vqs4G", "fldJuZqCdYZtFZiCu", "fldm82SCCRH3Wswm3"]
+        }
+      ]
+    },
+    {
+      "id": "wflW3ahJ5LZOZVigA",
+      "nome": "Enviar para Não Submetidos",
+      "descricao": "Pausada em 31/08/2026 por condição impossível. Não manda e-mail: cria ficha na tabela Não Submetidos. Para religar, apagar a condição Dias até o prazo maior que 0 no passo Encontre registros.",
+      "gatilho": {
+        "tipo": "cron diário",
+        "hora": "07:00",
+        "fuso": "America/Sao_Paulo",
+        "inicio": "2026-08-25T10:00:00.000Z"
+      },
+      "passos": [
+        {
+          "chave": "wacSibXGmucJ6E0Rw",
+          "tipo": "findRecords",
+          "descricao": "Pausado de propósito, condições contraditórias."
+        },
+        {
+          "chave": "wde9t5fclNyuogkQ2",
+          "tipo": "repeatingGroup",
+          "nome": "Para cada edital perdido",
+          "filhos": [
+            {
+              "chave": "wacWjQneYIYuVl5h3",
+              "tipo": "createRecord",
+              "descricao": "Cria a ficha em Não Submetidos, vinculada ao edital."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

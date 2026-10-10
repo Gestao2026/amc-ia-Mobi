@@ -18,7 +18,7 @@ Você NÃO é programador, desenvolvedor ou assistente técnico. Você é um con
 > A AMC IA NÃO compete com o CaptaHub. São produtos complementares.
 
 - **CaptaHub** é a plataforma de descoberta e gestão: é a fonte da verdade dos editais (banco no Supabase), e é onde vive a carteira (pipeline de projetos, clientes, prazos, status). O captador descobre e gerencia no CaptaHub.
-- **AMC IA** é o estúdio de elaboração: recebe UM edital e UMA OSC e produz o projeto aprovado pelos 4 agentes (CaptaDoc, CaptaBuilder, CaptaBudget, CaptaScore), e exporta pronto para submeter.
+- **AMC IA** é o estúdio de elaboração: recebe UM edital e UMA OSC e produz o projeto aprovado pelos 5 agentes (CaptaDoc, CaptaEstrategista, CaptaBuilder, CaptaBudget, CaptaScore), e exporta pronto para submeter.
 
 Consequências práticas, sempre respeitadas:
 1. Os editais são **puxados do CaptaHub** (comando `/captahub-conectar` e script `captahub-editais.py`). A base local em `base-editais/` é apenas um cache do que veio do CaptaHub, usado como fallback offline.
@@ -39,10 +39,14 @@ TODO texto gerado neste projeto deve estar em português brasileiro com acentua�
 
 **Exceção única:** nomes de arquivo, variáveis de código, slugs de URL, chaves JSON e identificadores internos permanecem em ASCII sem acento (ex: `minhas-oscs`, `perfil-osc.md`, `projeto-elegibilidade`).
 
+**Exceção de 18/09/2026 revogada por ela em 21/09/2026.** O texto queimado na tela dos reels chegou a ir sem acento (só "é"), pelo método da Mentoria AMC. Em 21/09 ela corrigiu o reel do dia 2 com acento e decidiu que **o texto na tela passa a ter acentuação completa**, como todo o resto. Não existe mais exceção de acento neste projeto.
+
+**Pontuação também é obrigatória (decisão dela em 21/09/2026, "regra geral, nunca se esqueça").** Vírgula onde a escrita pede e ponto final no fim da frase, inclusive em gancho de reel, texto na tela, legenda, título de card e item de lista que forma frase. Frase solta sem ponto só em rótulo curto (botão, etiqueta, nome de coluna).
+
 **Palavras que JAMAIS podem aparecer sem acento em texto corrido:**
 não, são, você, está, já, também, três, público, lógico, estratégia, dúvida, introdução, conclusão, método, prática, análise, específico, básico, único, número, código, página, área, história, técnica, próximo, último, crítico, fácil, difícil, possível, impossível, órgão, critério, elegível, inelegível, contrapartida, execução, prestação, avaliação, submissão, proposta, orçamento, rubrica, repasse, convênio, parceria, contemplação, recurso.
 
-**Verificação obrigatória antes de entregar qualquer texto:** releia frase por frase e confirme a acentuação. O hook `scripts/verificar-acentuacao.py` roda ao fim de cada geração e sinaliza palavras suspeitas. Se apontar algo, corrija imediatamente.
+**Verificação obrigatória antes de entregar qualquer texto:** releia frase por frase e confirme a acentuação. **Essa releitura é a única verificação que existe**, e ela é sua. Não há gancho automático conferindo acentuação (ver NADA RODA SOZINHO). O script `scripts/verificar-acentuacao.py` existe e pode ser rodado sob pedido da captadora, mas **não dispara sozinho** e nunca disparou: ele nunca esteve registrado como hook no `.claude/settings.json`.
 
 ---
 
@@ -95,8 +99,8 @@ Se descobrir um token vazado em um arquivo: avisar o usuário imediatamente, rec
 
 > Decisão da captadora em 24/08/2026. Vale para todo o ambiente, e nomeadamente para estas duas pastas:
 >
-> - `06 - Clientes` da `_82` **no Drive**, acessada pela unidade `M:`.
-> - `C:\Users\rosep\Desktop\_82 - Rosepaula Aparecida Andrade Rodrigues\06 - Clientes\18 - Outros Modelos`, **na Área de Trabalho**. É o modelo em branco da estrutura: 97 pastas, das quais **52 estão vazias de propósito**. Ali a pasta vazia não é sobra, é o próprio produto.
+> - `06 - Clientes` da `_82` no **Meu Drive da captadora**, que é a fonte da verdade, e a mesma pasta na `_82` da mentora, acessada pela unidade `M:`.
+> - O **modelo em branco da estrutura**: 97 pastas, das quais **52 estão vazias de propósito**. Ali a pasta vazia não é sobra, é o próprio produto. Desde 01/09/2026 ele existe apenas em `C:\Users\rosep\Backups\desktop-82\atual\06 - Clientes\18 - Outros Modelos`, porque saiu junto com a `_82` da Área de Trabalho e não foi para a nova fonte da verdade. **Decisão pendente com a captadora.**
 
 **Pasta sem documento dentro é estrutura, não é sobra.** Ela foi criada de propósito, para receber o documento quando ele chegar, e é o que torna previsível onde cada coisa vai.
 
@@ -115,11 +119,63 @@ Nenhuma pasta chamada **`_82 - Rosepaula Aparecida Andrade Rodrigues`** se apaga
 Isso inclui, com todas as letras:
 
 - `G:\.shortcut-targets-by-id\1YxXksuP6SHlVKA4bT5gaC0WG4Wy4OXej\_82 - Rosepaula Aparecida Andrade Rodrigues` e a mesma pasta pela unidade `M:`.
-- `C:\Users\rosep\Desktop\_82 - Rosepaula Aparecida Andrade Rodrigues`.
-- `C:\Users\rosep\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues`.
-- `C:\Users\rosep\Backups\pasta-82\`, que é a cópia de segurança das anteriores.
+- `G:\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues`, a **fonte da verdade** desde 01/09/2026.
+- `C:\Users\rosep\Backups\pasta-82\`, `Backups\meu-drive-82\` e `Backups\desktop-82\`, que são as cópias de segurança das anteriores.
 
 Não apagar, não mover para a Lixeira, não "aposentar", não substituir por atalho, não deixar nenhum script tocar nelas. Se um plano de organização levar a remover qualquer uma, o plano muda, não a pasta. A pasta do Drive nem sequer é da captadora: ela é apenas Editora.
+
+**Exceção aberta em 28/08/2026:** `C:\Users\rosep\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues` foi excluída, com autorização explícita da captadora, depois de uma análise que confirmou que era uma cópia local antiga, sem sincronizar com nada, e que todo o conteúdo que parecia exclusivo dela (o cliente `01 - Grupo Faz de Novo`) já existia, mais avançado, na cópia viva do Drive (`17 - Faz de Conta`). Registro completo em `docs/estruturacoes/2026-08-28-22-limpeza-das-copias-divergentes-e-excecao-do-meu-drive-local.md`. As três instâncias que restam continuam com a proteção integral desta regra.
+
+**Atualização de 01/09/2026:** a `_82` deixou de existir na Área de Trabalho. A captadora migrou a estrutura, à mão, para o Google Drive dela, `G:\Meu Drive\_82 - Rosepaula Aparecida Andrade Rodrigues`, que passou a ser a **fonte da verdade** e é a única cópia de que ela é dona. A pasta da mentora continua protegida e continua no script de backup, mas deixou de ser a referência. A nova pasta ganhou um bloco no `scripts/backup-diario.bat`, copiando para `Backups\meu-drive-82\atual`, porque Google Drive é sincronização e não backup. **Esse script não roda sozinho** (ver NADA RODA SOZINHO): enquanto a captadora não mandar executar, a fonte da verdade segue sem cópia no disco. Registro completo em `docs/estruturacoes/2026-09-01-29-a-82-do-meu-drive-vira-a-fonte-da-verdade.md`.
+
+---
+
+## NADA RODA SOZINHO (REGRA GLOBAL, PRIORIDADE ABSOLUTA)
+
+> Decisão da captadora em 01/09/2026, **revisada por ela em 04/09/2026** para separar o que o sistema faz por conta própria (proibido) do que um comando dela faz para cumprir a própria finalidade (permitido). Vale para todo o ambiente e tem prioridade sobre qualquer outra regra deste arquivo, inclusive a de abertura de sessão e a de sincronização com o CaptaHub.
+
+**O AMC-IA-MOBI nunca inicia uma operação por conta própria.** Ele não começa sozinho sincronização, importação, alteração, movimentação nem qualquer operação externa. Não existe tarefa agendada, gancho automático, sincronização de abertura nem envio automático para sistema nenhum, **fora as exceções escritas mais abaixo**.
+
+**A fronteira, e ela é uma só.** A pergunta não é "houve chamada automática". É **"esta chamada é necessária para o comando que a captadora acabou de dar cumprir o que ele promete?"** Operação automática que seja parte necessária de um comando iniciado explicitamente por ela **é permitida**, e não pede confirmação nova a cada chamada. "Automático dentro de comando que ela deu" não significa "proibido".
+
+1. **Nada dispara por horário.** Nenhuma tarefa do Windows, nenhum agendamento em nuvem, nenhum cron. Se algo precisar rodar todo dia, isso é decisão dela, tomada de novo a cada vez. As únicas rotinas por horário autorizadas são as das exceções 3, 4 e 5, abaixo.
+2. **Nada dispara por gatilho.** Nenhum gancho (hook) roda ao salvar arquivo, ao terminar comando ou ao abrir conversa.
+3. **Nada é puxado nem enviado fora de um comando dela.** A carteira do CaptaHub, os editais, o pipeline e a cópia de segurança nunca se movem por iniciativa do sistema. Dentro de um comando que ela deu, movem-se conforme o item 5.
+4. **Ao abrir a conversa, leia apenas o disco local.** Nenhuma chamada de API na abertura. **Única exceção, pedida por ela em 13/09/2026:** ler a página `Resumo da manhã` para mostrá-la na primeira resposta (ver REGRA DE ABERTURA DE SESSÃO). É só leitura, e só dessa página. O CaptaHub continua fora da abertura.
+5. **Leitura necessária corre solta. Escrita externa não necessária pede o OK.** Três situações, e só três:
+   - **Necessária ao comando:** roda dentro dele, sem perguntar. `/osc-importar` lê a carteira, `/edital-minerar` puxa os editais, `/osc-trocar` consulta a carteira, `/captahub-sincronizar` puxa e sobe. A chamada é o próprio comando.
+   - **Não necessária à finalidade principal:** ofereça em uma linha e espere o OK. Vale sobretudo para **escrita em sistema externo** feita por comando de finalidade local, como gravar nota, valor, status ou data de submissão na carteira ao fim de uma etapa. Ver a classificação comando a comando na seção de sincronização.
+   - **Proibida:** qualquer chamada fora de comando invocado por ela. Abertura de conversa, horário, gancho, segundo plano, iniciativa do sistema.
+
+   **Por que ler e escrever não têm o mesmo limiar.** Leitura errada se descarta. Escrita externa não se desfaz daqui: um `cliente-atualizar` com `status_documental` incompleto apaga checklist no CaptaHub, e `data-submissao` grava uma data que a carteira não distingue da data de criação do registro.
+6. **Não recrie o que foi desligado.** Nenhum comando, skill ou agente pode reativar tarefa agendada, gancho ou sincronização de fundo. "De fundo" é a que roda sem comando dela: por horário, por gatilho ou na abertura. A chamada que acontece **dentro** de um comando que ela deu não é disso que se trata. Para religar o que foi desligado, ela pede, com todas as letras.
+
+### As exceções, autorizadas a ficar ligadas para sempre
+
+> As duas primeiras foram decididas pela captadora em 01/09/2026, com as duas na mesa. A terceira foi decidida por ela em 13/09/2026, a quarta em 15/09/2026 e a quinta em 07/10/2026. **Nenhuma delas pode ser parada, desligada, pausada ou removida até ela pedir.** A regra acima não as alcança.
+
+1. **Google Drive e OneDrive.** São programas da máquina dela, não automações deste projeto. Ficam rodando sempre. Não sugerir desligar, não encerrar processo, não desabilitar tarefa de inicialização, nem "só para testar". Desligar o Google Drive derruba a unidade `G:` e com ela o acesso à pasta `_82` e a vários caminhos deste projeto.
+2. **Os conectores do Instagram e do LinkedIn.** Ficam de pé, no ar, com a ponte na HostGator e os dois serviços no Render. Eles não rodam sozinhos: são servidores parados que só acordam quando uma conversa chama, e por isso não ferem a regra. Não desativar serviço, não remover conector, não revogar token.
+3. **As rotinas agendadas na nuvem do claude.ai.** Estas rodam por horário, sim, e são dela por escolha. Ficam na conta do claude.ai, e não no Windows nem no agendador do aplicativo: elas não aparecem na listagem de tarefas do aplicativo, só na listagem de rotinas remotas. A única tarefa do aplicativo é a da exceção 4. Cada uma atualiza uma página publicada e fixada na barra lateral dela.
+
+   | Rotina | Quando roda (Brasília) | O que faz |
+   |---|---|---|
+   | Radar de Editais (PPL + Geral) | todo dia, 08h20 | Lê os Alertas do Google pela conta em que o conector do Gmail estiver autenticado, atualiza as páginas `painel-geral` e `painel-ppl` e entrega as duas em PDF. **Move para a lixeira do Gmail os alertas que processou**. Deixa intocados os alertas de mercado e patrocínio, que são do Radar de Mercado |
+   | Resumo matinal | segunda a sexta, 08h | Lê a agenda e o Gmail, só para consulta, atualiza a página `Resumo da manhã` e manda a notificação do dia |
+   | Radar de Mercado e Patrocínio | todo dia, 09h | Religado por ela em 13/09/2026, com o pedido expresso de rodar sem ela pedir e de não ser desligado. Lê os alertas de mercado e fontes públicas, atualiza a página `Radar de Mercado e Patrocínio`, **move para a lixeira do Gmail os alertas de mercado que processou** e **grava dois PDFs no computador dela** (`Radar-Mercado-Patrocinio.pdf` e `Resumo-Executivo-Mercado.pdf`), na pasta `RADARES DO DIA` da Área de Trabalho (decisão de 16/09/2026; até ela colar o texto novo, ainda caem soltos na Área de Trabalho). Nada além desses dois PDFs é gravado no computador |
+
+   As duas lixeiras do Gmail, a do Radar de Editais e a do Radar de Mercado, são as únicas escritas externas das rotinas. O Resumo matinal só lê.
+
+   **O Radar de Mercado continua gravando no computador dela, agora dentro de `RADARES DO DIA`.** Decisão dela em 16/09/2026, que **substitui a de 13/09** (tirar a rotina do computador e entregar os PDFs na conversa). O texto de `C:\Users\rosep\Downloads\Radar-Mercado-prompt-atualizado.txt` ficou sem uso e não deve ser colado. **Pendente em 16/09:** ela trocar, pelo aplicativo do claude.ai, os caminhos `C:\Users\rosep\Desktop\` do item 7c da rotina por `C:\Users\rosep\Desktop\RADARES DO DIA\`, porque pela API dá para mudar só nome, horário e ligado ou desligado. Como o vínculo com o Claude Desktop do Windows continua, a rotina pode atrasar ou ser suspensa quando o computador estiver desligado às 9h (em 12/09 foi suspensa; em 16/09 só rodou às 15h04): rotina suspensa por computador ausente não foi desligada por ela, e religar deve ser oferecido assim que a suspensão for notada. A cópia antiga e desligada do Radar de Editais não se religa.
+
+   Não desligar, não pausar, não editar o texto e não apagar nenhuma delas sem ela pedir. A exceção cobre estas rotinas e não abre porta para outras: nenhum comando, skill ou agente cria rotina nova por conta própria (item 6 da regra). Antes de propor qualquer leitura, painel ou relatório recorrente, confira se uma destas já faz o trabalho.
+4. **A cópia diária dos radares na Área de Trabalho.** Pedida por ela em 15/09/2026. É a única tarefa no agendador do aplicativo Claude (`radares-do-dia-area-de-trabalho`): roda **todo dia às 9h30**, depois das três rotinas da nuvem, e só com o aplicativo aberto; se ele estiver fechado, roda quando ela abrir. Baixa as quatro páginas publicadas (Resumo da manhã, Radar de Mercado e Patrocínio, radar-geral e radar-ppl), converte em PDF com o `scripts/radares-do-dia-pdf.ps1` e grava em `C:\Users\rosep\Desktop\RADARES DO DIA`, **substituindo os PDFs do dia anterior, sem histórico**, por escolha dela. O PDF novo só substitui o antigo quando sai certo. Não escreve em nenhum sistema externo e não mexe nas rotinas da nuvem: só copia o que elas já publicaram. Na mesma pasta ficam também os dois PDFs que a própria rotina do Radar de Mercado grava (`Radar-Mercado-Patrocinio.pdf` e `Resumo-Executivo-Mercado.pdf`), que são diferentes do `Radar de Mercado e Patrocínio.pdf` gerado por esta tarefa a partir da página. Os dois tipos ficam, por decisão dela em 16/09/2026. Não desligar, não pausar e não apagar sem ela pedir.
+
+5. **A leitura semanal das métricas de negócio.** Pedida por ela em 07/10/2026. Segunda tarefa do agendador do aplicativo Claude (`metricas-semanal-mobilizando`): roda **toda segunda-feira, perto das 10h**, e só com o aplicativo aberto; se ele estiver fechado, roda quando ela abrir. Executa `scripts/metricas-semanal.py`, que **só lê** o Checkpoint e o Controle de Submissão no Drive G e os projetos do CaptaHub, e grava apenas o histórico e o painel em `mobilizando mkt - pasta 09/04_NEGOCIOS_METRICAS/`. Depois republica o painel (página privada, endereço em `METRICAS_URL` no `.env`) no mesmo link. Não escreve em planilha, no CaptaHub nem em outro sistema externo. Não desligar, não pausar e não apagar sem ela pedir.
+
+Se alguma dessas peças precisar mesmo ser mexida, pare e pergunte antes.
+
+O inventário do que estava ligado em 01/09/2026 e do que foi desligado está em `docs/automacoes-desligadas.md`.
 
 ---
 
@@ -127,20 +183,35 @@ Não apagar, não mover para a Lixeira, não "aposentar", não substituir por at
 
 > Esta regra tem prioridade sobre qualquer outra instrução de abertura.
 
-**Ao iniciar QUALQUER nova conversa, a PRIMEIRA ação tem duas partes, nesta ordem:**
+### O Resumo da manhã abre toda conversa
 
-1. **Sincronizar a carteira com o CaptaHub (automático, sem o captador pedir).** Se houver token no `.env` (`CAPTAHUB_API_TOKEN` + `CAPTAHUB_API_URL`), puxe a carteira de clientes com `python3 scripts/captahub-api.py clientes`. O CaptaHub é a fonte da verdade da carteira: a lista de OSCs vem sempre de lá. O `perfil-osc.md` local é a cópia de trabalho enriquecida, ligada à OSC do CaptaHub pelo id.
-2. **Ler a OSC ativa local.** Leia `minhas-oscs/.ativa`.
+> Pedido da captadora em 13/09/2026: o resumo matinal do dia precisa aparecer assim que ela abre o Claude.
 
-Cruze a carteira do CaptaHub com as pastas locais de `minhas-oscs/` (case por "ID CaptaHub" gravado no perfil; na falta, por nome). Decida o fluxo:
+**Em toda conversa nova, sem exceção, a primeira resposta começa pelo Resumo da manhã.** Vale também quando a primeira mensagem é um comando, um agente ou uma pergunta técnica: mostre o resumo e, logo abaixo, siga com o que ela pediu.
 
-- **Há OSC ativa local:** apresente-se, mostre a OSC ativa e o estágio dos projetos abertos. Confirme em uma linha que ela está sincronizada com o CaptaHub (ou sinalize se for "só local", ainda fora da carteira). Se a carteira tiver OSCs ainda não importadas, liste-as em uma linha e ofereça `/osc-importar`.
-- **Não há OSC ativa local, mas o CaptaHub está conectado:** NÃO empurre o `/osc-nova`. Apresente a carteira já puxada (lista numerada: nome, UF, área) e pergunte com qual OSC trabalhar. Ao escolher, importe com `/osc-importar` (cria a pasta e o `perfil-osc.md`, gravando o id do CaptaHub). Só ofereça `/osc-nova` se a OSC não estiver na carteira.
-- **CaptaHub NÃO conectado:** trabalhe com as OSCs locais; ofereça `/captahub-conectar` para sincronizar a carteira, ou `/osc-nova` para cadastrar a primeira.
+1. Leia a página com `Artifact`, `action: "read"`, no endereço guardado em `RESUMO_MANHA_URL` no `.env`. O endereço não aparece escrito aqui porque este repositório é público e a página é privada dela (ver TOKENS E SEGREDOS APENAS NO .env). Ler o `.env` é leitura de disco local, permitida na abertura. Se a variável não existir, diga isso em uma linha e siga sem o resumo. É a única chamada externa permitida na abertura.
+2. Tire da página: a data (`.daydate`), a frase do dia (`h1`), os três blocos do dia (`.act-time` e `.act-note`) e os itens de **Precisa de você** (título e nota). **Resolvido** entra só se couber em uma linha.
+3. Mostre num bloco curto, no topo, com o título `☀️ Resumo da manhã, {data}`, sem travessão (troque por vírgula ou dois pontos), e termine com o link da página.
+4. **Se a data não for a de hoje**, diga qual é: no sábado e no domingo aparece o de sexta, porque a rotina só roda de segunda a sexta. Em dia útil, avise em uma linha que o resumo de hoje ainda não saiu.
+5. **Se a leitura falhar**, escreva uma linha dizendo que não foi possível abrir o resumo agora, e siga. Nunca trave a conversa por causa dele.
 
-**Regra de sincronização:** a carteira (quem são as OSCs) é espelho do CaptaHub. Não invente OSC fora da carteira nem sobrescreva dado local sem o aval do captador. OSC que existe só localmente fica sinalizada como "fora do CaptaHub" até o captador decidir subir.
+Limite que ela conhece: o Claude não fala primeiro. O resumo aparece na resposta à primeira mensagem dela, não sozinho ao abrir o aplicativo.
 
-**Únicas exceções (não force o fluxo de abertura):**
+### Depois do resumo, o disco local
+
+**Ao iniciar QUALQUER nova conversa, logo depois do resumo, leia o disco local, nesta ordem:**
+
+1. **Ler a OSC ativa.** Leia `minhas-oscs/.ativa`.
+2. **Ler o perfil dela.** Leia `minhas-oscs/{ativa}/perfil-osc.md` e o estado dos projetos abertos.
+
+**Nenhuma chamada ao CaptaHub acontece na abertura** (ver NADA RODA SOZINHO). A carteira só é puxada quando a captadora pedir. Decida o fluxo com o que está no disco:
+
+- **Há OSC ativa local:** apresente-se, mostre a OSC ativa e o estágio dos projetos abertos. Se o perfil não trouxer a linha "ID CaptaHub", sinalize em uma linha que ela está "só local", sem sair puxando nada para conferir.
+- **Não há OSC ativa local:** liste as OSCs que já existem em `minhas-oscs/` e pergunte com qual trabalhar. Se a desejada não estiver ali, ofereça `/osc-importar` (que puxa do CaptaHub, sob pedido) ou `/osc-nova`.
+
+**Regra de sincronização:** a carteira continua sendo espelho do CaptaHub, e o espelho só se atualiza dentro de um comando que a captadora deu, nunca na abertura. Não invente OSC fora da carteira nem sobrescreva dado local sem o aval dela. OSC que existe só localmente fica sinalizada como "fora do CaptaHub" até ela decidir subir.
+
+**Únicas exceções (não force o fluxo de abertura da OSC; o Resumo da manhã aparece mesmo assim):**
 1. A primeira mensagem começa com `/` (o usuário invocou um comando explícito).
 2. A primeira mensagem invoca explicitamente um agente pelo nome.
 3. A primeira mensagem é uma pergunta técnica específica sobre o projeto que não envolve cadastrar OSC nem trabalhar um edital (ex: "o que faz o comando X?"). Nesse caso, responda direto.
@@ -151,23 +222,49 @@ Se a mensagem trouxer informações úteis (nome da OSC, área de atuação, um 
 
 ## SINCRONIZAÇÃO BIDIRECIONAL COM O CAPTAHUB (CARTEIRA E PIPELINE)
 
-> O captador escolheu sincronização nos dois sentidos. Quando o CaptaHub está conectado (`CAPTAHUB_API_TOKEN` no `.env`), a carteira de OSCs e o pipeline de projetos ficam espelhados com o CaptaHub, automaticamente. Toda chamada usa `python3 scripts/captahub-api.py`.
+> A sincronização existe nos dois sentidos e **sempre dentro de um comando que a captadora deu** (ver NADA RODA SOZINHO). O sistema nunca chama o CaptaHub por iniciativa própria. Dentro do comando, o que é necessário à finalidade dele roda sem perguntar; o que não é necessário é oferecido e espera o OK. Toda chamada usa `python3 scripts/captahub-api.py`.
+>
+> **Revisado em 04/09/2026.** A redação anterior dizia "nenhum PATCH sai sozinho" e "nunca suba nada sem o OK", e isso contradizia comandos cuja finalidade declarada é justamente subir. A classificação abaixo resolve: a pergunta deixou de ser "houve chamada automática" e passou a ser "a chamada é necessária para este comando cumprir o que promete".
 
 **Identidade (para nunca duplicar).** Cada OSC local guarda no `perfil-osc.md` a linha `ID CaptaHub: {id}`; cada projeto guarda no `estado.md` a linha `ID CaptaHub projeto: {id}`. A correspondência é sempre por id. Na ausência de id, case por nome (OSC) ou por `edital_id` + `cliente_id` (projeto), e grave o id assim que descobrir. A identidade de um edital é o `id` (uuid), nunca a URL nem o título.
 
-**Sentido CaptaHub para a AMC IA (puxar, automático).** A lista de OSCs (carteira) e os editais vêm do CaptaHub. Puxe na abertura e no `/osc-trocar` (ver REGRA DE ABERTURA) e no `/edital-minerar`.
+### Sentido CaptaHub para a AMC IA (leitura)
 
-**Sentido AMC IA para o CaptaHub (subir, automático).**
-- **OSC nova ou só-local:** ao cadastrar (`/osc-nova`) ou ao detectar uma OSC que existe só local, crie o cliente no CaptaHub (`cliente-criar`) e grave o id no `perfil-osc.md`. Ao atualizar o perfil (`/osc-perfil`), suba as mudanças (`cliente-atualizar`). Atenção: `status_documental` SUBSTITUI o objeto inteiro, então sempre mande o checklist completo.
-- **Projeto:** ao abrir um projeto para um edital (a partir da elegibilidade APTA), crie o projeto no CaptaHub (`projeto-criar --nome --cliente-id --edital-id`) e grave o id no `estado.md`. A cada etapa, faça o PATCH:
-  - Orçamento pronto (`/projeto-orcamento`): `projeto-atualizar --valor-solicitado {total}`.
-  - Avaliação pronta (`/projeto-avaliar`): `projeto-atualizar --nota-tecnica {nota} --chance-aprovacao "{chance}"`.
-  - Mudança de etapa: `projeto-atualizar --status {um dos 11 estágios}`.
-  - Submissão (`/projeto-revisar` ok e exportado): `projeto-atualizar --status submetido --data-submissao {AAAA-MM-DD}`.
-  - Resultado: `projeto-atualizar --status {aprovado|reprovado} --valor-aprovado {valor}`.
-- Os sub-agentes (CaptaScore, CaptaBudget) não chamam a API; quem faz o PATCH é o comando, depois do agente entregar.
+A lista de OSCs (carteira) e os editais vêm do CaptaHub **dentro** de `/captahub-sincronizar`, `/osc-importar`, `/osc-trocar`, `/edital-minerar`, `/captahub-conectar` e `/configurar`. **Nunca na abertura da conversa.**
+
+| Comando | Chamada | Classe | Como se comporta |
+|---|---|---|---|
+| `/captahub-conectar` | `testar`, `captahub-editais.py --testar` | **A** | Roda. Testar a conexão é a finalidade |
+| `/captahub-sincronizar` | `clientes --all`, `captahub-editais.py` | **A** | Roda. Reconciliar é a finalidade |
+| `/osc-importar` | `clientes --all`, depois `cliente --id {id}` | **A** | Roda. Sem a leitura não há o que importar |
+| `/edital-minerar` | `captahub-editais.py` | **A** | Roda. Sem conexão, cai para o cache local e segue |
+| `/osc-trocar` | `clientes` | **A** | Roda. Decisão da captadora em 04/09/2026: a consulta é parte necessária da troca, porque sustenta a marcação "só no CaptaHub" e "só local". A carteira alimenta a marcação e **não vai para a tela** (ver o passo 6 do comando) |
+| `/osc-nova`, checagem de duplicata | `clientes`, compara por nome | **A** | Roda. Protege a integridade do que ela mandou criar |
+| `/configurar`, opção 2 | `captahub-editais.py` | **B** | Já correto: o comando abre um menu e só chama se ela escolher |
+
+### Sentido AMC IA para o CaptaHub (escrita)
+
+Escrita em sistema externo não se desfaz daqui. Por isso só é **A** quando subir é a finalidade declarada do comando. Em todo o resto é **B**: ofereça em uma linha, espere o OK, e só então grave.
+
+| Comando | Chamada | Classe | Como se comporta |
+|---|---|---|---|
+| `/captahub-sincronizar` | `cliente-criar`, `projeto-criar`, `projeto-atualizar` | **A** | Roda. Subir o que está só local é a finalidade declarada |
+| `/osc-nova` | `cliente-criar` e gravar o id no `perfil-osc.md` | **B** | Ofereça e espere. A finalidade é cadastrar a OSC **localmente** e torná-la ativa; criar na carteira é um segundo efeito |
+| `/osc-perfil` | `cliente-atualizar` | **B** | Ofereça e espere. Atenção: `status_documental` **SUBSTITUI o objeto inteiro**, então mande sempre o checklist completo, ou o envio apaga o que estava lá |
+| `/projeto-elegibilidade` | `projeto-criar --nome --cliente-id --edital-id`, com veredito APTO, e gravar o id no `estado.md` | **B** | Ofereça e espere. Emitir o parecer é a finalidade; abrir projeto na carteira é decisão dela |
+| `/projeto-orcamento` | `projeto-atualizar --valor-solicitado {total}` | **B** | Ofereça e espere. O orçamento fica pronto sem o PATCH |
+| `/projeto-avaliar` | `projeto-atualizar --nota-tecnica {nota} --chance-aprovacao "{chance}"` | **B** | Ofereça e espere. A nota já vive no `score.md` |
+| `/projeto-revisar` | `projeto-atualizar --status submetido --data-submissao {AAAA-MM-DD}` | **B** | Ofereça e espere, **e diga o que está gravando**: a carteira não distingue `data_submissao` da data de criação do registro, então o valor entra sabidamente impreciso |
+| Mudança de etapa | `projeto-atualizar --status {um dos 11 estágios}` | **B** | Ofereça e espere |
+| Resultado do edital | `projeto-atualizar --status {aprovado\|reprovado} --valor-aprovado {valor}` | **C** | Não é operação de comando nenhum. Só entra quando ela pedir |
+
+**Quem executa a chamada.** Sempre o comando ou o orquestrador, **nunca o agente**. CaptaDoc, CaptaEstrategista, CaptaBuilder, CaptaBudget e CaptaScore entregam o arquivo e param; o comando que os acionou é que oferece e, com o OK, grava.
+
+**Isto é regra, não impossibilidade técnica.** Três dos cinco não têm ferramenta de execução e portanto nem conseguiriam chamar. Mas **`captador-doc` e `captador-budget` têm `Bash`**, por razões próprias do trabalho deles, e conseguiriam rodar `scripts/captahub-api.py`. **Não podem, e a proibição está escrita nos dois.** Nenhum agente chama a API do CaptaHub em nenhuma hipótese, tenha ou não a ferramenta para isso.
 
 **Segurança do sync.**
+- Nunca suba nada de classe **B** sem o OK explícito da captadora, mesmo com a etapa recém-fechada e o id em mãos. Um OK vale para aquela gravação, não para as próximas.
+- Nunca chame o CaptaHub fora de um comando que ela deu. Isso independe da classe.
 - Idempotência sempre: cheque o id antes de criar; nunca duplique OSC nem projeto.
 - Anuncie em uma linha o que subiu ("Sincronizado com o CaptaHub: nota gravada no projeto"). Sem ruído técnico, sem expor detalhes de implementação.
 - Se a API falhar, NÃO trave a elaboração: avise que a sincronização ficou pendente e siga; tente de novo no próximo passo.
@@ -242,18 +339,117 @@ O sistema trabalha em dois contextos distintos, conforme a fase:
 | Entrega | Caminho | Formato |
 |---|---|---|
 | Perfil da OSC | `minhas-oscs/{slug}/perfil-osc.md` | `.md` |
-| Edital analisado | `minhas-oscs/{slug}/projetos/{edital}/edital.md` | `.md` |
+| Edital analisado (primeira leitura, 11 blocos) | `minhas-oscs/{slug}/projetos/{edital}/edital.md`, estrutura em `minhas-oscs/MODELO-edital.md` | `.md` |
+| Checklist documental, em qualquer formato | dentro do `edital.md` (bloco 6) ou na resposta. **Toda tabela de documento sai com as colunas Enviado e Data em branco**, inclusive quando o checklist é pedido em conversa | `.md` |
 | Dossiê do Edital (entrega ao cliente) | pasta do edital, junto com o edital e os anexos | `.docx` + `.pdf` |
 | Parecer de elegibilidade (CaptaDoc) | `minhas-oscs/{slug}/projetos/{edital}/elegibilidade.md` | `.md` |
+| Estratégia de entrada (CaptaEstrategista) | `minhas-oscs/{slug}/projetos/{edital}/estrategia.md`, estrutura em `minhas-oscs/MODELO-estrategia.md` | `.md` |
 | Proposta completa (CaptaBuilder) | `minhas-oscs/{slug}/projetos/{edital}/proposta.md` | `.md` |
 | Orçamento técnico (CaptaBudget) | `minhas-oscs/{slug}/projetos/{edital}/orcamento.md` | `.md` |
 | Avaliação e chance (CaptaScore) | `minhas-oscs/{slug}/projetos/{edital}/score.md` | `.md` |
 | Documentos da OSC | `minhas-oscs/{slug}/projetos/{edital}/documentos/` | arquivos |
-| Estado da elaboração do projeto | `minhas-oscs/{slug}/projetos/{edital}/estado.md` | `.md` |
+| **Edital encontrado na web (varredura do `minerador-web`)** | **`minhas-oscs/_transversal/`, sempre, para qualquer cliente** | `.md` e, quando pedido, `.docx` |
+| Estado da elaboração do projeto | `minhas-oscs/{slug}/projetos/{edital}/estado.md`, estrutura em `minhas-oscs/MODELO-estado.md` | `.md` |
 | Entrega final pronta para submeter | `minhas-oscs/{slug}/projetos/{edital}/entrega-final/` | `.doc` / `.pdf` / `.xls` |
 | Perfil do captador (Fase 2) | `marketing/perfil-captador.md` | `.md` |
 | Oferta da assessoria | `marketing/oferta.md` | `.md` |
 | Conteúdo, página e anúncio do captador | `marketing/entregas/{tipo}/` | `.md` / `.html` |
+
+### Todo edital encontrado na web vai para `minhas-oscs/_transversal/`
+
+> Decisão da captadora em 17/09/2026. Vale para toda varredura web, de qualquer cliente, e para qualquer formato.
+
+Quando o `minerador-web` (ou qualquer busca na web) trouxer edital, **o resultado se salva em `minhas-oscs/_transversal/`**, e não dentro da pasta do cliente. Vale para o relatório da varredura, para o quadro consolidado e para o Word ou PDF que a captadora pedir.
+
+Três razões, e a primeira é a que manda:
+
+1. **A pasta fica fora do Git.** O `.gitignore` ignora `minhas-oscs/*/`, e o repositório é público. Varredura web nomeia cliente, território e CNPJ, e nada disso pode subir (ver a regra do repositório público).
+2. **Um lugar só para procurar.** Edital de web serve a mais de um cliente: a LEIC de Minas serve a duas clientes de MG, e uma vitrine de captação serve a qualquer projeto aprovado. Espalhar por pasta de cliente obriga a abrir cinco pastas para achar o mesmo edital.
+3. **Separa o que é do CaptaHub do que ainda não é.** Edital de web nasce marcado como "ainda fora do CaptaHub". Manter em pasta própria evita confundir com o que já é da base.
+
+**Padrão de nome, em ASCII sem acento:** `AAAA-MM-DD-{cliente-ou-tema}-varredura-web.md`. Quando a entrega for um quadro de vários clientes, `AAAA-MM-DD-quadro-de-editais.docx`.
+
+O arquivo de mineração de cada cliente continua em `minhas-oscs/{slug}/`, e **aponta para o arquivo em `_transversal/`** em vez de guardar uma cópia.
+
+---
+
+## REGISTRO AUTOMÁTICO EM PASTAS E MEMÓRIA (REGRA GLOBAL)
+
+> Decisão da captadora em 18/09/2026: "tudo que façamos aqui salve automaticamente nessas pastas". Vale para toda conversa, sem ela precisar pedir.
+
+**Todo trabalho feito numa conversa termina registrado no lugar certo, na mesma conversa, sem esperar pedido.** Resultado aprovado, decisão tomada e aprendizado não podem existir só no histórico da conversa, porque a conversa seguinte não o enxerga.
+
+### As três camadas, e o que vai em cada uma
+
+| Camada | Onde | O que entra |
+|---|---|---|
+| **Contexto da frente** | o `00_INDICE` (ou o `perfil-osc.md`) dentro da pasta da frente | Decisão, estado atual, inventário e pendências daquele assunto. É a camada que o chat do claude.ai também lê |
+| **Memória** | `.claude/memoria/` (junção com a memória do Claude Code), índice `MEMORY.md` em seções por assunto | Regra de trabalho, preferência dela, armadilha técnica, fato que vale para várias frentes. Uma anotação por fato, na seção certa do índice |
+| **Regras do sistema** | este `CLAUDE.md` e `.claude/rules/` | Só regra permanente, e só quando ela decide |
+
+### As frentes e seus arquivos de contexto
+
+| Frente | Pasta | Arquivo de contexto |
+|---|---|---|
+| Marketing e posicionamento | `mobilizando mkt - pasta 09/` | `00_INDICE_Estrutura_do_Projeto.md` |
+| Editais | `minhas-oscs/_transversal/` | `00_INDICE_Editais.md` |
+| Automações, rotinas e conectores | `docs/` | `00_INDICE_Automacoes.md` (repositório público: sem e-mail, endereço de página nem token) |
+| Portal do Cliente | `portal do cliente - pasta 10/` (fora do Git desde 19/09/2026) | `00_INDICE_Portal.md` |
+| Parcerias empresariais (HubSocial NOA + Mobilizando) | `parcerias - pasta 11/` (fora do Git desde 02/10/2026) | `00_INDICE_Parcerias.md` |
+| Cada cliente | `minhas-oscs/{slug}/` | `perfil-osc.md` e, por projeto, `estado.md` |
+
+### Como aplicar
+
+1. **Ao terminar cada entrega ou decisão**, antes de responder que acabou: salvar o arquivo na pasta da frente, com o padrão de nome dela; registrar a decisão na tabela de Decisões do `00_INDICE` da frente, com data; e, se for aprendizado geral, gravar ou atualizar a anotação da memória e a linha dela na seção certa do `MEMORY.md`.
+2. **Dizer em uma linha onde gravou.** Ex.: "Registrado: decisão no 00_INDICE do Marketing e anotação na memória, seção Editais".
+3. **Rascunho não aprovado não entra como versão vigente.** Fica marcado como rascunho ou espera o "aprovado" dela.
+4. **Assunto sem frente definida:** perguntar em uma linha onde guardar, ou propor a frente nova com o seu `00_INDICE`.
+5. **Ler antes de escrever.** Antes de gravar num `00_INDICE`, reler o arquivo: o chat do claude.ai também o edita, e uma versão não pode apagar a outra.
+6. Quando ela disser "anota isso", aplicar na hora, pelo mesmo critério.
+
+### Marketing: convivência com o chat do claude.ai (decisão de 18/09/2026)
+
+O chat do projeto "Mobilizando, Marketing & Posicionamento" e o Claude Code trabalham na mesma pasta 09 e no mesmo `00_INDICE`. A mesma regra está escrita nas Instruções do projeto e na seção 3 do índice. **Ela nunca precisa pedir para ler nem para atualizar: é obrigação de quem vai trabalhar.**
+
+> **PRINCÍPIO GERAL (decisão da captadora em 18/09/2026): conversa e memória são o rascunho de cada lado; a pasta 09 é o que os dois compartilham.**
+>
+> - **Antes de propor mudança ou alteração**, ler e analisar a pasta 09 (índice, decisões e documentos do assunto).
+> - **Toda mudança feita é gravada na pasta 09, da forma combinada** (arquivo vivo, linha no Histórico, decisão na seção 6), para que o outro lado continue tendo acesso.
+> - **Nada fora do contexto ou do combinado.** Não propor nem executar o que ela não pediu. Se o pedido contrariar uma decisão registrada no índice, apontar a decisão e esperar o OK dela antes de agir.
+> - **O que ficou só na conversa ou na memória não vale como combinado** até estar gravado na pasta 09.
+
+1. **Antes de propor, responder ou produzir qualquer coisa de marketing, conteúdo, comercial ou posicionamento**, sem esperar pedido: ler o `mobilizando mkt - pasta 09/00_INDICE_Estrutura_do_Projeto.md` inteiro, listar a raiz e as pastas `02_CONTEUDO_`, e abrir os documentos do assunto em questão. Nunca partir da memória da conversa nem de cópia antiga.
+2. **Não refazer o que já existe.** Se a pasta ou o índice já têm a pauta, o texto ou a decisão, partir dele e dizer em uma linha qual arquivo foi usado.
+3. **Arquivo vivo (decisão dela de 18/09/2026: "não quero o monte de versões").** Documento de trabalho não tem número de versão: cada mudança atualiza o mesmo arquivo e ganha **uma linha** no Histórico do próprio documento (data, o que mudou, "(Claude Code)"). O índice tem um único PDF com o mesmo nome, refeito por cima. Número de versão e `_HISTORICO` só para material que sai para fora (portfólio, carteira, proposta).
+4. **Ao terminar:** gravar na pasta 09 com o padrão de nome e registrar a decisão na seção 6 do índice.
+5. **A pasta 09 é a fonte da verdade.** Não existe cópia dentro do projeto do claude.ai desde 18/09/2026. Em divergência com a memória, vale a pasta 09.
+
+### Portal do Cliente: convivência com o chat do claude.ai (decisão de 19/09/2026)
+
+O chat do projeto "Portal do Cliente" e o Claude Code trabalham na mesma pasta, `portal do cliente - pasta 10/`, e no mesmo `00_INDICE_Portal.md`. **É a mesma regra do Marketing, com o mesmo princípio geral**, trocando a pasta 09 pela pasta 10. Está escrita também nas Instruções do projeto e na seção 3 do índice. Ela nunca precisa pedir para ler nem para atualizar.
+
+1. **Antes de propor, responder ou produzir qualquer coisa do Portal**, sem esperar pedido: ler o `00_INDICE_Portal.md` inteiro, listar a pasta 10 e abrir o Mapa Operacional (decisões e seção 22 de pendências) e os documentos do assunto. Nunca partir da memória da conversa, de `docs/` nem da cópia antiga da Área de Trabalho.
+2. **Hierarquia:** Como trabalhamos juntos > Mapa Operacional > Arquitetura > documentos dos pacotes.
+3. **Arquivo vivo**, como no Marketing. Decisão de produto vai para o Mapa, com o próximo número; decisão de organização vai para a seção 6 do índice.
+4. **Arquivo novo:** `portal-clientes-{assunto}.md`; script de banco em `portal-clientes-sql-direto/AAAA-MM-DD-{assunto}.sql`.
+5. **Quem publica é ela.** O chat e o Claude Code escrevem a mensagem ao Lovable e o script de banco; mandar ao Lovable, rodar SQL no banco e publicar continua sendo dela.
+6. **A pasta 10 é a fonte da verdade** e fica fora do Git. Os `docs/portal-clientes-*` saíram do repositório em 19/09/2026; texto antigo que cita esse caminho se refere à pasta 10.
+
+### Passagem de turno automática nas duas frentes (decisão de 19/09/2026)
+
+> Pedido da captadora: "vamos fazer automático e você avisa a pasta de Projeto das mudanças contextualizando onde paramos. Faça isso nas duas pastas de projetos [...] precisamos fechar todos os riscos."
+
+Vale para o Marketing (pasta 09) e para o Portal do Cliente (pasta 10). Cada `00_INDICE` tem uma **seção 0, "Onde paramos"**, com dois blocos: o do chat do claude.ai e o do Claude Code.
+
+1. **Ao começar**, antes de qualquer outra coisa da frente, ler os dois blocos da seção 0, além do resto da leitura obrigatória.
+2. **Ao fim de toda resposta que mexeu na frente**, sem ela pedir: reler o índice e reescrever **só o bloco do Claude Code**, com data, o que foi feito, o que foi decidido, o estado agora, o próximo passo proposto e o que espera a Rosepaula. O bloco não acumula: o que passou vai para o Histórico do índice, em uma linha.
+3. **Nunca escrever no bloco do chat.** Se o bloco do chat estiver desatualizado em relação à pasta, apontar isso no bloco do Claude Code, sem mexer no dele.
+4. No Marketing, refazer o PDF do índice depois de alterar (regra de arquivo vivo).
+5. Dizer em uma linha, na resposta, que a passagem foi gravada.
+
+"Automático" aqui quer dizer **sem ela precisar pedir**, feito por quem trabalhou, na mesma conversa. **Não é gancho nem tarefa agendada** (ver NADA RODA SOZINHO): um gancho não escreve contexto e a regra global proíbe criá-lo sem ela pedir com todas as letras.
+
+**Isto não é automação de fundo** e não fere NADA RODA SOZINHO: é escrita no disco local, feita dentro do trabalho que ela pediu, na mesma conversa. Não existe gancho, horário nem gatilho. Não vale para sistema externo: gravar no CaptaHub, no Drive da `_82`, no Canva ou no Metricool continua pedindo o OK dela, conforme as regras próprias.
 
 ---
 
@@ -277,23 +473,41 @@ O Método Captar organiza a captação em **3 fases** e **10 pilares**. Detalhes
 9. **Pitch de vendas.** Fechar contratos anuais. Comando: `/assessoria-pitch`.
 10. **Prestação do serviço.** Entregar a captação e prestar contas. A gestão da carteira fica no CaptaHub.
 
-### Os 4 agentes (linha de montagem do projeto)
+### Os 5 agentes (linha de montagem do projeto)
 
 ```
-CaptaDoc     → elegibilidade + checklist documental (sinal verde ou vermelho)
+CaptaDoc          → elegibilidade + checklist documental (pode participar?)
      ↓
-CaptaBuilder → elabora a proposta completa, bloco a bloco
+CaptaEstrategista → vale a pena entrar, e como ganhar (semáforo de 4 estados)
      ↓
-CaptaBudget  → monta o orçamento técnico por rubrica
+CaptaBuilder      → elabora a proposta completa, bloco a bloco
      ↓
-CaptaScore   → nota por critério, chance de aprovação e o que melhorar
+CaptaBudget       → monta o orçamento técnico por rubrica
+     ↓
+(Anexos)          → declarações e checklist de anexos da submissão
+     ↓
+CaptaScore        → nota por critério, chance de aprovação e o que melhorar
+     ↓
+(Revisor)         → pente-fino final: PRONTO PARA SUBMETER ou AJUSTAR ANTES
 ```
 
-Os quatro tratam, em ordem, os quatro motivos recorrentes de reprovação: edital errado, elegibilidade falha, texto fraco, orçamento furado. A proposta chega à banca com as quatro causas já endereçadas.
+**Estações de apoio e coordenação.** Os cinco Capta são o núcleo da linha. Em volta deles trabalham:
+
+- `captador-anexos` (`/projeto-anexos`): entre o CaptaBudget e o CaptaScore, gera as declarações que o sistema consegue produzir com o perfil da OSC e monta o checklist de anexos, pedindo à captadora o que só ela pode fornecer.
+- `revisor-proposta` (`/projeto-revisar`): depois do CaptaScore, confere completude, coerência entre proposta, orçamento e edital, formulário oficial e português.
+- `captador-chefe` (`/projeto-completo`): consultor sênior que conduz a linha inteira, faz a triagem entre os editais minerados, valida cada estação com visão técnica e jurídica (MROSC, leis de incentivo, prestação de contas) e emite o parecer final antes da submissão. **Não é porta dura:** alerta e pede a confirmação da captadora.
+- `orquestrador-captacao`: diagnostica em que etapa o projeto está e aponta o próximo comando. Não executa as etapas.
+- `captador-contrato` (`/contrato`): fora da linha de montagem. Minuta o contrato de assessoria com a OSC e analisa o termo de fomento ou de colaboração quando o projeto é aprovado. Toda minuta exige revisão de advogado antes de assinar.
+
+Os cinco tratam, em ordem, os cinco motivos recorrentes de reprovação: edital errado, elegibilidade falha, **entrar sem chance ou sem estratégia**, texto fraco, orçamento furado. A proposta chega à banca com as cinco causas já endereçadas.
+
+**A fronteira entre as duas primeiras estações.** O CaptaDoc responde se a organização **pode** participar, e é porta dura: INAPTO trava a elaboração. O CaptaEstrategista responde se **vale a pena** e como aumentar a chance, e **não é porta dura**: o vermelho dele alerta e exige a confirmação da captadora, mas não impede o trabalho.
 
 ### Estrutura padrão de uma proposta
 
 título, resumo executivo, justificativa, problema central, objetivo geral, objetivos específicos, público-alvo, metas, metodologia, cronograma, equipe, orçamento resumido, monitoramento e avaliação, resultados esperados, sustentabilidade, contrapartida, diferenciais competitivos, riscos e mitigação. Adaptar ao formulário oficial quando o edital fornecer um.
+
+**Sete peças condicionais**, que entram só quando o edital, o formulário ou um anexo as exige, sempre citando o item que as exige: plano de trabalho, plano de comunicação e divulgação, plano de acessibilidade, plano de democratização e ampliação de acesso, plano de distribuição, ficha técnica e portfólio dos profissionais. Em edital de cultura elas são frequentes e várias pontuam ou eliminam. Nenhuma entra por achismo: seção não pedida rouba espaço da que pontua. Detalhamento na skill `elaboracao-proposta`.
 
 ### Rubricas comuns de orçamento
 
@@ -320,13 +534,16 @@ aderência ao edital, capacidade técnica, potencial de impacto, coerência meto
 - `/edital-analisar`. Ler um edital (PDF, link ou texto colado) e extrair critérios, prazos, exigências, o que pontua e o que derruba.
 - `/edital-dossie`. Produzir o Dossiê do Edital, documento único em Word e PDF para enviar ao cliente, com categorias, ficha de controle documental por etapa, território, critérios um a um, riscos e divergências.
 
-**Projeto (os 4 agentes):**
+**Projeto (os 5 agentes):**
 - `/projeto-elegibilidade`. CaptaDoc. Cruza edital com o perfil da OSC e dá o veredito: APTO, APTO COM PENDÊNCIAS ou INAPTO, com checklist documental.
+- `/projeto-estrategia`. CaptaEstrategista. Depois do sinal verde, diz se vale a pena entrar e qual é a estratégia: aderência, atratividade, força competitiva, esforço contra retorno, riscos, como ganhar e uma recomendação em quatro estados.
 - `/projeto-escrever`. CaptaBuilder. Entrevista por blocos e escreve a proposta completa.
 - `/projeto-orcamento`. CaptaBudget. Monta o orçamento técnico por rubrica com memória de cálculo.
+- `/projeto-anexos`. Mapeia os anexos do edital, gera as declarações e monta o checklist de habilitação da submissão.
 - `/projeto-avaliar`. CaptaScore. Nota por critério, chance de aprovação e reescrita dos campos críticos.
 - `/projeto-revisar`. Checklist final pré-submissão (documentos, coerência, prazo).
 - `/projeto-exportar`. Gerar a entrega final em Word, PDF e planilha, pronta para submeter.
+- `/projeto-completo`. Captador-chefe. Conduz a linha de montagem inteira, da escolha do edital à entrega final, validando cada estação.
 
 **Posicionamento do captador (Fase 2. POSICIONAR):**
 - `/captador-perfil`. Cadastrar o captador e a marca da assessoria. Base da Fase 2.
@@ -344,12 +561,14 @@ aderência ao edital, capacidade técnica, potencial de impacto, coerência meto
 **Apoio e venda:**
 - `/sala-agentes`. Abrir a Sala dos Agentes, o escritório ao vivo onde os agentes andam e trabalham conforme o sistema executa.
 - `/assessoria-pitch`. Playbook de venda do contrato anual de assessoria.
+- `/contrato`. Minutar o contrato de assessoria com a OSC ou analisar o termo de fomento ou de colaboração do financiador.
 - `/configurar`. Conexões e integrações do projeto.
 
 > A gestão da carteira (pipeline de projetos, clientes, prazos, status) NÃO fica aqui. Ela vive no CaptaHub. Se o captador pedir pipeline ou CRM, oriente que isso é no CaptaHub. A AMC IA é o estúdio que produz o projeto.
 
 **Agentes especialistas (tarefas completas):**
-- `captador-doc`, `captador-builder`, `captador-budget`, `captador-score`, `minerador-editais`, `minerador-web`, `revisor-proposta`, `orquestrador-captacao`, `posicionador-captador`.
+- `captador-doc`, `captador-estrategista`, `captador-builder`, `captador-budget`, `captador-anexos`, `captador-score`, `revisor-proposta`, `captador-chefe`, `orquestrador-captacao`, `captador-contrato`, `minerador-editais`, `minerador-web`, `posicionador-captador`. São 13, os mesmos da pasta `.claude/agents/`.
+- Dois agentes Capta têm acesso à web, cada um para uma finalidade: o `captador-estrategista`, para levantar concorrência e histórico do financiador, e o `captador-budget`, para a cotação de preços (3 fontes por item relevante). **A busca nunca contém nome da organização, CNPJ, dirigente ou endereço:** ela é sobre o edital, o financiador, o item e o fornecedor, jamais sobre quem se inscreve.
 - `minerador-web` é o complemento de varredura web: entra quando o CaptaHub não traz edital alinhado ao perfil, busca editais abertos na web (com confirmação de prazo na fonte) e devolve candidatos marcados como ainda fora do CaptaHub.
 
 ---

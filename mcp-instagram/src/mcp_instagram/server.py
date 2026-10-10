@@ -68,7 +68,11 @@ from mcp_instagram.instagram_client.leitura import (
 from mcp_instagram.instagram_client.transporte import ErroDeTransporte, TransporteGraphHttpx
 from mcp_instagram.auth_claude.session_store import ClaudeSessionStore
 from mcp_instagram.auth_instagram.oauth_callback import CallbackOutcome, CallbackParams
-from mcp_instagram.auth_instagram.runtime import InstagramOAuthRuntime, build_runtime
+from mcp_instagram.auth_instagram.runtime import (
+    InstagramOAuthRuntime,
+    build_credential_backend,
+    build_runtime,
+)
 from mcp_instagram.auth_instagram.signed_request import (
     InvalidSignedRequestError,
     parse_signed_request,
@@ -81,6 +85,8 @@ from mcp_instagram.config import (
     INSTAGRAM_DATA_DELETION_STATUS_PATH,
     INSTAGRAM_DEAUTHORIZE_PATH,
     TOKEN_STORE_BACKEND_MEMORY,
+    TOKEN_STORE_BACKEND_PONTE,
+    TOKEN_STORE_BACKEND_SUPABASE,
     missing_instagram_env_vars,
     resolve_instagram_config,
 )
@@ -781,6 +787,74 @@ class ClaudeAuthConfig:
     auth_settings: AuthSettings
 
 
+# Trava de segurança da persistência da sessão pela ponte.
+#
+# O `token-instagram.php` publicado hoje IGNORA o alvo enviado e grava
+# sempre em 'mcp-instagram:instagram-access-token' (seção 6 do arquivo).
+# Persistir a sessão por essa ponte SOBRESCREVERIA o token do Instagram,
+# e a ação 'excluir' o apagaria: a conta cairia e precisaria ser
+# reautorizada. É o pior desfecho possível, e silencioso.
+#
+# Enquanto a ponte publicada não aceitar o namespace 'mcp-instagram:claude-*',
+# esta variável fica ausente e a sessão segue só em memória. Ligar SOMENTE
+# depois de publicar a ponte atualizada (ver ponte-hostgator/).
+VARIAVEL_PONTE_SESSAO = "MCP_CLAUDE_SESSION_STORE_PONTE"
+
+
+def ponte_aceita_sessao(env: Mapping[str, str]) -> bool:
+    """
+    True somente quando o operador confirmou, pela variável de ambiente,
+    que a ponte publicada aceita o namespace da sessão.
+
+    É uma confirmação humana de propósito: a capacidade vive no PHP da
+    hospedagem, e nenhuma variável do Render consegue descobri-la sozinha.
+    O padrão é o seguro.
+    """
+    valor = (env.get(VARIAVEL_PONTE_SESSAO) or "").strip().lower()
+    return valor in ("1", "true", "sim")
+
+
+def build_claude_session_backend(env: Mapping[str, str]):
+    """
+    Devolve o armazenamento persistente da sessão da Camada 1, ou None
+    para manter tudo em memória (comportamento da v1).
+
+    Reaproveita a configuração da Camada 2 de propósito, em vez de criar
+    variáveis próprias no Render: a ponte já está configurada e testada
+    ali, e um segundo conjunto de variáveis só multiplicaria a chance de
+    divergirem sem o operador perceber.
+
+    Só os backends remotos servem. 'memory' e 'windows' não sobrevivem ao
+    reinício do contêiner, que é exatamente o problema a resolver.
+
+    A ponte exige confirmação explícita (ver VARIAVEL_PONTE_SESSAO): o PHP
+    publicado hoje trabalha com um alvo fixo, e usá-lo para a sessão faria
+    estrago. O padrão é não persistir.
+
+    Nada aqui pode impedir a Camada 1 de subir: com a Camada 2 ausente,
+    inválida ou sem as dependências do backend, a sessão volta a viver só
+    em memória, e o servidor sobe igual. Perder persistência custa um
+    clique em Reconectar; não subir custa a conexão inteira.
+    """
+    try:
+        config = resolve_instagram_config(env)
+        if config is None:
+            return None
+
+        # O Supabase guarda uma linha por target_name, então aceita o
+        # namespace da sessão sem nenhuma mudança.
+        if config.token_store_backend == TOKEN_STORE_BACKEND_SUPABASE:
+            return build_credential_backend(config)
+
+        # A ponte, não: depende de qual PHP está publicado (ver a trava).
+        if config.token_store_backend == TOKEN_STORE_BACKEND_PONTE and ponte_aceita_sessao(env):
+            return build_credential_backend(config)
+
+        return None
+    except Exception:
+        return None
+
+
 def resolve_claude_auth_config(env: Mapping[str, str] | None = None) -> ClaudeAuthConfig | None:
     """
     Lê a configuração da Camada 1 do ambiente informado (por padrão,
@@ -804,7 +878,7 @@ def resolve_claude_auth_config(env: Mapping[str, str] | None = None) -> ClaudeAu
     client_secret = env.get("MCP_CLAUDE_CLIENT_SECRET") or None
     base_url = base_url.rstrip("/")
 
-    store = ClaudeSessionStore()
+    store = ClaudeSessionStore(backend=build_claude_session_backend(env))
     provider = ClaudeAuthProvider(client_id=client_id, client_secret=client_secret, store=store)
     token_verifier = ProviderTokenVerifier(provider)
 

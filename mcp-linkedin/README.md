@@ -40,7 +40,11 @@ Isso é o que faz a autorização sobreviver a reinício e a fim de semana. Ver 
 
 ### A hibernação, e o que fazer com ela
 
-O plano gratuito do Render adormece o serviço após cerca de 15 minutos ocioso. Quando ele dorme, a **sessão do Claude morre** (ela vive em memória, decisão explícita da v1) e o conector passa a pedir "Reconectar".
+O plano gratuito do Render adormece o serviço após cerca de 15 minutos ocioso. Quando ele dorme, a **sessão do Claude morria** (ela vivia em memória, decisão explícita da v1) e o conector passava a pedir "Reconectar".
+
+Desde a Etapa 8 a sessão pode sobreviver: `ClaudeSessionStore` aceita um armazenamento persistente, e access token e refresh token vão cifrados para a ponte, sob uma chave que é o SHA-256 do token. Depende de duas condições, o `token.php` publicado aceitando o namespace `mcp-linkedin:claude-*` e a variável `MCP_CLAUDE_SESSION_STORE_PONTE=1` no Render. O passo a passo está em `docs/persistencia-sessao-conectores.md`. Enquanto as duas não estiverem feitas, o comportamento continua o descrito acima.
+
+A hibernação em si continua: a primeira chamada depois de dormir leva de 13 a 22 segundos. A diferença é que o serviço acorda já autorizado.
 
 O token sobrevive, porque está na ponte. A sessão não.
 
