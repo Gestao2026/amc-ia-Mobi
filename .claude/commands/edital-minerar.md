@@ -36,7 +36,7 @@ O CaptaHub continua sendo a fonte principal. A varredura web é cobertura extra:
 
 ## Passo 4. Entrega
 
-Apresente a lista priorizada (top 10 a 15) em tabela: edital, órgão, escopo, valor, prazo, aderência, motivo em uma linha. **Ordem da lista: sempre do menor prazo para o maior** (regra da captadora, 17/11/2026). A aderência decide quem entra; a ordem de exibição é o prazo. Fluxo contínuo e sem data vão para o fim. O bloco da web segue a mesma ordem. Se houver resultados da varredura web, traga-os em um bloco à parte, marcado como "fonte: web, ainda não está no CaptaHub".
+Apresente a lista priorizada (top 10 a 15) em tabela: edital, órgão, escopo, valor, prazo, aderência, motivo em uma linha. Se houver resultados da varredura web, traga-os em um bloco à parte, marcado como "fonte: web, ainda não está no CaptaHub".
 
 Para os de ALTA aderência, ofereça abrir o projeto: criar a pasta `projetos/{edital-slug}/` e gravar um `edital.md` inicial com os dados (da base do CaptaHub ou da fonte web). Para os achados na web, sugira também cadastrá-los no CaptaHub.
 

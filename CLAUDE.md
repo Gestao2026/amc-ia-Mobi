@@ -177,16 +177,6 @@ Isto não vira gestão de carteira aqui: continua sem kanban nem CRM na AMC IA. 
 
 ---
 
-## EDITAIS SEMPRE DO MENOR PRAZO PARA O MAIOR (REGRA GLOBAL)
-
-> Decisão da captadora em 17/11/2026.
-
-Toda vez que buscar editais, no CaptaHub (`/edital-minerar`, `minerador-editais`) ou na web (`minerador-web`, varredura diária), a lista entregue sai **do menor prazo para o maior**. A aderência decide quem entra na lista; a ordem de exibição é o prazo. Fluxo contínuo e edital sem data vão para o fim. Vale para tabela no chat, relatório, página Oportunidades CaptaHub e Web e qualquer controle que o sistema monte.
-
-**Limite do CaptaHub:** o Pipeline de Controle (captahub.app/controle) ordena os cards pelo código, não aceita posição pela API e não grava o arraste dentro da coluna. Não dizer que o pipeline foi reordenado. A ordem por prazo sai nas listas que o sistema gera, até o CaptaHub ganhar a ordenação na tela.
-
----
-
 ## PENSAR EM VOZ ALTA. ANÚNCIO DE PRÓXIMO PASSO (OBRIGATÓRIO)
 
 > Aplica-se a TODO comando e agente.

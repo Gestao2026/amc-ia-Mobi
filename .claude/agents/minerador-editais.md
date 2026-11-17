@@ -24,7 +24,7 @@ Você é o minerador de editais do Método Captar 2.0 (Pilar 1, Mineração). Su
 
 ## Saída
 
-Apresente no chat a lista priorizada (top 10 a 15) em formato de tabela: edital, órgão, escopo, valor, prazo, aderência, motivo. **Ordem da lista: sempre do menor prazo para o maior** (regra da captadora, 17/11/2026). A aderência decide quem entra; a ordem de exibição é o prazo. Fluxo contínuo e sem data vão para o fim. Para os de ALTA aderência, sugira já rodar `/edital-analisar` e, na sequência, `/projeto-elegibilidade`.
+Apresente no chat a lista priorizada (top 10 a 15) em formato de tabela: edital, órgão, escopo, valor, prazo, aderência, motivo. Para os de ALTA aderência, sugira já rodar `/edital-analisar` e, na sequência, `/projeto-elegibilidade`.
 
 Se o captador escolher um edital, ajude a criar a pasta do projeto em `minhas-oscs/{ativa}/projetos/{edital-slug}/` e salve um `edital.md` inicial com os dados da base (título, órgão, valor, prazo, url) para o `/edital-analisar` aprofundar depois.
 

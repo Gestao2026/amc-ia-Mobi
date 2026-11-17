@@ -194,22 +194,11 @@ def main():
     candidatos.sort(key=chave_ordem)
     selecionados = candidatos[: args.top]
 
-    # Regra da captadora (17/11/2026): a lista sai sempre do menor prazo para o
-    # maior. A aderência escolhe quem entra no top; a ordem exibida é o prazo.
-    # Sem data e fluxo contínuo vão para o fim (a data antiga que alguns
-    # contínuos trazem na ficha não conta como prazo).
-    def chave_prazo(c):
-        e = c[3]
-        prazo = None if e.get("is_continuous") else parse_data(e.get("deadline"))
-        return (prazo is None, prazo or date.max, -c[0])
-
-    selecionados.sort(key=chave_prazo)
-
     print(f"Editais na base: {len(editais)} | vencidos descartados: {descartados_vencidos} "
           f"| candidatos: {len(candidatos)} | exibindo: {len(selecionados)}\n")
 
     for i, (score, eleg, hits, e) in enumerate(selecionados, 1):
-        prazo = "fluxo contínuo" if e.get("is_continuous") else (e.get("deadline") or "sem data")
+        prazo = e.get("deadline") or ("fluxo contínuo" if e.get("is_continuous") else "sem data")
         territorio = "" if eleg else "  ⚠ fora do território da OSC"
         print(f"{i}. {e.get('title', 'sem título')}")
         print(f"   Órgão: {e.get('institution', '-')} | Escopo: {e.get('scope', '-')} | "
