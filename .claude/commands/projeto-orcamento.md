@@ -14,9 +14,9 @@ Aciona o CaptaBudget para transformar a proposta em um orçamento técnico defen
    ```
    🔍 Próximo passo: montar o orçamento técnico por rubrica (CaptaBudget). Tempo estimado: 2 a 4 minutos.
    ```
-4. Acione o agente `captador-budget`. Ele lê as regras financeiras do edital, deriva os itens das atividades, monta o quadro por rubrica com memória de cálculo e sinaliza tetos, despesas vedadas, glosa e exigência de 3 cotações.
+4. Acione o agente `captador-budget`. Ele lê as regras financeiras do edital, deriva os itens das atividades, faz a cotação sistemática na web (3 fontes por item relevante, mediana como referência), monta o quadro por rubrica com memória de cálculo e sinaliza tetos, despesas vedadas, glosa e exigência de 3 cotações.
 5. Mostre o orçamento para aprovação (aprovar e salvar / ajustar).
-6. Após aprovar, confirme o salvamento em `orcamento.md` e informe o caminho.
+6. Após aprovar, confirme o salvamento em `orcamento.md` e no quadro de cotações `cotacoes.md`, e informe os caminhos.
 7. Próximo passo: `/projeto-avaliar`.
 
 ## Regras

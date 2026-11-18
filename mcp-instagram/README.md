@@ -176,10 +176,21 @@ Vale separar duas coisas que somem juntas quando o serviço adormece:
 
 | O que morre | Sintoma | Resolvido pela ponte? |
 |---|---|---|
-| Token do Instagram | conta desautorizada | **sim** |
-| Sessão do Claude | conector pede "Reconectar" | não |
+| Token do Instagram | conta desautorizada | **sim**, desde 21/08/2026 |
+| Sessão do Claude | conector pede "Reconectar" | **sim**, desde a Etapa 8, com duas condições |
 
-A sessão da Camada 1 vive em memória por decisão explícita da v1 (ver `auth_claude/session_store.py`), então ela morre mesmo com a ponte configurada.
+Até a Etapa 8 a sessão da Camada 1 vivia em memória por decisão explícita da v1, então ela morria mesmo com a ponte configurada, e o captador reconectava toda segunda de manhã e depois de cada publicação de código.
+
+Agora `ClaudeSessionStore` aceita um `CredentialBackend` injetado, o mesmo Protocol que a Camada 2 já usava para o token. Access token e refresh token vão cifrados para a ponte, sob uma chave que é o SHA-256 do token, nunca o token.
+
+As duas condições para isso valer em produção:
+
+1. **A ponte publicada precisa aceitar o namespace `mcp-instagram:claude-*`.** O `token-instagram.php` anterior gravava tudo num alvo fixo, então persistir a sessão ali **sobrescreveria o token do Instagram** e derrubaria a conta. O arquivo em `ponte-hostgator/` já está corrigido, mas precisa ser publicado.
+2. **A variável `MCP_CLAUDE_SESSION_STORE_PONTE=1` precisa existir no Render.** É uma confirmação humana de propósito: a capacidade vive no PHP da hospedagem, e nenhuma variável consegue descobri-la sozinha. Sem ela, o padrão é não persistir, que é o comportamento seguro.
+
+Enquanto as duas não estiverem feitas, nada muda e nada quebra: a sessão segue em memória, como antes. O passo a passo está em `docs/persistencia-sessao-conectores.md`.
+
+Uma limitação conhecida que fica: o access token antigo não é apagado quando o refresh rotaciona, então a tabela acumula cerca de uma linha por hora de uso. Linha vencida é removida quando alguém tenta lê-la, mas as que ninguém procura ficam. Numa faxina eventual, apagar as linhas `claude-access:%` é seguro: elas valem uma hora.
 
 Contorno em uso desde 21/08/2026: um ping externo (cron-job.org) chama `/.well-known/oauth-authorization-server` a cada 10 minutos, das 8h às 20h em dias úteis:
 

@@ -116,11 +116,23 @@ if (!is_array($entrada)) {
 $acao = $entrada['acao'] ?? '';
 $alvo = $entrada['alvo'] ?? '';
 
-// O alvo aceito e fixo: o cliente nao escolhe qual credencial ler ou
-// gravar, entao nao ha como usar esta ponte como armazenamento
-// generico nem para varrer outras chaves.
+// O alvo continua fechado: o cliente nao escolhe uma chave qualquer,
+// entao nao ha como usar esta ponte como armazenamento generico nem
+// para varrer outras chaves. Sao dois formatos, e nenhum outro passa:
+//
+//   mcp-linkedin:linkedin-access-token        o token da conta
+//   mcp-linkedin:claude-access:<64 hex>       sessao da Camada 1
+//   mcp-linkedin:claude-refresh:<64 hex>      sessao da Camada 1
+//
+// O sufixo hexadecimal e o SHA-256 do token de sessao, calculado no
+// Render: a chave nunca carrega o segredo. As chaves de sessao existem
+// para o conector parar de pedir "Reconectar" a cada hibernacao.
 $alvoEsperado = $config['ALVO'] ?? 'mcp-linkedin:linkedin-access-token';
-if (!is_string($alvo) || !hash_equals($alvoEsperado, $alvo)) {
+$alvoPermitido = is_string($alvo) && (
+    hash_equals($alvoEsperado, $alvo)
+    || preg_match('/^mcp-linkedin:claude-(access|refresh):[0-9a-f]{64}$/', $alvo) === 1
+);
+if (!$alvoPermitido) {
     responder(400, ['status' => 'erro']);
 }
 

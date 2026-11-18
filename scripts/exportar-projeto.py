@@ -11,8 +11,15 @@ prontos para submeter, sem precisar instalar nada:
   orcamento.xls             Excel/Google Sheets (editável)
   orcamento.csv             planilha simples (compatibilidade máxima)
   orcamento-impressao.html  versão para imprimir
-  projeto-completo.html     proposta + orçamento + parecer + nota, em um arquivo
-  *.pdf                     gerados automaticamente se o Google Chrome existir
+  cotacoes, checklist-anexos, elegibilidade, score, revisao, parecer-chefe
+                            cada documento de apoio que existir, em .doc e .pdf
+                            (cotações e checklist também em .xls e .csv; os de
+                            uso interno saem marcados como tal)
+  declaracoes/              as declarações do agente de anexos, em .doc e .pdf
+  projeto-completo.html     proposta + orçamento + todos os documentos de apoio
+  *.pdf                     gerados automaticamente se o Chrome ou o Edge existir
+
+O estrategia.md e o edital.md nunca entram na exportação.
 
 Uso:
   python3 scripts/exportar-projeto.py <osc-slug> <edital-slug> [--sem-pdf]
@@ -23,7 +30,9 @@ projeto; com vários, lista as opções.
 
 import argparse
 import html
+import os
 import re
+import shutil
 import subprocess
 import sys
 from datetime import date
@@ -32,7 +41,39 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 OSCS = RAIZ / "minhas-oscs"
 
-CHROME_MAC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+# Caminhos do Chrome (ou Edge) por sistema. O primeiro que existir é usado para
+# gerar o PDF automaticamente. Sem nenhum deles, o sistema cai no caminho manual
+# (abrir o HTML de impressão no navegador e salvar como PDF).
+CHROME_CANDIDATOS = [
+    # macOS
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+    # Windows
+    r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+    os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"),
+    r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+    r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+    # Linux
+    "/usr/bin/google-chrome",
+    "/usr/bin/google-chrome-stable",
+    "/usr/bin/chromium",
+    "/usr/bin/chromium-browser",
+    "/usr/bin/microsoft-edge",
+]
+
+
+def achar_navegador():
+    """Devolve o caminho do primeiro navegador disponível, ou None."""
+    for caminho in CHROME_CANDIDATOS:
+        if caminho and Path(caminho).exists():
+            return caminho
+    # Última tentativa: o que estiver no PATH do sistema
+    for nome in ("google-chrome", "chromium", "chrome", "msedge"):
+        achado = shutil.which(nome)
+        if achado:
+            return achado
+    return None
 
 CSS_BASE = """
   body{font-family:'Calibri','Segoe UI',Arial,sans-serif;font-size:11.5pt;color:#1a1a1a;line-height:1.5}
@@ -180,8 +221,11 @@ def remover_secoes_internas(md):
 
 
 # ── Geração dos arquivos ─────────────────────────────────────────────────────
-def doc_word(titulo, org, sub, corpo_html):
-    """HTML compatível com Word (.doc), com página A4 e capa."""
+def doc_word(titulo, org, sub, corpo_html, capa=True):
+    """HTML compatível com Word (.doc), com página A4 e capa (opcional)."""
+    bloco_capa = (f'<div class="capa"><div class="org">{html.escape(org)}</div>'
+                  f'<div class="tit">{html.escape(titulo)}</div>'
+                  f'<div class="sub">{html.escape(sub)}</div></div>') if capa else ""
     return f"""<html xmlns:o="urn:schemas-microsoft-com:office:office"
  xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
 <head><meta charset="utf-8">
@@ -192,14 +236,13 @@ div.Section1 {{ page:Section1; }}
 {CSS_BASE}
 </style></head>
 <body><div class="Section1">
-<div class="capa"><div class="org">{html.escape(org)}</div>
-<div class="tit">{html.escape(titulo)}</div>
-<div class="sub">{html.escape(sub)}</div></div>
+{bloco_capa}
 {corpo_html}
 </div></body></html>"""
 
 
-def html_impressao(titulo, corpo_html, org="", sub=""):
+def html_impressao(titulo, corpo_html, org="", sub="", rodape=True):
+    pe = '<div class="rodape">Gerado pela AMC IA</div>' if rodape else ""
     capa = ""
     if org or sub:
         capa = (f'<div class="capa"><div class="org">{html.escape(org)}</div>'
@@ -211,10 +254,10 @@ def html_impressao(titulo, corpo_html, org="", sub=""):
 {CSS_BASE}
 @media screen {{ body{{max-width:780px;margin:24px auto;padding:0 16px}} }}
 </style></head><body>{capa}{corpo_html}
-<div class="rodape">Gerado pela AMC IA</div></body></html>"""
+{pe}</body></html>"""
 
 
-def planilha_xls(titulo, tabelas):
+def planilha_xls(titulo, tabelas, aba="Orcamento"):
     linhas_html = ""
     for tab in tabelas:
         for r, row in enumerate(tab):
@@ -224,7 +267,7 @@ def planilha_xls(titulo, tabelas):
         linhas_html += "<tr></tr>"
     return f"""<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8">
 <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
-<x:Name>Orcamento</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+<x:Name>{html.escape(aba)}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
 </x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
 <style>table{{border-collapse:collapse}}th{{background:#0e7490;color:#fff}}th,td{{border:1px solid #999;padding:4px 8px;font-family:Calibri,Arial}}</style>
 </head><body><h3>{html.escape(titulo)}</h3><table>{linhas_html}</table></body></html>"""
@@ -246,12 +289,17 @@ def csv_de_tabelas(tabelas):
 
 
 def gerar_pdf(html_path, pdf_path):
-    if not Path(CHROME_MAC).exists():
+    navegador = achar_navegador()
+    if not navegador:
         return False
+    # as_uri() monta o file:// correto em qualquer sistema (no Windows vira
+    # file:///C:/... com as barras trocadas, que é o que o Chrome espera)
+    origem = Path(html_path).as_uri()
+    destino = str(pdf_path)
     try:
         subprocess.run(
-            [CHROME_MAC, "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
-             f"--print-to-pdf={pdf_path}", f"file://{html_path}"],
+            [navegador, "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
+             f"--print-to-pdf={destino}", origem],
             check=True, capture_output=True, timeout=60,
         )
         return Path(pdf_path).exists()
@@ -259,8 +307,8 @@ def gerar_pdf(html_path, pdf_path):
         # tenta o headless clássico
         try:
             subprocess.run(
-                [CHROME_MAC, "--headless", "--disable-gpu",
-                 f"--print-to-pdf={pdf_path}", f"file://{html_path}"],
+                [navegador, "--headless", "--disable-gpu",
+                 f"--print-to-pdf={destino}", origem],
                 check=True, capture_output=True, timeout=60,
             )
             return Path(pdf_path).exists()
@@ -362,13 +410,62 @@ def main():
     else:
         print("Aviso: orcamento.md ausente ou vazio. Rode /projeto-orcamento antes para incluir o orçamento.")
 
-    # Projeto completo (proposta + orçamento + parecer + nota)
+    # Documentos de apoio: cada um vira arquivo próprio em entrega-final/ e entra
+    # no projeto completo. Os de uso interno saem marcados como tal, para não
+    # serem anexados por engano na submissão. Decisão da captadora em 10/09/2026.
+    # O estrategia.md e o edital.md nunca entram, nem soltos nem no completo.
+    APOIO = [
+        # (arquivo, título, uso interno, gera planilha)
+        ("cotacoes.md",         "Quadro de Cotações",       False, True),
+        ("checklist-anexos.md", "Checklist de Anexos",      False, True),
+        ("elegibilidade.md",    "Parecer de Elegibilidade", True,  False),
+        ("score.md",            "Avaliação CaptaScore",     True,  False),
+        ("revisao.md",          "Revisão Final",            True,  False),
+        ("parecer-chefe.md",    "Parecer do Chefe",         True,  False),
+    ]
     extras = ""
-    for arq, tit in [("elegibilidade.md", "Parecer de Elegibilidade"), ("score.md", "Avaliação CaptaScore")]:
+    for arq, tit, interno, planilha in APOIO:
         f = pasta / arq
-        if f.exists() and f.read_text(encoding="utf-8").strip():
-            c, _ = md_para_html(f.read_text(encoding="utf-8"))
-            extras += f"<hr><h1>{tit}</h1>" + c
+        if not (f.exists() and f.read_text(encoding="utf-8").strip()):
+            continue
+        corpo, tabelas = md_para_html(f.read_text(encoding="utf-8"))
+        nome = f.stem
+        marca = " (uso interno, não anexar na submissão)" if interno else ""
+        extras += f"<hr><h1>{html.escape(tit + marca)}</h1>" + corpo
+        sub = f"Uso interno. Não anexar na submissão. {hoje}" if interno else f"{titulo}. {hoje}"
+        (saida / f"{nome}.doc").write_text(doc_word(tit, org, sub, corpo), encoding="utf-8")
+        h = saida / f"{nome}-impressao.html"
+        h.write_text(html_impressao(tit, corpo, org, sub), encoding="utf-8")
+        gerados += [f"{nome}.doc", f"{nome}-impressao.html"]
+        if planilha and tabelas:
+            (saida / f"{nome}.xls").write_text(planilha_xls(f"{tit}. {titulo}", tabelas, aba=nome), encoding="utf-8")
+            (saida / f"{nome}.csv").write_text(csv_de_tabelas(tabelas), encoding="utf-8-sig")
+            gerados += [f"{nome}.xls", f"{nome}.csv"]
+        if not args.sem_pdf and gerar_pdf(h.resolve(), (saida / f"{nome}.pdf").resolve()):
+            gerados.append(f"{nome}.pdf")
+
+    # Declarações do agente de anexos (documentos/declaracao-*.md): cada uma vira
+    # Word e PDF em entrega-final/declaracoes/, sem capa nem rodapé, para assinar.
+    docs = pasta / "documentos"
+    declaracoes = sorted(docs.glob("declaracao-*.md")) if docs.exists() else []
+    if declaracoes:
+        pasta_decl = saida / "declaracoes"
+        pasta_decl.mkdir(exist_ok=True)
+        for f in declaracoes:
+            texto = f.read_text(encoding="utf-8")
+            if not texto.strip():
+                continue
+            corpo, _ = md_para_html(texto)
+            m = re.search(r"(?m)^#\s+(.+)$", texto)
+            tit = m.group(1).strip() if m else f.stem.replace("-", " ").capitalize()
+            (pasta_decl / f"{f.stem}.doc").write_text(doc_word(tit, org, hoje, corpo, capa=False), encoding="utf-8")
+            h = pasta_decl / f"{f.stem}-impressao.html"
+            h.write_text(html_impressao(tit, corpo, rodape=False), encoding="utf-8")
+            gerados += [f"declaracoes/{f.stem}.doc", f"declaracoes/{f.stem}-impressao.html"]
+            if not args.sem_pdf and gerar_pdf(h.resolve(), (pasta_decl / f"{f.stem}.pdf").resolve()):
+                gerados.append(f"declaracoes/{f.stem}.pdf")
+
+    # Projeto completo: proposta, orçamento e todos os documentos de apoio
     if corpo_completo:
         completo = html_impressao(titulo, corpo_completo + extras, org, f"Documento completo. {hoje}")
         c_html = saida / "projeto-completo.html"

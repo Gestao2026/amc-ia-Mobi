@@ -28,6 +28,10 @@ Exemplo: "Oficineiro de música. 1 profissional x 8h/semana x 4 semanas x 10 mes
 
 Valor "no chute" é a porta de entrada da glosa. Use referências de preço estáveis: tabelas oficiais, cotações formais com CNPJ, mediana de 3 orçamentos. Evite marketplace, promoção e preço volátil.
 
+## Cotação sistemática (rotina do CaptaBudget)
+
+Para material permanente, equipamento e serviço de terceiros relevante, a rotina é: 3 cotações na web por item, de fornecedores formais (CNPJ e site próprio identificáveis) ou tabelas oficiais; a mediana das 3 vira o valor de referência do orçamento; cada cotação registra fornecedor, CNPJ, link, valores, data da coleta, tipo (formal, referência pública ou estimativa) e validade. O quadro completo vive em `cotacoes.md` na pasta do projeto, e o `orcamento.md` referencia o item cotado. Cotação web define o valor; quando o edital exige cotação formal anexada, o documento assinado do fornecedor entra no checklist de anexos.
+
 ## Regras a verificar no edital
 
 1. **Teto total.** O orçamento não pode passar do valor máximo.

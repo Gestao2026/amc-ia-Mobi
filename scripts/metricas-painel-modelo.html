@@ -1,0 +1,180 @@
+<title>Métricas da Mobilizando</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap">
+<style>
+/* Layout: leitura semanal em uma coluna. Três números de cabeça, a lista de atenção e a tabela das oito métricas. Identidade da Mobilizando: azul #19336B, dourado #d1b484, Poppins nos títulos e números, Inter no apoio. */
+:root {
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --fg: #14213f;
+  --muted: #55627f;
+  --line: #dde2ee;
+  --track: #e3e8f2;
+  --brand: #19336b;
+  --brand-ink: #ffffff;
+  --gold: #d1b484;
+  --good: #1f7a4d;
+  --warn: #9a5f00;
+  --bad: #b3261e;
+  --good-bg: #e3f3ea;
+  --warn-bg: #fbefd5;
+  --bad-bg: #fbe3e1;
+  --info-bg: #e7ecf7;
+  --display: "Poppins", "Segoe UI", system-ui, sans-serif;
+  --text: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1730; --surface: #16213f; --fg: #eaeefb; --muted: #a3aecb; --line: #2a3760; --track: #26335c;
+    --brand: #9bb2ef; --brand-ink: #0e1730; --gold: #d1b484;
+    --good: #5fd49a; --warn: #e9b24f; --bad: #ff8f86;
+    --good-bg: #17382b; --warn-bg: #3a2f14; --bad-bg: #432020; --info-bg: #212e55;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1730; --surface: #16213f; --fg: #eaeefb; --muted: #a3aecb; --line: #2a3760; --track: #26335c;
+  --brand: #9bb2ef; --brand-ink: #0e1730; --gold: #d1b484;
+  --good: #5fd49a; --warn: #e9b24f; --bad: #ff8f86;
+  --good-bg: #17382b; --warn-bg: #3a2f14; --bad-bg: #432020; --info-bg: #212e55;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--text); font-size: 15px; line-height: 1.5; padding-inline: 16px; padding-block: 28px 56px; }
+.page { max-width: 980px; margin-inline: auto; display: grid; gap: 28px; }
+header { display: grid; gap: 6px; border-bottom: 3px solid var(--gold); padding-bottom: 16px; }
+.eyebrow { font-family: var(--display); font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--brand); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 5vw, 36px); line-height: 1.15; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); margin: 0; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 17px; margin: 0 0 12px; }
+.heads { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.label { font-family: var(--display); font-weight: 600; font-size: 13px; color: var(--muted); }
+.big { font-family: var(--display); font-weight: 700; font-size: 40px; line-height: 1.05; color: var(--brand); font-variant-numeric: tabular-nums; }
+.big small { font-size: 16px; font-weight: 600; color: var(--muted); }
+.note { color: var(--muted); font-size: 13.5px; margin: 0; }
+.chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 99px; background: var(--info-bg); color: var(--fg); width: fit-content; }
+.chip.up { background: var(--good-bg); color: var(--good); }
+.chip.down { background: var(--bad-bg); color: var(--bad); }
+.bar { position: relative; height: 10px; border-radius: 99px; background: var(--track); margin-block: 6px 2px; }
+.bar > i { position: absolute; inset: 0 auto 0 0; border-radius: 99px; background: var(--brand); }
+.bar > b { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--gold); }
+.attn { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.attn li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; }
+.pill { font-size: 11.5px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+.pill.alto, .pill.bad { background: var(--bad-bg); color: var(--bad); }
+.pill.medio, .pill.warn { background: var(--warn-bg); color: var(--warn); }
+.pill.info, .pill.neutral { background: var(--info-bg); color: var(--fg); }
+.pill.good { background: var(--good-bg); color: var(--good); }
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--display); font-weight: 600; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td.n { font-variant-numeric: tabular-nums; font-weight: 600; }
+td small { display: block; color: var(--muted); font-weight: 400; }
+.hist td, .hist th { padding: 8px 14px; }
+footer { color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 14px; }
+</style>
+
+<div class="page" id="app"></div>
+
+<script>
+const D = /*DADOS*/null;
+const brl = (v) => v == null ? "sem dado" : "R$ " + Math.round(v).toLocaleString("pt-BR");
+const pct = (v, d = 0) => v == null ? "sem dado" : (v * 100).toLocaleString("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d }) + "%";
+const nf = (v, d = 0) => v == null ? "sem dado" : Number(v).toLocaleString("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const dataBr = (iso) => iso.split("-").reverse().join("/");
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+
+function chip(atual, anterior, fmt) {
+  if (anterior == null || atual == null) return `<span class="chip">Primeira leitura</span>`;
+  const d = atual - anterior;
+  if (Math.abs(d) < 1e-9) return `<span class="chip">Sem mudança desde ${dataBr(D.anterior.data)}</span>`;
+  return `<span class="chip ${d > 0 ? "up" : "down"}">${d > 0 ? "Subiu" : "Caiu"} ${fmt(Math.abs(d))} desde ${dataBr(D.anterior.data)}</span>`;
+}
+
+function render() {
+  const a = D.aprovacao, s = D.submissoes, r = D.recebimento, f = D.funil, p = D.pipeline, rc = D.recorrente;
+  const prev = D.anterior || {};
+  const nivelAprov = a.taxa_qtd == null ? "neutral" : a.taxa_qtd >= a.referencia ? "good" : a.taxa_qtd >= a.referencia / 2 ? "warn" : "bad";
+  const textoAprov = { good: "No alvo", warn: "Atenção", bad: "Abaixo", neutral: "Sem dado" }[nivelAprov];
+  const nivelSub = s.pct_meta_acumulada == null ? "neutral" : s.pct_meta_acumulada >= .9 ? "good" : s.pct_meta_acumulada >= .6 ? "warn" : "bad";
+  const textoSub = { good: "No alvo", warn: "Atenção", bad: "Abaixo", neutral: "Sem dado" }[nivelSub];
+  const larg = Math.min(100, (s.realizado / s.meta_ano) * 100);
+  const marca = Math.min(100, (s.meta_ate_mes_anterior / s.meta_ano) * 100);
+  const semPag = r.pagamentos_registrados === 0;
+
+  const prox = Object.entries(p.proximos_resultados || {}).map(([d, n]) => `${d} (${n})`).join(", ");
+  const jan = r.janeiro || {};
+
+  const linhas = [
+    ["Taxa de aprovação, em quantidade", `${pct(a.taxa_qtd)} <small>${nf(a.aprovados)} de ${nf(a.resolvidos)} com resultado</small>`, `Referência da mentoria: ${pct(a.referencia)}`, `<span class="pill ${nivelAprov}">${textoAprov}</span>`],
+    ["Taxa de aprovação, em valor", `${pct(a.taxa_valor, 1)} <small>${brl(a.valor_aprovado)} aprovados de ${brl(a.valor_aprovado + a.valor_reprovado)}</small>`, "Valores da planilha são o teto do edital, nem sempre o valor pedido", ""],
+    ["Submissões, em quantidade e valor", `${nf(s.realizado_ate_mes_anterior)} de ${nf(s.meta_ate_mes_anterior)} até o mês passado (${pct(s.pct_meta_acumulada)}) <small>${nf(s.realizado)} de ${nf(s.meta_ano)} no ano · valor identificado ${brl(s.valor_submetido)}</small>`, `Ritmo ${nf(s.ritmo_mes, 1)} por mês, necessário ${nf(s.necessario_mes, 1)}`, `<span class="pill ${nivelSub}">${textoSub}</span>`],
+    ["Taxa de recebimento", `${pct(r.taxa, 1)} <small>${brl(r.remuneracao)} de remuneração sobre ${brl(r.captado)} captados</small>`, "Remuneração prevista. Alvo do modelo: 10% do captado", semPag ? `<span class="pill warn">Sem registro de pagamento</span>` : ""],
+    ["Média de recebimento", `${brl(r.media_remuneracao)} <small>por aprovação, sobre ${brl(r.media_captado)} captados em média</small>`, `Janeiro (base a confirmar): ${brl(jan.remuneracao)} sobre ${brl(jan.captado)}, ${nf(jan.aprovacoes)} aprovações`, ""],
+    ["Receita recorrente mensal", `Até ${brl(rc.valor_fixo_max)} por mês <small>${nf(rc.contratos_com_fixo)} contratos com valor fixo na planilha</small>`, "Tabela de 29/09: R$ 2.000 a R$ 3.000 por contrato, mais 10% do captado", ""],
+    ["Funil comercial", `${nf(f.reunioes)} reuniões, ${nf(f.contratos_ano)} contratos no ano <small>${nf(f.clientes_total)} clientes desde novembro · ${nf(f.sem_sucesso)} reuniões sem sucesso listadas</small>`, `Meta de reuniões até o mês passado: ${nf(f.meta_reunioes)}`, ""],
+    ["Pipeline aguardando resultado", `${nf(p.abertos)} projetos, ${brl(p.valor)} <small>${p.sem_valor ? nf(p.sem_valor) + " sem valor na planilha, fora da soma" : "todos com valor"}</small>`, prox ? `Resultados previstos: ${prox}` : "Sem data de resultado a partir de hoje", ""],
+  ];
+
+  const alertas = (D.alertas || []).map((x) => `<li><span class="pill ${x.nivel}">${{ alto: "Alto", medio: "Médio", info: "Aviso" }[x.nivel]}</span><span>${esc(x.texto)}</span></li>`).join("");
+
+  const hist = (D.historico || []).slice().reverse().slice(0, 8);
+  const histHtml = hist.length > 1 ? `
+    <section>
+      <h2>Leituras anteriores</h2>
+      <div class="tablewrap"><table class="hist"><thead><tr><th>Data</th><th>Aprovação</th><th>Submissões</th><th>Remuneração</th><th>Aguardando resultado</th></tr></thead><tbody>
+      ${hist.map((h) => `<tr><td>${dataBr(h.data)}</td><td class="n">${pct(h.taxa_qtd)} (${nf(h.aprovados)} de ${nf(h.resolvidos)})</td><td class="n">${nf(h.realizado)}</td><td class="n">${brl(h.remuneracao)}</td><td class="n">${nf(h.abertos)}</td></tr>`).join("")}
+      </tbody></table></div>
+    </section>` : "";
+
+  document.getElementById("app").innerHTML = `
+    <header>
+      <span class="eyebrow">Mobilizando · leitura semanal</span>
+      <h1>Métricas da Mobilizando</h1>
+      <p class="sub">Leitura de ${dataBr(D.data)}, período de ${esc(D.periodo)}. Fontes: Checkpoint 2026, Controle de Submissão e CaptaHub.</p>
+    </header>
+
+    <section class="heads" aria-label="Três números da semana">
+      <div class="card">
+        <span class="label">Taxa de aprovação</span>
+        <span class="big">${pct(a.taxa_qtd)}</span>
+        <p class="note">${nf(a.aprovados)} aprovados de ${nf(a.resolvidos)} com resultado. Em valor, ${pct(a.taxa_valor, 1)}.</p>
+        ${chip(a.taxa_qtd, prev.taxa_qtd, (d) => (d * 100).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + " pontos")}
+      </div>
+      <div class="card">
+        <span class="label">Submissões no ano</span>
+        <span class="big">${nf(s.realizado)} <small>de ${nf(s.meta_ano)}</small></span>
+        <div class="bar" role="img" aria-label="${nf(s.realizado)} de ${nf(s.meta_ano)} submissões, meta acumulada em ${nf(s.meta_ate_mes_anterior)}"><i style="width:${larg}%"></i><b style="left:${marca}%"></b></div>
+        <p class="note">A marca dourada é a meta até o mês passado (${nf(s.meta_ate_mes_anterior)}). Ritmo de ${nf(s.ritmo_mes, 1)} por mês, e ${nf(s.necessario_mes, 1)} seriam necessárias.</p>
+        ${chip(s.realizado, prev.realizado, (d) => nf(d) + " submissões")}
+      </div>
+      <div class="card">
+        <span class="label">Remuneração no ano</span>
+        <span class="big">${brl(r.remuneracao)}</span>
+        <p class="note">${pct(r.taxa, 1)} do captado (${brl(r.captado)}). Média de ${brl(r.media_remuneracao)} por aprovação.</p>
+        ${chip(r.remuneracao, prev.remuneracao, brl)}
+      </div>
+    </section>
+
+    <section>
+      <h2>O que pede atenção</h2>
+      <ul class="attn">${alertas || "<li><span class='pill good'>Ok</span><span>Nada fora do esperado nesta leitura.</span></li>"}</ul>
+    </section>
+
+    <section>
+      <h2>As oito métricas</h2>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Métrica</th><th>Hoje</th><th>Referência</th><th>Situação</th></tr></thead>
+        <tbody>${linhas.map((l) => `<tr><td>${l[0]}</td><td class="n">${l[1]}</td><td>${esc(l[2])}</td><td>${l[3]}</td></tr>`).join("")}</tbody>
+      </table></div>
+    </section>
+
+    ${histHtml}
+
+    <footer>Painel de uso interno, com valores de clientes. A leitura roda toda segunda-feira e só lê as planilhas e o CaptaHub. Nada é gravado neles.</footer>
+  `;
+}
+render();
+</script>

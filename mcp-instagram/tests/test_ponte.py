@@ -17,6 +17,7 @@ qualquer rede:
 """
 
 import json
+import re
 import socket
 
 import httpx2
@@ -71,6 +72,19 @@ def _env_ponte(**overrides) -> dict:
     return env
 
 
+# Mesmo formato aceito pelo PHP (ver ponte-hostgator/): o sufixo e o
+# SHA-256 do token de sessao, entao a chave nunca carrega o segredo e
+# nao ha como inventar uma nem varrer as alheias.
+PADRAO_ALVO_SESSAO = re.compile(r"^mcp-instagram:claude-(access|refresh):[0-9a-f]{64}$")
+
+
+def alvo_permitido(alvo, alvo_do_token: str) -> bool:
+    """Regra de alvo da ponte, identica a do PHP."""
+    if not isinstance(alvo, str):
+        return False
+    return alvo == alvo_do_token or PADRAO_ALVO_SESSAO.match(alvo) is not None
+
+
 class PonteFalsa:
     """
     Especificacao executavel do token.php: mesmo contrato de entrada e
@@ -111,8 +125,9 @@ class PonteFalsa:
 
         entrada = json.loads(request.content)
 
-        # 3. alvo fixo: a ponte nao e armazenamento generico
-        if entrada.get("alvo") != self._alvo_esperado:
+        # 3. alvo fechado: o token da conta, ou uma chave de sessao do
+        #    Claude. Continua nao sendo armazenamento generico.
+        if not alvo_permitido(entrada.get("alvo"), self._alvo_esperado):
             return httpx2.Response(400, text=json.dumps({"status": "erro"}))
 
         acao = entrada.get("acao")

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tema Mobilizando</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mobi-verde:#1d624d; --mobi-magenta:#7f126f; --mobi-azul:#19336B;
+  --mobi-dourado:#d1b484; --mobi-creme:#FAF6EE; --mobi-branco:#FFFFFF;
+  --t:'Poppins',sans-serif; --c:'Inter',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--mobi-branco);color:var(--mobi-azul);font-family:var(--c);font-weight:400;line-height:1.55}
+.wrap{max-width:1040px;margin:0 auto;padding:48px 16px 72px}
+h1{font-family:var(--t);font-weight:700;font-size:40px;line-height:1.15;margin:0 0 8px;color:var(--mobi-verde)}
+.sub{margin:0 0 40px;color:var(--mobi-azul);font-weight:300;font-size:17px}
+h2{font-family:var(--t);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin:48px 0 16px;color:var(--mobi-azul)}
+.cores{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.cor{border:1px solid #e6e2d8;border-radius:0 14px 0 0;overflow:hidden;background:#fff}
+.cor .amostra{height:86px}
+.cor p{margin:0;padding:10px 12px;font-size:13px}
+.cor b{font-family:var(--t);font-weight:600;display:block;font-size:14px}
+.cor code{font-size:12px}
+.pares{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.par{padding:16px;font-family:var(--t);font-weight:600;font-size:17px;border-radius:0 14px 0 0}
+.par small{display:block;font-family:var(--c);font-weight:400;font-size:12px;margin-top:6px;opacity:.9}
+.proibido{background:var(--mobi-branco);color:var(--mobi-dourado);border:2px dashed var(--mobi-magenta)}
+.tipo{display:grid;gap:18px;background:var(--mobi-creme);padding:24px;border-radius:0 18px 0 0}
+.tipo .l{font-family:var(--c);font-size:12px;color:var(--mobi-verde);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px}
+.tipo .t1{font-family:var(--t);font-weight:700;font-size:32px;line-height:1.15;margin:0;text-transform:uppercase}
+.tipo .t2{font-family:var(--t);font-weight:600;font-size:20px;margin:0}
+.tipo .t3{font-family:var(--t);font-weight:600;font-size:16px;margin:0;max-width:640px}
+.tipo .t4{font-family:var(--c);font-weight:400;font-size:13px;margin:0}
+.exemplos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;align-items:start}
+.card{position:relative;aspect-ratio:4/5;background:var(--mobi-verde);color:#fff;overflow:hidden;padding:7.4%}
+.card .arco{position:absolute;right:-30%;top:-30%;width:62%;aspect-ratio:1;border:18px solid var(--mobi-dourado);border-radius:50%}
+.card .arco::after{content:"";position:absolute;inset:14px;border:2px solid #fff;border-radius:50%}
+.card .etq{display:inline-block;font-family:var(--t);font-weight:700;font-size:11px;letter-spacing:.08em;background:#fff;color:var(--mobi-verde);padding:5px 12px;border-radius:999px}
+.card h3{font-family:var(--t);font-weight:700;font-size:25px;line-height:1.15;text-transform:uppercase;margin:24% 18% 16px 0;position:relative;z-index:1}
+.card .bloco{display:inline-block;background:var(--mobi-creme);color:var(--mobi-azul);font-family:var(--t);font-weight:600;font-size:16px;padding:10px 16px;border-radius:0 14px 0 0}
+.card .fonte{font-family:var(--c);font-size:11px;margin-top:14px;border-left:3px solid var(--mobi-dourado);padding-left:8px}
+.card .rodape{position:absolute;left:7.4%;right:7.4%;bottom:6%;display:flex;justify-content:space-between;align-items:center;font-family:var(--c);font-size:11px}
+.simb{width:34px;height:34px;flex:none;border:2px dashed rgba(255,255,255,.8);border-radius:50%;display:grid;place-items:center;font-size:8px;text-align:center;line-height:1}
+.doc{background:#fff;border:1px solid #e6e2d8;aspect-ratio:1/1.414;padding:9%;color:var(--mobi-azul);position:relative}
+.doc .topo{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--mobi-dourado);padding-bottom:10px;margin-bottom:22px}
+.doc .topo span{font-family:var(--t);font-weight:600;font-size:11px;color:var(--mobi-verde);letter-spacing:.08em;text-transform:uppercase}
+.doc .simb{border-color:var(--mobi-azul);color:var(--mobi-azul)}
+.doc h3{font-family:var(--t);font-weight:700;font-size:21px;line-height:1.2;margin:0 0 6px}
+.doc .meta{font-family:var(--c);font-size:11px;color:var(--mobi-verde);margin:0 0 18px}
+.doc p{font-family:var(--t);font-weight:600;font-size:12px;margin:0 0 10px}
+.doc .num{font-family:var(--t);font-weight:700;font-size:30px;color:var(--mobi-magenta);line-height:1}
+.doc .linha{display:flex;gap:12px;align-items:center;background:var(--mobi-creme);padding:12px;border-radius:0 12px 0 0;margin:14px 0}
+.doc .linha p{margin:0}
+.doc .malha{position:absolute;left:9%;right:9%;bottom:6%;height:30px;background:repeating-linear-gradient(to bottom,transparent 0 9px,#e6e2d8 9px 10px)}
+.nota{font-size:13px;margin-top:10px}
+ul.fora{columns:2;font-size:14px;padding-left:18px}
+@media (max-width:640px){h1{font-size:30px}ul.fora{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Tema Mobilizando.</h1>
+  <p class="sub">A identidade própria da Mobilizando, a mesma do feed aprovada em 23/09, em toda peça: tela, papel e PDF.</p>
+
+  <h2>Paleta</h2>
+  <div class="cores">
+    <div class="cor"><div class="amostra" style="background:#1d624d"></div><p><b>Verde</b><code>#1d624d</code><br>"Edital na mão"</p></div>
+    <div class="cor"><div class="amostra" style="background:#7f126f"></div><p><b>Magenta</b><code>#7f126f</code><br>"Editais abertos"</p></div>
+    <div class="cor"><div class="amostra" style="background:#19336B"></div><p><b>Azul</b><code>#19336B</code><br>Texto e "a lei diz"</p></div>
+    <div class="cor"><div class="amostra" style="background:#d1b484"></div><p><b>Dourado</b><code>#d1b484</code><br>"Com a Rosepaula"</p></div>
+    <div class="cor"><div class="amostra" style="background:#FAF6EE"></div><p><b>Creme</b><code>#FAF6EE</code><br>Quadro e papel</p></div>
+  </div>
+
+  <h2>Combinações de texto</h2>
+  <div class="pares">
+    <div class="par" style="background:#1d624d;color:#fff">Branco sobre verde.<small>Permitido.</small></div>
+    <div class="par" style="background:#19336B;color:#fff">Branco sobre azul.<small>Permitido.</small></div>
+    <div class="par" style="background:#d1b484;color:#19336B">Azul sobre dourado.<small>Permitido.</small></div>
+    <div class="par" style="background:#FAF6EE;color:#7f126f">Magenta sobre creme.<small>Permitido.</small></div>
+    <div class="par proibido">Dourado sobre branco.<small style="color:#7f126f">Proibido: não se lê.</small></div>
+  </div>
+
+  <h2>Tipografia</h2>
+  <div class="tipo">
+    <div><p class="l">Título · Poppins Bold</p><p class="t1">Aprovado não é captado.</p></div>
+        <div><p class="l">Texto e listas · Poppins SemiBold</p><p class="t3">O texto da peça, do card ao relatório, sai em Poppins SemiBold, em azul sobre fundo claro.</p></div>
+    <div><p class="l">Apoio, fonte e rodapé · Inter</p><p class="t4">Fonte: Lei 13.019/2014, citada com artigo e inciso.</p></div>
+  </div>
+
+  <h2>Aplicado</h2>
+  <div class="exemplos">
+    <div>
+      <div class="card">
+        <div class="arco"></div>
+        <span class="etq">EDITAL NA MÃO</span>
+        <h3>Título da peça em até quatro linhas.</h3>
+        <span class="bloco">Palavra-chave em destaque.</span>
+        <div class="fonte">Fonte da informação, com lei e artigo.</div>
+        <div class="rodape"><span>@rosepaula_rodrigues</span><span class="simb" title="símbolo da Mobilizando"></span></div>
+      </div>
+      <p class="nota">Card do feed, família "edital na mão". Formas usadas: arco e bloco de canto único.</p>
+    </div>
+    <div>
+      <div class="doc">
+        <div class="topo"><span>Mobilizando Impacto Social</span><span class="simb" title="símbolo da Mobilizando"></span></div>
+        <h3>Título do documento institucional.</h3>
+        <p class="meta">Documento institucional em PDF.</p>
+        <p>O corpo do texto usa a Poppins SemiBold, no mesmo azul do feed, sobre fundo branco. O filete dourado separa o cabeçalho.</p>
+        <div class="linha"><span class="num">8</span><p>Número grande em magenta, com o rótulo ao lado.</p></div>
+        <p>Formas usadas: bloco de canto único e malha no rodapé.</p>
+        <div class="malha"></div>
+      </div>
+      <p class="nota">Página de documento: a mesma identidade do feed, em papel.</p>
+    </div>
+  </div>
+  <p class="nota">O círculo tracejado marca o lugar do símbolo da Mobilizando. Na peça real entra o arquivo oficial, na versão de cor certa para o fundo.</p>
+
+  <h2>Fora do tema</h2>
+  <ul class="fora">
+    <li>Texto dourado sobre fundo claro.</li>
+    <li>O azul #070552 do Manual.</li>
+    <li>Arial Black e Montserrat.</li>
+    <li>Gradiente roxo e layout todo centralizado.</li>
+    <li>Folhas, papel rasgado e textura de papel.</li>
+    <li>Megafone, foguete, emoji na arte.</li>
+    <li>Imagem gerada por IA.</li>
+    <li>Logo girada, recolorida ou em preto.</li>
+  </ul>
+</div>
+</body>
+</html>

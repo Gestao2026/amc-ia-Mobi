@@ -72,6 +72,15 @@ escopo (o que entra e o que não entra), entregáveis por mês ou por edital, n�
 
 **Ancoragem:** uma consultoria cobra R$ 1.500 a R$ 5.000 por projeto; um edital aprovado costuma valer de R$ 100 mil para cima. O custo da assessoria é uma fração do que está em jogo a cada submissão.
 
+**Captação junto a empresas (leis de incentivo, marketing, responsabilidade social, patrocínio).** Quando a oferta inclui vender o projeto direto às empresas, a remuneração tem três partes, e o captador não é vendedor: ele avalia, estuda e depois capta.
+- **Avaliação do projeto:** fixo, por projeto. Diz se o projeto serve para o mercado e que ajustes precisa. Na AMC IA é o `/projeto-estrategia`.
+- **Estudo de mercado:** fixo, por projeto. Documento de 5 a 10 páginas com as empresas, os recursos públicos e internacionais, a tendência, o tipo de empresa recomendado e a lista nominal das que serão abordadas. O cliente assina, o estudo integra o contrato e dá exclusividade ao captador sobre as empresas listadas. Modelo em `marketing/MODELO-estudo-de-mercado.md`.
+- **Captação:** ajuda de custo mensal mais comissão sobre o captado. Comissão pura só quando o projeto chega pronto, avaliado, com as empresas já identificadas e já conversadas pelo cliente.
+
+O valor mensal se sustenta em quatro papéis que o cliente recebe: o estudo assinado com a lista de empresas, o passo a passo de horas na proposta, a reunião quinzenal e o relatório com o retorno do mercado (o que cada empresa disse). Quem contrata captador está machucado por quem cobra fixo e não entrega nem um relatório. Quanto mais papel, retorno e ferramenta o cliente recebe, mais ele entende que o mensal é pouco diante do que é feito.
+
+Contratos com lei de incentivo têm natureza mista, parte representação comercial e parte intermediação de negócio, e precisam de revisão específica antes de assinar.
+
 ## Light Copy aplicada à captação (regras de escrita do marketing)
 
 Vale para conteúdo, anúncio e página (não para a proposta técnica, que tem regras próprias).

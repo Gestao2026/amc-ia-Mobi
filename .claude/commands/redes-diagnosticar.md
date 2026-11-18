@@ -16,7 +16,9 @@ Nunca chute. Percorra a sequência: cada passo elimina uma camada.
 | 2. Autorização | seu servidor → a rede social | token expira, é revogado, ou vive em memória |
 | 3. Capacidade | o que a API permite | escopo faltando ou produto não aprovado |
 
-A camada 1 cai **toda segunda-feira e depois de cada publicação de código**. Isso é esperado, não é defeito. A camada 2 sobrevive, porque o token está na ponte.
+A camada 1 caía **toda segunda-feira e depois de cada publicação de código**, porque a sessão vivia em memória. A camada 2 sempre sobreviveu, porque o token está na ponte.
+
+Desde a Etapa 8 a sessão também pode sobreviver, se as duas condições estiverem feitas: a ponte publicada aceitando o namespace `claude-*` e a variável `MCP_CLAUDE_SESSION_STORE_PONTE=1` no Render (ver `docs/persistencia-sessao-conectores.md`). **Confira isso antes de tratar a queda como normal.** Se as duas estiverem feitas e o conector ainda cair toda segunda, aí é defeito, e o lugar de investigar é a ponte, não o painel.
 
 ## Passos
 
